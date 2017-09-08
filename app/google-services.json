@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "768575352254",
+    "firebase_url": "https://igorapp-7f518.firebaseio.com",
+    "project_id": "igorapp-7f518",
+    "storage_bucket": "igorapp-7f518.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768575352254:android:e2331a99c87dd1c1",
+        "android_client_info": {
+          "package_name": "com.devapps.igor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768575352254-jip6ej96498phmm6429lia1vqg92n8qg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.devapps.igor",
+            "certificate_hash": "1c046a58b6817b9aad408f211ff5daf819c4326d"
+          }
+        },
+        {
+          "client_id": "768575352254-rck3ujku9uivmed9958ovdv1pjsovrpq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAy7TvAlLt8eg-Mh5oEoFhBIXiNB5rUVjo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768575352254-rck3ujku9uivmed9958ovdv1pjsovrpq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
