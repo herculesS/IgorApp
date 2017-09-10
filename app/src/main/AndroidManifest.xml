@@ -16,7 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".Screens.CriarNovaAventura.CriarNovaAventura">
+        <activity android:name=".Screens.CriarNovaAventura.CriarNovaAventura"
+            android:theme="@style/Theme.AppCompat.Dialog" >
         </activity>
     </application>
 
