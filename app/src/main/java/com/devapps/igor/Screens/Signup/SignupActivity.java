@@ -1,22 +1,19 @@
 package com.devapps.igor.Screens.Signup;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.RadioButton;
 
 import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.R;
-import com.devapps.igor.Screens.MainActivity;
+import com.devapps.igor.RequestManager.Database;
+import com.devapps.igor.Util.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,20 +29,26 @@ public class SignupActivity extends AppCompatActivity {
 
     private static final String TAG = "SignupActivity";
 
-    private EditText inputEmail, inputPassword;
-    private Button btnSignUp;
+    private EditText _inputEmail;
+    private EditText _inputPassword;
+    private EditText _inputRetypePassword;
+    private EditText _userName;
+    private Utils.Sex userSex = Utils.Sex.MALE;
+    private Button _btnSignUp;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference userDatabaseReference;
 
     private Profile userProfile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
         //Get Firebase auth instance
+        userDatabaseReference = Database.getUsersReference();
         mAuth = FirebaseAuth.getInstance();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -54,15 +57,16 @@ public class SignupActivity extends AppCompatActivity {
                 final FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    //String name = _name.getText().toString();
-                    String email = inputEmail.getText().toString().trim();
-                    //TODO Name, Birth date, sex
+                    String name = _userName.getText().toString();
+                    String email = _inputEmail.getText().toString().trim();
+                    //TODO Birth date
 
                     userProfile = new Profile();
                     userProfile.setId(user.getUid());
-                    //userProfile.setName(name);
+                    userProfile.setName(name);
                     userProfile.setEmail(email);
-                    //TODO Name, Birth date, sex
+                    userProfile.setSex(userSex);
+                    //TODO Birth date
 
                     userDatabaseReference.child(user.getUid()).setValue(userProfile)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -82,15 +86,16 @@ public class SignupActivity extends AppCompatActivity {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                // ...
             }
         };
 
-        btnSignUp = (Button) findViewById(R.id.sign_up_button);
-        inputEmail = (EditText) findViewById(R.id.email);
-        inputPassword = (EditText) findViewById(R.id.password);
+        _btnSignUp = (Button) findViewById(R.id.sign_up_button);
+        _inputEmail = (EditText) findViewById(R.id.email);
+        _inputPassword = (EditText) findViewById(R.id.password);
+        _inputRetypePassword = (EditText) findViewById(R.id.r_password);
+        _userName = (EditText) findViewById(R.id.name);
 
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
+        _btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signup();
@@ -101,15 +106,15 @@ public class SignupActivity extends AppCompatActivity {
     public void signup() {
         Log.d(TAG, "Signup");
 
-        btnSignUp.setEnabled(false);
+        _btnSignUp.setEnabled(false);
 
         if (!validate()) {
             onSignupFailed();
             return;
         }
 
-        final String email = inputEmail.getText().toString().trim();
-        final String password = inputPassword.getText().toString().trim();
+        final String email = _inputEmail.getText().toString().trim();
+        final String password = _inputPassword.getText().toString().trim();
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -136,7 +141,7 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                         sweetAlertDialog.dismissWithAnimation();
-                        btnSignUp.setEnabled(true);
+                        _btnSignUp.setEnabled(true);
                         setResult(RESULT_OK, null);
                         finish();
                     }
@@ -150,7 +155,7 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                         sweetAlertDialog.dismissWithAnimation();
-                        btnSignUp.setEnabled(true);
+                        _btnSignUp.setEnabled(true);
                     }
                 }).show();
     }
@@ -158,38 +163,39 @@ public class SignupActivity extends AppCompatActivity {
     public boolean validate() {
         boolean valid = true;
 
-        //String name = _name.getText().toString();
-        String email = inputEmail.getText().toString();
-        String password = inputPassword.getText().toString();
-        //String rPassword = _rPasswordText.getText().toString();
+        String name = _userName.getText().toString();
+        String email = _inputEmail.getText().toString();
+        String password = _inputPassword.getText().toString();
+        String rPassword = _inputRetypePassword.getText().toString();
+        //TODO birthdate
 
-      /*  if(name.isEmpty()){
-            _name.setError("campo vazio");
+        if(name.isEmpty()){
+            _userName.setError("Informe seu nome");
             valid = false;
         }else{
-            _name.setError(null);
-        }*/
+            _userName.setError(null);
+        }
 
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            inputEmail.setError("endereço email inválido");
+            _inputEmail.setError("Email inválido");
             valid = false;
         } else {
-            inputEmail.setError(null);
+            _inputEmail.setError(null);
         }
 
         if (password.isEmpty() || password.length() < 6 ) {
-            inputPassword.setError("senha tem que ter mais do que 6 carateres");
+            _inputPassword.setError("Mínimo 6 carateres");
             valid = false;
         } else {
-            inputPassword.setError(null);
+            _inputPassword.setError(null);
         }
 
-        /*if(rPassword.isEmpty() || !rPassword.equals(password)){
-            _rPasswordText.setError("senhas incompatíveis");
+        if (rPassword.isEmpty() || !password.equals(rPassword)) {
+            _inputRetypePassword.setError("As senhas não são iguais");
             valid = false;
-        }else{
-            _rPasswordText.setError(null);
-        }*/
+        } else {
+            _inputRetypePassword.setError(null);
+        }
 
         return valid;
     }
@@ -214,6 +220,23 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.male_rbutton:
+                if (checked)
+                    userSex = Utils.Sex.MALE;
+                    break;
+            case R.id.female_rbutton:
+                if (checked)
+                    userSex = Utils.Sex.FEMALE;
+                    break;
+        }
     }
 
     @Override

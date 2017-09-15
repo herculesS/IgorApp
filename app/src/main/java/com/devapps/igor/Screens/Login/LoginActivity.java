@@ -1,18 +1,14 @@
 package com.devapps.igor.Screens.Login;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.devapps.igor.DataObject.Profile;
@@ -20,7 +16,6 @@ import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
 import com.devapps.igor.Screens.MainActivity;
 import com.devapps.igor.Screens.Signup.SignupActivity;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -32,8 +27,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-import static java.security.AccessController.getContext;
-
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
@@ -43,13 +36,12 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
-    private EditText inputEmail, inputPassword;
-    private Button btnSignup, btnLogin, btnReset;
+    private EditText _inputEmail, _inputPassword;
+    private Button _btnSignup, _btnLogin, _btnForgotPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // set the view now
         setContentView(R.layout.activity_login);
 
         //Get Firebase auth instance
@@ -70,24 +62,24 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-        inputEmail = (EditText) findViewById(R.id.email);
-        inputPassword = (EditText) findViewById(R.id.password);
-        btnSignup = (Button) findViewById(R.id.btn_signup);
-        btnLogin = (Button) findViewById(R.id.btn_login);
-        btnReset = (Button) findViewById(R.id.btn_reset_password);
+        _inputEmail = (EditText) findViewById(R.id.email);
+        _inputPassword = (EditText) findViewById(R.id.password);
+        _btnSignup = (Button) findViewById(R.id.btn_signup);
+        _btnLogin = (Button) findViewById(R.id.btn_login);
+        _btnForgotPassword = (Button) findViewById(R.id.btn_reset_password);
 
-        btnSignup.setOnClickListener(new View.OnClickListener() {
+        _btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivityForResult(new Intent(LoginActivity.this, SignupActivity.class), REQUEST_SIGNUP);
             }
         });
 
-        btnReset.setOnClickListener(new View.OnClickListener() {
+        _btnForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(validateEmail()) {
-                    String email = inputEmail.getText().toString();
+                    String email = _inputEmail.getText().toString();
                     mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -103,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                                         }).show();
                             }else{
                                 new SweetAlertDialog(getApplicationContext(), SweetAlertDialog.ERROR_TYPE)
-                                        .setTitleText("Erro!")
+                                        .setTitleText("Ops!")
                                         .setContentText("Email não encontrado")
                                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                             @Override
@@ -118,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        _btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login();
@@ -148,16 +140,15 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        btnLogin.setEnabled(false);
+        _btnLogin.setEnabled(false);
 
-        final String email = inputEmail.getText().toString();
-        final String password = inputPassword.getText().toString();
+        final String email = _inputEmail.getText().toString();
+        final String password = _inputPassword.getText().toString();
 
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
-
                 // If sign in fails, display a message to the user. If sign in succeeds
                 // the auth state listener will be notified and logic to handle the
                 // signed in user can be handled in the listener.
@@ -188,35 +179,28 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public boolean validate() {
-        boolean valid = true;
+        boolean valid;
+        String password = _inputPassword.getText().toString();
 
-        String email = inputEmail.getText().toString();
-        String password = inputPassword.getText().toString();
+        valid = validateEmail();
 
-        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            inputEmail.setError("email inválido");
+        if (password.isEmpty() || password.length() < 6 ) {
+            _inputPassword.setError("Mínimo 6 caracteres");
             valid = false;
         } else {
-            inputEmail.setError(null);
-        }
-
-        if (password.isEmpty() || password.length() < 4 ) {
-            inputPassword.setError("senha tem que ter mais do que 4 caracteres");
-            valid = false;
-        } else {
-            inputPassword.setError(null);
+            _inputPassword.setError(null);
         }
 
         return valid;
     }
 
     private boolean validateEmail(){
-        String email = inputEmail.getText().toString();
+        String email = _inputEmail.getText().toString();
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            inputEmail.setError("email inválido");
+            _inputEmail.setError("Email inválido");
             return false;
         } else {
-            inputEmail.setError(null);
+            _inputEmail.setError(null);
             return true;
         }
     }
@@ -241,8 +225,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginFailed() {
-        Toast.makeText(this, "Login failed", Toast.LENGTH_LONG).show();
-        btnLogin.setEnabled(true);
+        Toast.makeText(this, "O Login falhou", Toast.LENGTH_LONG).show();
+        _btnLogin.setEnabled(true);
     }
 
 }

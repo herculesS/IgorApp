@@ -29,7 +29,6 @@
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:singleLine="true"
                 android:textColor="@android:color/white" />
 
         </android.support.design.widget.TextInputLayout>
@@ -44,11 +43,8 @@
                 android:layout_height="wrap_content"
                 android:focusableInTouchMode="true"
                 android:hint="@string/hint_password"
-                android:imeActionId="@+id/login"
-                android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:singleLine="true"
                 android:textColor="@android:color/white" />
 
         </android.support.design.widget.TextInputLayout>
@@ -62,12 +58,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusableInTouchMode="true"
-                android:hint="@string/hint_password"
-                android:imeActionId="@+id/login"
-                android:imeOptions="actionUnspecified"
+                android:hint="@string/retype_password"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:singleLine="true"
                 android:textColor="@android:color/white" />
 
         </android.support.design.widget.TextInputLayout>
@@ -80,10 +73,9 @@
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/email"
-                android:inputType="textEmailAddress"
+                android:hint="@string/user_name"
+                android:inputType="textPersonName"
                 android:maxLines="1"
-                android:singleLine="true"
                 android:textColor="@android:color/white" />
 
         </android.support.design.widget.TextInputLayout>
@@ -99,26 +91,31 @@
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:singleLine="true"
                 android:textColor="@android:color/white" />
 
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/sex"
-                android:layout_width="match_parent"
+        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:hint="@string/email"
-                android:inputType="textEmailAddress"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textColor="@android:color/white" />
-
-        </android.support.design.widget.TextInputLayout>
+                android:text="Sexo:"
+                android:textSize="20sp"/>
+            <RadioButton android:id="@+id/male_rbutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/male"
+                android:onClick="onRadioButtonClicked"/>
+            <RadioButton android:id="@+id/female_rbutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/female"
+                android:onClick="onRadioButtonClicked"/>
+        </RadioGroup>
 
         <Button
             android:id="@+id/sign_up_button"

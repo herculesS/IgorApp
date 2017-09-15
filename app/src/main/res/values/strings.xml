@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Igor</string>
 
-    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_login">Log in</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -12,7 +12,7 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
-    <string name="action_sign_in_short">Register</string>
+    <string name="action_sign_in_short">Registrar</string>
     <string name="email">Email</string>
     <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
     <string name="auth_failed">Authentication failed, check your email and password or sign up</string>
@@ -23,7 +23,7 @@
     <string name="new_pass">New Password</string>
     <string name="title_activity_profile">Firebase</string>
     <string name="hint_email">Email</string>
-    <string name="hint_password">Password</string>
+    <string name="hint_password">Senha</string>
     <string name="hint_name">Fullname</string>
     <string name="btn_login">LOGIN</string>
     <string name="btn_link_to_register">Cadastrar</string>
@@ -39,4 +39,8 @@
     <string name="btn_sign_out">Sign Out</string>
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
+    <string name="male">Homem</string>
+    <string name="female">Mulher</string>
+    <string name="retype_password">Repita a senha</string>
+    <string name="user_name">Nome</string>
 </resources>
