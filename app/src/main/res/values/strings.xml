@@ -43,4 +43,9 @@
     <string name="female">Mulher</string>
     <string name="retype_password">Repita a senha</string>
     <string name="user_name">Nome</string>
+
+    <!-- Strings related to criarAventura -->
+
+    <string name="criar_aventura_title">Criar Aventura</string>
+    <string name="criar_aventura_nome">De um nome a sua aventura</string>
 </resources>
