@@ -18,9 +18,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity android:name=".Screens.MainActivity"
@@ -36,6 +36,9 @@
             android:name=".Screens.Signup.SignupActivity"
             android:screenOrientation="portrait"
             android:label="Sign up">
+        </activity>
+        <activity android:name=".Screens.CriarNovaAventura.CriarNovaAventura"
+            android:theme="@style/Theme.AppCompat.Dialog" >
         </activity>
     </application>
 
