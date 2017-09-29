@@ -37,7 +37,7 @@
             android:screenOrientation="portrait"
             android:label="Sign up">
         </activity>
-        <activity android:name=".Screens.CriarNovaAventura.CriarNovaAventura"
+        <activity android:name=".Screens.CriarNovaAventura.CriarNovaAventuraFragment"
             android:theme="@style/Theme.AppCompat.Dialog" >
         </activity>
     </application>

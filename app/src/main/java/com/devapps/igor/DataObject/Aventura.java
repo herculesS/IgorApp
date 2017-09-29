@@ -1,4 +1,4 @@
-package com.devapps.igor.Screens.CriarNovaAventura;
+package com.devapps.igor.DataObject;
 
 /**
  * Created by hercules on 09/09/17.

@@ -1,43 +1,142 @@
 package com.devapps.igor.Screens;
 
-import android.content.Intent;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.devapps.igor.R;
-import com.devapps.igor.Screens.CriarNovaAventura.CriarNovaAventura;
+import com.devapps.igor.Screens.CriarNovaAventura.CriarNovaAventuraFragment;
+
 
 public class MainActivity extends AppCompatActivity {
-    private Button mInicio;
-    private TextView mTextView;
+
+    private FragmentManager fragmentManager;
+
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private ActionBarDrawerToggle mDrawerToggle;
+
+    private CharSequence mDrawerTitle;
+    private CharSequence mTitle;
+    private String[] mMenuItens;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mInicio = (Button) findViewById(R.id.criarAventura);
-        mTextView = (TextView) findViewById(R.id.textView3);
+        mTitle = mDrawerTitle = getTitle();
+        mMenuItens = getResources().getStringArray(R.array.menu_array);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        mInicio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, CriarNovaAventura.class);
-                startActivityForResult(i, 1);
+        // set a custom shadow that overlays the main content when the drawer opens
+        // mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        // set up the drawer's list view with items and click listener
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.drawer_list_item, mMenuItens));
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+        // enable ActionBar app icon to behave as action to toggle nav drawer
+        /*getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);*/
+
+        // ActionBarDrawerToggle ties together the the proper interactions
+        // between the sliding drawer and the action bar app icon
+        /*mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  *//* host Activity *//*
+                mDrawerLayout,         *//* DrawerLayout object *//*
+                R.drawable.ic_drawer,  *//* nav drawer image to replace 'Up' caret *//*
+                R.string.drawer_open,  *//* "open drawer" description for accessibility *//*
+                R.string.drawer_close  *//* "close drawer" description for accessibility *//*
+        ) {
+            public void onDrawerClosed(View view) {
+                getActionBar().setTitle(mTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
-        });
+
+            public void onDrawerOpened(View drawerView) {
+                getActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);*/
+
+        if (savedInstanceState == null) {
+            selectItem(0);
+        }
+
+        setFragment(savedInstanceState);
+        fragmentManager = getSupportFragmentManager();
+
     }
 
+    private void setFragment(Bundle savedInstanceState) {
+        // Check that the activity is using the layout version with
+        // the fragment_container FrameLayout
+        if (findViewById(R.id.fragment_container) != null) {
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            // However, if we're being restored from a previous state,
+            // then we don't need to do anything and should return or else
+            // we could end up with overlapping fragments.
+            if (savedInstanceState != null) {
+                return;
+            }
 
-        if(resultCode == RESULT_OK) {
-            mTextView.setText(data.getStringExtra("result"));
+            // Create a new Fragment to be placed in the activity layout
+            CriarNovaAventuraFragment firstFragment = new CriarNovaAventuraFragment();
+
+            // In case this activity was started with special instructions from an
+            // Intent, pass the Intent's extras to the fragment as arguments
+            firstFragment.setArguments(getIntent().getExtras());
+
+            // Add the fragment to the 'fragment_container' FrameLayout
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, firstFragment).commit();
         }
+    }
+
+    /* The click listner for ListView in the navigation drawer */
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
+
+    private void selectItem(int position) {
+        // update the main content by replacing fragments
+        Fragment newFragment;
+        switch (position) {
+            case 0:
+                newFragment = new CriarNovaAventuraFragment();
+                break;
+            case 1:
+                newFragment = new CriarNovaAventuraFragment();
+                break;
+            default:
+                newFragment = new CriarNovaAventuraFragment();
+                break;
+        }
+        /*Bundle args = new Bundle();
+        args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
+        fragment.setArguments(args);*/
+
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, newFragment).commit();
+
+        // update selected item and title, then close the drawer
+        mDrawerList.setItemChecked(position, true);
+        mDrawerLayout.closeDrawer(mDrawerList);
     }
 
 }

@@ -16,4 +16,11 @@ public class Database {
         databaseReference.keepSynced(true);
         return databaseReference;
     }
+
+    public static DatabaseReference getAdventuresReference(){
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
+                .child(FirebaseReference.DATABASE_ADVENTURES_REFERENCE);
+        databaseReference.keepSynced(true);
+        return databaseReference;
+    }
 }
