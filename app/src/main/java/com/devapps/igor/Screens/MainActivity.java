@@ -3,18 +3,16 @@ package com.devapps.igor.Screens;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.devapps.igor.R;
-import com.devapps.igor.Screens.CriarNovaAventura.CriarNovaAventuraFragment;
+import com.devapps.igor.Screens.CreateNewAdventure.CreateNewAdventureFragment;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -71,13 +69,14 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);*/
+        fragmentManager = getSupportFragmentManager();
+        setFragment(savedInstanceState);
 
         if (savedInstanceState == null) {
             selectItem(0);
         }
 
-        setFragment(savedInstanceState);
-        fragmentManager = getSupportFragmentManager();
+
 
     }
 
@@ -94,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Create a new Fragment to be placed in the activity layout
-            CriarNovaAventuraFragment firstFragment = new CriarNovaAventuraFragment();
+            CreateNewAdventureFragment firstFragment = new CreateNewAdventureFragment();
 
             // In case this activity was started with special instructions from an
             // Intent, pass the Intent's extras to the fragment as arguments
@@ -119,13 +118,13 @@ public class MainActivity extends AppCompatActivity {
         Fragment newFragment;
         switch (position) {
             case 0:
-                newFragment = new CriarNovaAventuraFragment();
+                newFragment = new CreateNewAdventureFragment();
                 break;
             case 1:
-                newFragment = new CriarNovaAventuraFragment();
+                newFragment = new CreateNewAdventureFragment();
                 break;
             default:
-                newFragment = new CriarNovaAventuraFragment();
+                newFragment = new CreateNewAdventureFragment();
                 break;
         }
         /*Bundle args = new Bundle();
