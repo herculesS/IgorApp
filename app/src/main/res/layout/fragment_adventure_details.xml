@@ -1,0 +1,44 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:adjustViewBounds="true"
+            app:srcCompat="@drawable/bg_adventure_title"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingTop="15dp"
+            android:text="Aventura sem título"
+            android:textColor="@color/gray_btn_bg_color"
+            android:textSize="24dp"/>
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="90dp">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            app:srcCompat="@drawable/bg_adventure_progress"/>
+    </LinearLayout>
+
+</FrameLayout>
