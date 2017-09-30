@@ -1,6 +1,5 @@
 package com.devapps.igor.Screens.CreateNewAdventure;
 
-import android.icu.util.Calendar;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -11,12 +10,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.devapps.igor.DataObject.Adventure;
-import com.devapps.igor.DataObject.Session;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
 import com.google.firebase.database.DatabaseReference;
-
-import java.util.Date;
 
 
 public class CreateNewAdventureFragment extends Fragment {
@@ -79,9 +75,9 @@ public class CreateNewAdventureFragment extends Fragment {
 
     private void initializeMembers(View view) {
         mReadyButton = (ImageView) view.findViewById(R.id.criar_aventura_botao_pronto);
-        mCloseButton = (ImageView) view.findViewById(R.id.criar_aventura_botao_fechar);
-        mFinishButton = (ImageView) view.findViewById(R.id.criar_aventura_botao_criar_aventura);
-        mNameEditText = (EditText) view.findViewById(R.id.criar_aventura_editText);
+        mCloseButton = (ImageView) view.findViewById(R.id.create_adventure_btn_close);
+        mFinishButton = (ImageView) view.findViewById(R.id.create_adventure_btn_create);
+        mNameEditText = (EditText) view.findViewById(R.id.create_adventure_editText);
 
     }
 }
