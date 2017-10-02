@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
+import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
 import com.google.firebase.database.DatabaseReference;
 
 
@@ -50,10 +51,18 @@ public class CreateNewAdventureFragment extends Fragment {
                      adventure = new Adventure(name);
                 }else{
                      adventure = new Adventure();
+                   adventure.setName( Adventure.DefaultAdventureName);
+                    adventure.setSummary(Adventure.DefaultAdventureSummary);
+                    adventure.setSessions(null);
                 }
                 DatabaseReference ref = Database.getAdventuresReference();
                 ref = ref.push();
                 ref.setValue(adventure);
+                String key = ref.getKey();
+
+               Fragment fragment =  AdventureProgressFragment.newInstance(key);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, fragment).commit();
 
             }
         });

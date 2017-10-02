@@ -1,10 +1,15 @@
 package com.devapps.igor.Screens.AdventureProgress;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.R;
@@ -19,6 +24,12 @@ public class AdventureProgressFragment extends Fragment {
 
     private String mAdventureId;
     private Adventure mAdventure;
+
+    private TextView mAdventureTitleTextView;
+    private TextView mAdventureSummaryTextView;
+    private ImageView mBtnSeeMore;
+    private ListView mSessionsListView;
+    private ImageView mBtnAddSession;
 
     public AdventureProgressFragment() {
         // Required empty public constructor
@@ -38,18 +49,7 @@ public class AdventureProgressFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mAdventureId = getArguments().getString(ADVENTURE_ID);
-            DatabaseReference ref = Database.getAdventuresReference();
-            ref.child(mAdventureId).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    mAdventure = dataSnapshot.getValue(Adventure.class);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
+            Log.d("AdventureId", mAdventureId);
 
         }
     }
@@ -58,9 +58,49 @@ public class AdventureProgressFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_adventure_details, container, false);
+        return inflater.inflate(R.layout.fragment_adventure_progress, container, false);
     }
 
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        mAdventureTitleTextView = (TextView) view.findViewById(R.id.adventure_progress_adventure_title);
+        mAdventureSummaryTextView = (TextView) view.findViewById(R.id.adventure_progress_adventure_summary);
+        mBtnSeeMore = (ImageView) view.findViewById(R.id.adventure_progress_btn_see_more);
+        mSessionsListView = (ListView) view.findViewById(R.id.adventure_progress_sessions_list);
+        mBtnAddSession = (ImageView) view.findViewById(R.id.adventure_progress_btn_add_session);
+
+        DatabaseReference ref = Database.getAdventuresReference();
+        ref.child(mAdventureId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                mAdventure = dataSnapshot.getValue(Adventure.class);
+                mAdventureTitleTextView.setText(mAdventure.getName());
+                mAdventureSummaryTextView.setText(mAdventure.getSummary());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+        mBtnSeeMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        mBtnAddSession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+    }
 
 
 }

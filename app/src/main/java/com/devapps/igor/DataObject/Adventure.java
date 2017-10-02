@@ -10,20 +10,30 @@ import java.util.List;
  */
 
 public class Adventure implements Serializable {
-    private static final String DefaultAdventureName = "Aventura sem título";
+    public static final String DefaultAdventureName = "Aventura sem título";
+    public static final String DefaultAdventureSummary = "Aventura sem resumo";
+
     private String mName;
+    private String mSummary;
     private ArrayList<Session> mSessions;
 
     public Adventure(String name) {
         mName = name;
+        mSummary = DefaultAdventureSummary;
         mSessions = null;
     }
 
     public Adventure() {
-        mName = DefaultAdventureName;
-        mSessions = null;
+
     }
 
+    public String getSummary() {
+        return mSummary;
+    }
+
+    public void setSummary(String summary) {
+        mSummary = summary;
+    }
     public ArrayList<Session> getSessions() {
         return mSessions;
     }
