@@ -1,23 +1,30 @@
 package com.devapps.igor.Screens.AdventureProgress;
 
+import android.content.Context;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.devapps.igor.DataObject.Adventure;
+import com.devapps.igor.DataObject.Session;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class AdventureProgressFragment extends Fragment {
     private static final String ADVENTURE_ID = "ADVENTURE_ID";
@@ -97,10 +104,64 @@ public class AdventureProgressFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
+
             }
         });
 
     }
 
+    private class SessionsAdapter extends ArrayAdapter<Session> {
+        public SessionsAdapter(Context context, ArrayList<Session> sessions) {
+            super(context, 0, sessions);
+        }
 
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            // Get the data item for this position
+            Session s = getItem(position);
+            // Check if an existing view is being reused, otherwise inflate the view
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.sessions_list_view_elem, parent, false);
+            }
+
+
+            TextView sessionDateTextView = (TextView) convertView.findViewById(R.id.session_list_view_item_date);
+            TextView sessionTitleTextView = (TextView) convertView.findViewById(R.id.session_list_view_item_title);
+            TextView sessionSummaryTextView = (TextView) convertView.findViewById(R.id.session_list_view_item_summary);
+
+            String[] date = s.getDate().split("/");
+            sessionDateTextView.setText(date[0] + "/" + date[1]);
+            sessionTitleTextView.setText(s.getName());
+            sessionSummaryTextView.setText(s.getSummary());
+
+
+            sessionTitleTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    View parent = (View) view.getParent();
+                    if (parent != null) {
+                        View root = (View) view.getParent().getParent();
+                        if (root != null) {
+                            TextView sessionSummaryTextView = (TextView) root.findViewById(R.id.session_list_view_item_summary);
+                            if (sessionSummaryTextView != null) {
+                                if (sessionSummaryTextView.isShown()) {
+
+                                    sessionSummaryTextView.setVisibility(View.VISIBLE);
+                                } else {
+                                    sessionSummaryTextView.setVisibility(View.GONE);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+
+            // Return the completed view to render on screen
+            return convertView;
+        }
+
+    }
 }

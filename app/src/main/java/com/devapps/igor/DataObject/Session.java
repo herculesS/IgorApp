@@ -8,8 +8,9 @@ import java.util.Date;
  */
 
 public class Session implements Serializable {
-    private  String mName;
+    private String mName;
     private String mDate;
+    private String mSummary;
 
     public String getName() {
         return mName;
@@ -25,6 +26,14 @@ public class Session implements Serializable {
 
     public void setDate(String date) {
         mDate = date;
+    }
+
+    public String getSummary() {
+        return mSummary;
+    }
+
+    public void setSummary(String summary) {
+        mSummary = summary;
     }
 
 
