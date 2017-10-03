@@ -1,23 +1,41 @@
 package com.devapps.igor.DataObject;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Created by hercules on 29/09/17.
  */
 
 public class Session implements Serializable {
-    private String mName;
+
+    public static final String DefaultSessionTitle = "Sessão sem título";
+    public static final String DefaultSessionSummary = "Sessão sem resumo";
+    public static final String DefaultSessionDate = "00/00/0000";
+
+    private String mTitle;
     private String mDate;
     private String mSummary;
 
-    public String getName() {
-        return mName;
+    public Session(String title,String date) {
+        mTitle = title;
+        mDate = date;
+        mSummary = DefaultSessionSummary;
+
+
     }
 
-    public void setName(String name) {
-        mName = name;
+    public Session() {
+        mTitle = DefaultSessionTitle;
+        mDate = DefaultSessionDate;
+        mSummary = DefaultSessionSummary;
+    }
+
+    public String getTitle() {
+        return mTitle;
+    }
+
+    public void setTitle(String title) {
+        mTitle = title;
     }
 
     public String getDate() {

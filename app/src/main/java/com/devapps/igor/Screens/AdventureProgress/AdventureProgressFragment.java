@@ -1,16 +1,13 @@
 package com.devapps.igor.Screens.AdventureProgress;
 
 import android.content.Context;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,6 +16,7 @@ import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.DataObject.Session;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
+import com.devapps.igor.Screens.CreateNewSession.CreateNewSessionFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +35,7 @@ public class AdventureProgressFragment extends Fragment {
     private ImageView mBtnSeeMore;
     private ListView mSessionsListView;
     private ImageView mBtnAddSession;
+    private Context mContext;
 
     public AdventureProgressFragment() {
         // Required empty public constructor
@@ -76,6 +75,13 @@ public class AdventureProgressFragment extends Fragment {
         mBtnSeeMore = (ImageView) view.findViewById(R.id.adventure_progress_btn_see_more);
         mSessionsListView = (ListView) view.findViewById(R.id.adventure_progress_sessions_list);
         mBtnAddSession = (ImageView) view.findViewById(R.id.adventure_progress_btn_add_session);
+        mContext = view.getContext();
+        mSessionsListView.setItemsCanFocus(true);
+
+
+       // mSessionsListView.setFocusable(false);
+       // mSessionsListView.setFocusableInTouchMode(false);
+        //mSessionsListView.setClickable(false);
 
         DatabaseReference ref = Database.getAdventuresReference();
         ref.child(mAdventureId).addValueEventListener(new ValueEventListener() {
@@ -85,6 +91,8 @@ public class AdventureProgressFragment extends Fragment {
                 mAdventure = dataSnapshot.getValue(Adventure.class);
                 mAdventureTitleTextView.setText(mAdventure.getName());
                 mAdventureSummaryTextView.setText(mAdventure.getSummary());
+                mSessionsListView.setAdapter(new SessionsAdapter(mContext, mAdventure.getSessions()));
+
             }
 
             @Override
@@ -103,6 +111,9 @@ public class AdventureProgressFragment extends Fragment {
         mBtnAddSession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Fragment fragment = CreateNewSessionFragment.newInstance(mAdventureId);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, fragment).commit();
 
 
             }
@@ -123,7 +134,7 @@ public class AdventureProgressFragment extends Fragment {
             Session s = getItem(position);
             // Check if an existing view is being reused, otherwise inflate the view
             if (convertView == null) {
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.sessions_list_view_elem, parent, false);
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.sessions_list_view_elem, parent, false);
             }
 
 
@@ -133,20 +144,26 @@ public class AdventureProgressFragment extends Fragment {
 
             String[] date = s.getDate().split("/");
             sessionDateTextView.setText(date[0] + "/" + date[1]);
-            sessionTitleTextView.setText(s.getName());
+            sessionTitleTextView.setText(s.getTitle());
             sessionSummaryTextView.setText(s.getSummary());
 
 
             sessionTitleTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Log.d("Listner","Can click me!");
                     View parent = (View) view.getParent();
                     if (parent != null) {
+                        Log.d("Listner","Can click me2!");
                         View root = (View) view.getParent().getParent();
                         if (root != null) {
+                            Log.d("Listner","Can click me3!");
                             TextView sessionSummaryTextView = (TextView) root.findViewById(R.id.session_list_view_item_summary);
                             if (sessionSummaryTextView != null) {
-                                if (sessionSummaryTextView.isShown()) {
+                                Log.d("Listner","Can click me4!");
+                                //sessionSummaryTextView.setVisibility(View.VISIBLE);
+
+                                if (!sessionSummaryTextView.isShown()) {
 
                                     sessionSummaryTextView.setVisibility(View.VISIBLE);
                                 } else {

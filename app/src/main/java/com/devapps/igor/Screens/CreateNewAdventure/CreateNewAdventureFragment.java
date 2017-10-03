@@ -47,20 +47,17 @@ public class CreateNewAdventureFragment extends Fragment {
             public void onClick(View view) {
                 String name = mNameEditText.getText().toString().trim();
                 Adventure adventure;
-                if(!name.equals("")) {
-                     adventure = new Adventure(name);
-                }else{
-                     adventure = new Adventure();
-                   adventure.setName( Adventure.DefaultAdventureName);
-                    adventure.setSummary(Adventure.DefaultAdventureSummary);
-                    adventure.setSessions(null);
+                if (!name.equals("")) {
+                    adventure = new Adventure(name);
+                } else {
+                    adventure = new Adventure();
                 }
                 DatabaseReference ref = Database.getAdventuresReference();
                 ref = ref.push();
                 ref.setValue(adventure);
                 String key = ref.getKey();
 
-               Fragment fragment =  AdventureProgressFragment.newInstance(key);
+                Fragment fragment = AdventureProgressFragment.newInstance(key);
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, fragment).commit();
 
@@ -83,7 +80,7 @@ public class CreateNewAdventureFragment extends Fragment {
     }
 
     private void initializeMembers(View view) {
-        mReadyButton = (ImageView) view.findViewById(R.id.criar_aventura_botao_pronto);
+        mReadyButton = (ImageView) view.findViewById(R.id.criar_adventure_botao_pronto);
         mCloseButton = (ImageView) view.findViewById(R.id.create_adventure_btn_close);
         mFinishButton = (ImageView) view.findViewById(R.id.create_adventure_btn_create);
         mNameEditText = (EditText) view.findViewById(R.id.create_adventure_editText);

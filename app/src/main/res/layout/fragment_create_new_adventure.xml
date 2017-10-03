@@ -68,7 +68,7 @@
                 android:hint="De um nome pra sua aventura"/>
 
             <ImageView
-                android:id="@+id/criar_aventura_botao_pronto"
+                android:id="@+id/criar_adventure_botao_pronto"
                 android:layout_width="118dp"
                 android:layout_height="42dp"
                 android:layout_alignParentEnd="true"
@@ -83,7 +83,7 @@
                 android:layout_width="260dp"
                 android:layout_height="1dp"
 
-                android:layout_alignEnd="@+id/criar_aventura_botao_pronto"
+                android:layout_alignEnd="@+id/criar_adventure_botao_pronto"
                 android:layout_alignStart="@+id/create_adventure_editText"
                 android:layout_below="@+id/create_adventure_editText"
                 android:layout_marginTop="11dp"

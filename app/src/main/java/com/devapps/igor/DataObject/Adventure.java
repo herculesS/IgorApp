@@ -20,11 +20,13 @@ public class Adventure implements Serializable {
     public Adventure(String name) {
         mName = name;
         mSummary = DefaultAdventureSummary;
-        mSessions = null;
+        mSessions = new ArrayList<Session>();
     }
 
     public Adventure() {
-
+        mName = DefaultAdventureName;
+        mSummary = DefaultAdventureSummary;
+        mSessions = new ArrayList<Session>();
     }
 
     public String getSummary() {
@@ -43,7 +45,6 @@ public class Adventure implements Serializable {
     }
 
     public void addSession(Session s){
-        if(mSessions == null) mSessions = new ArrayList<Session>();
         mSessions.add(s);
     }
 

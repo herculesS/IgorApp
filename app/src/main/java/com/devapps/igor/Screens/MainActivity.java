@@ -11,7 +11,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.R;
+import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
 import com.devapps.igor.Screens.CreateNewAdventure.CreateNewAdventureFragment;
 
 
@@ -93,11 +95,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Create a new Fragment to be placed in the activity layout
-            CreateNewAdventureFragment firstFragment = new CreateNewAdventureFragment();
+            AdventureProgressFragment firstFragment = AdventureProgressFragment.newInstance("-KvV1jHurj0sGVPXP9GO");
 
             // In case this activity was started with special instructions from an
             // Intent, pass the Intent's extras to the fragment as arguments
-            firstFragment.setArguments(getIntent().getExtras());
+            //firstFragment.setArguments(getIntent().getExtras());
 
             // Add the fragment to the 'fragment_container' FrameLayout
             getSupportFragmentManager().beginTransaction()
@@ -118,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment newFragment;
         switch (position) {
             case 0:
-                newFragment = new CreateNewAdventureFragment();
+                newFragment = AdventureProgressFragment.newInstance("-KvV1jHurj0sGVPXP9GO");
                 break;
             case 1:
                 newFragment = new CreateNewAdventureFragment();
