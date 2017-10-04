@@ -1,117 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:app="http://schemas.android.com/apk/res-auto"
-             xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.devapps.igor.Screens.MainActivity">
+             android:layout_height="match_parent">
 
-    <FrameLayout
+
+    <ImageView
+        android:id="@+id/create_session_btn_create"
+        android:layout_width="111dp"
+        android:layout_height="77dp"
+        android:layout_gravity="right"
+        app:srcCompat="@drawable/btn_close_edit_mode"/>
+
+    <ImageView
+        android:id="@+id/create_session_btn_close"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:layout_gravity="left"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        app:srcCompat="@drawable/btn_close"/>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/bg_create_adventure_session"/>
 
-        <ImageView
-            android:id="@+id/create_session_btn_create"
-            android:layout_width="99dp"
-            android:layout_height="76dp"
-            android:layout_gravity="right"
-            app:srcCompat="@drawable/btn_close_edit_mode"/>
-
-        <RelativeLayout
+        <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/create_session_btn_close"
-                android:layout_width="13dp"
-                android:layout_height="13dp"
-                android:layout_alignParentStart="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="20dp"
-                app:srcCompat="@drawable/btn_close"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="43dp"
+            android:paddingBottom="15dp"
+            android:text="Criar Sessão"/>
 
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="43dp"
+            android:text="Dê um nome à próxima sessão"/>
+
+
+        <EditText
+            android:id="@+id/create_session_editText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:inputType="text|textNoSuggestions"
+            android:layout_marginLeft="43dp"
+            android:hint="Dê um nome pra sua sessão"/>
+
+
+        <FrameLayout
+            android:id="@+id/layout_ready_date_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/create_session_editText"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="26dp">
+
+
+            <Button
+                android:id="@+id/session_date_picker"
+                android:layout_width="118dp"
+                android:layout_height="42dp"
                 android:layout_gravity="left"
-                android:layout_toEndOf="@+id/create_session_btn_close"
-                android:paddingBottom="15dp"
-                android:text="Criar Sessão"/>
-
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/textView"
-                android:layout_below="@+id/textView"
-                android:paddingBottom="5dp"
-                android:text="Dê um nome à próxima sessão"/>
-
-            <EditText
-                android:id="@+id/create_session_editText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/textView2"
-                android:layout_below="@+id/textView2"
-                android:background="@android:color/transparent"
-                android:hint="De um nome pra sua sessão"/>
-
-            <RelativeLayout
-                android:id="@+id/layout_ready_date_picker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@+id/create_session_editText"
-                android:layout_marginTop="26dp"
-                android:orientation="horizontal">
-
-
-                <Button
-                    android:id="@+id/session_date_picker"
-                    android:layout_width="118dp"
-                    android:layout_height="42dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="43dp"
-                    android:text="02/10"
-                    android:textColor="#FFF"
-                    android:textStyle="bold"
-                    android:background="@drawable/bg_button_default"/>
-
-                <ImageView
-                    android:id="@+id/criar_session_botao_pronto"
-                    android:layout_width="118dp"
-                    android:layout_height="42dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="43dp"
-                    app:srcCompat="@drawable/btn_ready"/>
-
-            </RelativeLayout>
+                android:layout_marginLeft="43dp"
+                android:background="@drawable/bg_button_default"
+                android:text="02/10"
+                android:textColor="#FFF"
+                android:textStyle="bold"/>
 
             <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="260dp"
-                android:layout_height="1dp"
+                android:id="@+id/criar_session_botao_pronto"
+                android:layout_width="118dp"
+                android:layout_height="42dp"
+                android:layout_gravity="right"
+                android:layout_marginRight="43dp"
+                app:srcCompat="@drawable/btn_ready"/>
 
-                android:layout_alignEnd="@+id/layout_ready_date_picker"
-                android:layout_alignStart="@+id/create_session_editText"
-                android:layout_below="@+id/create_session_editText"
-                android:layout_marginTop="11dp"
-                app:srcCompat="@drawable/barra_de_progressao_jogadas"/>
+        </FrameLayout>
 
-
-        </RelativeLayout>
-    </FrameLayout>
-
-
+    </LinearLayout>
 </FrameLayout>
+
