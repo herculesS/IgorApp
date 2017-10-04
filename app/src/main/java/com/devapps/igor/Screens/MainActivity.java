@@ -7,6 +7,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,13 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
 
     private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
-
-    private CharSequence mDrawerTitle;
-    private CharSequence mTitle;
     CustomDrawerAdapter drawerAdapter;
-
-    private String[] mMenuItens;
+    private ListView mDrawerList;
 
     List<DrawerItem> dataList;
 
@@ -42,14 +38,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+
         fragmentManager = getSupportFragmentManager();
 
         dataList = new ArrayList<DrawerItem>();
-        mTitle = mDrawerTitle = getTitle();
-        mMenuItens = getResources().getStringArray(R.array.menu_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
+        String[] mMenuItens = getResources().getStringArray(R.array.menu_array);
         dataList.add(new DrawerItem(mMenuItens[0], R.drawable.profile_icon));
         dataList.add(new DrawerItem(mMenuItens[1], R.drawable.profile_icon));
         dataList.add(new DrawerItem(mMenuItens[2], R.drawable.profile_icon));
@@ -75,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void selectItem(int position) {
         // update the main content by replacing fragments
+        // TODO link with the others Fragments
         Fragment newFragment;
         switch (position) {
             case 0:

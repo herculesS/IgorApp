@@ -28,13 +28,16 @@
         <activity
             android:name=".Screens.MainActivity"
             android:label="Igor"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".Screens.Login.LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:label="@string/title_activity_login"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Screens.Signup.SignupActivity"
-            android:label="Sign up"></activity>
+            android:label="Sign up"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
