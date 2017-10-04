@@ -77,11 +77,7 @@ public class AdventureProgressFragment extends Fragment {
         mBtnAddSession = (ImageView) view.findViewById(R.id.adventure_progress_btn_add_session);
         mContext = view.getContext();
         mSessionsListView.setItemsCanFocus(true);
-
-
-       // mSessionsListView.setFocusable(false);
-       // mSessionsListView.setFocusableInTouchMode(false);
-        //mSessionsListView.setClickable(false);
+        mBtnSeeMore.setVisibility(View.GONE);
 
         DatabaseReference ref = Database.getAdventuresReference();
         ref.child(mAdventureId).addValueEventListener(new ValueEventListener() {
@@ -91,7 +87,30 @@ public class AdventureProgressFragment extends Fragment {
                 mAdventure = dataSnapshot.getValue(Adventure.class);
                 mAdventureTitleTextView.setText(mAdventure.getName());
                 mAdventureSummaryTextView.setText(mAdventure.getSummary());
+                mAdventureSummaryTextView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mAdventureSummaryTextView.getLineCount() > 6) {
+                            mAdventureSummaryTextView.setMaxLines(6);
+                            mBtnSeeMore.setVisibility(View.VISIBLE);
+                        }
+
+                    }
+                });
+
                 mSessionsListView.setAdapter(new SessionsAdapter(mContext, mAdventure.getSessions()));
+                mBtnSeeMore.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (mAdventureSummaryTextView.getMaxLines() > 6) {
+                            mAdventureSummaryTextView.setMaxLines(6);
+                            mAdventureSummaryTextView.getMaxLines();
+                        } else {
+                            mAdventureSummaryTextView.setMaxLines(mAdventureSummaryTextView.getLineCount());
+                            mAdventureSummaryTextView.getMaxLines();
+                        }
+                    }
+                });
 
             }
 
@@ -102,12 +121,6 @@ public class AdventureProgressFragment extends Fragment {
         });
 
 
-        mBtnSeeMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
         mBtnAddSession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -151,17 +164,12 @@ public class AdventureProgressFragment extends Fragment {
             sessionTitleTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d("Listner","Can click me!");
                     View parent = (View) view.getParent();
                     if (parent != null) {
-                        Log.d("Listner","Can click me2!");
                         View root = (View) view.getParent().getParent();
                         if (root != null) {
-                            Log.d("Listner","Can click me3!");
                             TextView sessionSummaryTextView = (TextView) root.findViewById(R.id.session_list_view_item_summary);
                             if (sessionSummaryTextView != null) {
-                                Log.d("Listner","Can click me4!");
-                                //sessionSummaryTextView.setVisibility(View.VISIBLE);
 
                                 if (!sessionSummaryTextView.isShown()) {
 
