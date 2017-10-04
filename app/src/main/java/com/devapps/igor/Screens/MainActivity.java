@@ -15,6 +15,11 @@ import android.widget.ListView;
 
 import com.devapps.igor.R;
 import com.devapps.igor.Screens.CriarNovaAventura.CriarNovaAventuraFragment;
+import com.devapps.igor.Screens.NavigationDrawer.CustomDrawerAdapter;
+import com.devapps.igor.Screens.NavigationDrawer.DrawerItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -23,86 +28,40 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
-    private ActionBarDrawerToggle mDrawerToggle;
 
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
+    CustomDrawerAdapter drawerAdapter;
+
     private String[] mMenuItens;
 
+    List<DrawerItem> dataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        fragmentManager = getSupportFragmentManager();
+
+        dataList = new ArrayList<DrawerItem>();
         mTitle = mDrawerTitle = getTitle();
         mMenuItens = getResources().getStringArray(R.array.menu_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        // set a custom shadow that overlays the main content when the drawer opens
-        // mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        // set up the drawer's list view with items and click listener
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, mMenuItens));
+        dataList.add(new DrawerItem(mMenuItens[0], R.drawable.profile_icon));
+        dataList.add(new DrawerItem(mMenuItens[1], R.drawable.profile_icon));
+        dataList.add(new DrawerItem(mMenuItens[2], R.drawable.profile_icon));
+        dataList.add(new DrawerItem(mMenuItens[3], R.drawable.profile_icon));
+        dataList.add(new DrawerItem(mMenuItens[4], R.drawable.profile_icon));
+
+        drawerAdapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item, dataList);
+        mDrawerList.setAdapter(drawerAdapter);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
-        // enable ActionBar app icon to behave as action to toggle nav drawer
-        /*getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);*/
-
-        // ActionBarDrawerToggle ties together the the proper interactions
-        // between the sliding drawer and the action bar app icon
-        /*mDrawerToggle = new ActionBarDrawerToggle(
-                this,                  *//* host Activity *//*
-                mDrawerLayout,         *//* DrawerLayout object *//*
-                R.drawable.ic_drawer,  *//* nav drawer image to replace 'Up' caret *//*
-                R.string.drawer_open,  *//* "open drawer" description for accessibility *//*
-                R.string.drawer_close  *//* "close drawer" description for accessibility *//*
-        ) {
-            public void onDrawerClosed(View view) {
-                getActionBar().setTitle(mTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                getActionBar().setTitle(mDrawerTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-        };
-        mDrawerLayout.setDrawerListener(mDrawerToggle);*/
 
         if (savedInstanceState == null) {
             selectItem(0);
-        }
-
-        setFragment(savedInstanceState);
-        fragmentManager = getSupportFragmentManager();
-
-    }
-
-    private void setFragment(Bundle savedInstanceState) {
-        // Check that the activity is using the layout version with
-        // the fragment_container FrameLayout
-        if (findViewById(R.id.fragment_container) != null) {
-
-            // However, if we're being restored from a previous state,
-            // then we don't need to do anything and should return or else
-            // we could end up with overlapping fragments.
-            if (savedInstanceState != null) {
-                return;
-            }
-
-            // Create a new Fragment to be placed in the activity layout
-            CriarNovaAventuraFragment firstFragment = new CriarNovaAventuraFragment();
-
-            // In case this activity was started with special instructions from an
-            // Intent, pass the Intent's extras to the fragment as arguments
-            firstFragment.setArguments(getIntent().getExtras());
-
-            // Add the fragment to the 'fragment_container' FrameLayout
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, firstFragment).commit();
         }
     }
 
@@ -128,9 +87,6 @@ public class MainActivity extends AppCompatActivity {
                 newFragment = new CriarNovaAventuraFragment();
                 break;
         }
-        /*Bundle args = new Bundle();
-        args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
-        fragment.setArguments(args);*/
 
         fragmentManager.beginTransaction().replace(R.id.fragment_container, newFragment).commit();
 
