@@ -3,7 +3,7 @@
 
     <!-- Strings related to MenuDrawer -->
     <string-array name="menu_array">
-        <item>Anventuras</item>
+        <item>Aventuras</item>
         <item>Livros</item>
         <item>Conta</item>
         <item>Notificações</item>
@@ -58,10 +58,5 @@
 
     <string name="criar_aventura_title">Criar Aventura</string>
     <string name="criar_aventura_nome">De um nome a sua aventura</string>
-    <string name="title_activity_main2">Main2Activity</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_settings">Settings</string>
 </resources>

@@ -1,21 +1,18 @@
 package com.devapps.igor.Screens;
 
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.devapps.igor.R;
-import com.devapps.igor.Screens.CriarNovaAventura.CriarNovaAventuraFragment;
+import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
+import com.devapps.igor.Screens.CreateNewAdventure.CreateNewAdventureFragment;
 import com.devapps.igor.Screens.NavigationDrawer.CustomDrawerAdapter;
 import com.devapps.igor.Screens.NavigationDrawer.DrawerItem;
 
@@ -77,13 +74,13 @@ public class MainActivity extends AppCompatActivity {
         Fragment newFragment;
         switch (position) {
             case 0:
-                newFragment = new CriarNovaAventuraFragment();
+                newFragment = AdventureProgressFragment.newInstance("-KvV1jHurj0sGVPXP9GO");
                 break;
             case 1:
-                newFragment = new CriarNovaAventuraFragment();
+                newFragment = new CreateNewAdventureFragment();
                 break;
             default:
-                newFragment = new CriarNovaAventuraFragment();
+                newFragment = new CreateNewAdventureFragment();
                 break;
         }
 

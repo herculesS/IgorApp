@@ -28,8 +28,7 @@
         <activity
             android:name=".Screens.MainActivity"
             android:label="Igor"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Screens.Login.LoginActivity"
             android:label="@string/title_activity_login"

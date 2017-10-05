@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:id="@+id/session_list_view_item_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:textStyle="bold"
+            android:text="TextView"/>
+
+        <TextView
+            android:id="@+id/session_list_view_item_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="TextView"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/session_list_view_item_summary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit amet pretium nunc, non tempor sem. Maecenas eget quam sem. Phasellus metus ante, vulputate congue metus semper, tristique vestibulum eros. Vestibulum vehicula nisl est, et semper nisl molestie eu. Cras sed erat sagittis, porttitor dolor non, convallis lacus. In hendrerit convallis enim at vulputate. Nam velit eros, accumsan sit amet dolor eget, viverra tincidunt nunc."/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:srcCompat="@drawable/line"/>
+</LinearLayout>
