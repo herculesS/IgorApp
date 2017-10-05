@@ -70,14 +70,7 @@ public class AdventureProgressFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        mAdventureTitleTextView = (TextView) view.findViewById(R.id.adventure_progress_adventure_title);
-        mAdventureSummaryTextView = (TextView) view.findViewById(R.id.adventure_progress_adventure_summary);
-        mBtnSeeMore = (ImageView) view.findViewById(R.id.adventure_progress_btn_see_more);
-        mSessionsListView = (ListView) view.findViewById(R.id.adventure_progress_sessions_list);
-        mBtnAddSession = (ImageView) view.findViewById(R.id.adventure_progress_btn_add_session);
-        mContext = view.getContext();
-        mSessionsListView.setItemsCanFocus(true);
-        mBtnSeeMore.setVisibility(View.GONE);
+        InitializeMembers(view);
 
         DatabaseReference ref = Database.getAdventuresReference();
         ref.child(mAdventureId).addValueEventListener(new ValueEventListener() {
@@ -134,6 +127,19 @@ public class AdventureProgressFragment extends Fragment {
 
     }
 
+    private void InitializeMembers(View view) {
+        mAdventureTitleTextView = (TextView) view.findViewById(R.id.adventure_progress_adventure_title);
+        mAdventureSummaryTextView = (TextView) view.findViewById(R.id.adventure_progress_adventure_summary);
+        mBtnSeeMore = (ImageView) view.findViewById(R.id.adventure_progress_btn_see_more);
+        mSessionsListView = (ListView) view.findViewById(R.id.adventure_progress_sessions_list);
+        mBtnAddSession = (ImageView) view.findViewById(R.id.adventure_progress_btn_add_session);
+        mContext = view.getContext();
+        mSessionsListView.setItemsCanFocus(true);
+        mBtnSeeMore.setVisibility(View.GONE);
+    }
+
+
+    /* Adapter class implementation for the items of the listView that contains the sessions */
     private class SessionsAdapter extends ArrayAdapter<Session> {
         public SessionsAdapter(Context context, ArrayList<Session> sessions) {
             super(context, 0, sessions);
@@ -142,10 +148,7 @@ public class AdventureProgressFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-
-            // Get the data item for this position
             Session s = getItem(position);
-            // Check if an existing view is being reused, otherwise inflate the view
             if (convertView == null) {
                 convertView = LayoutInflater.from(mContext).inflate(R.layout.sessions_list_view_elem, parent, false);
             }
@@ -155,8 +158,8 @@ public class AdventureProgressFragment extends Fragment {
             TextView sessionTitleTextView = (TextView) convertView.findViewById(R.id.session_list_view_item_title);
             TextView sessionSummaryTextView = (TextView) convertView.findViewById(R.id.session_list_view_item_summary);
 
-            String[] date = s.getDate().split("/");
-            sessionDateTextView.setText(date[0] + "/" + date[1]);
+
+            sessionDateTextView.setText(Session.formatSessionDateToDayMonth(s.getDate()));
             sessionTitleTextView.setText(s.getTitle());
             sessionSummaryTextView.setText(s.getSummary());
 
@@ -168,25 +171,29 @@ public class AdventureProgressFragment extends Fragment {
                     if (parent != null) {
                         View root = (View) view.getParent().getParent();
                         if (root != null) {
-                            TextView sessionSummaryTextView = (TextView) root.findViewById(R.id.session_list_view_item_summary);
-                            if (sessionSummaryTextView != null) {
-
-                                if (!sessionSummaryTextView.isShown()) {
-
-                                    sessionSummaryTextView.setVisibility(View.VISIBLE);
-                                } else {
-                                    sessionSummaryTextView.setVisibility(View.GONE);
-                                }
-                            }
+                            setSummarySeeMoreBehavior(root);
                         }
                     }
                 }
             });
 
-
-            // Return the completed view to render on screen
             return convertView;
         }
 
+        private void setSummarySeeMoreBehavior(View root) {
+            TextView sessionSummaryTextView = (TextView) root.findViewById(R.id.session_list_view_item_summary);
+            if (sessionSummaryTextView != null) {
+
+                if (!sessionSummaryTextView.isShown()) {
+
+                    sessionSummaryTextView.setVisibility(View.VISIBLE);
+                } else {
+                    sessionSummaryTextView.setVisibility(View.GONE);
+                }
+            }
+        }
+
     }
+
+
 }
