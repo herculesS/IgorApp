@@ -76,7 +76,9 @@ public class CreateNewSessionFragment extends Fragment {
                 if (!title.equals("")) {
                     session = new Session(title, date);
                 } else {
+                    //TODO make today the default date in the default session constructor
                     session = new Session();
+                    session.setDate(date);
                 }
 
                 mAdventure.addSession(session);
@@ -126,7 +128,8 @@ public class CreateNewSessionFragment extends Fragment {
                 @Override
                 public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                     mDate.set(year, month, day);
-                    mBtnDatePicker.setText(mDate.get(Calendar.DAY_OF_MONTH) + "/" + mDate.get(Calendar.MONTH));
+                    mBtnDatePicker.setText(Session.
+                            formatSessionDateToDayMonth(mDate.get(Calendar.DAY_OF_MONTH) + "/" + mDate.get(Calendar.MONTH)));
                 }
             }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         }
@@ -171,7 +174,8 @@ public class CreateNewSessionFragment extends Fragment {
         mFinishButton = (ImageView) view.findViewById(R.id.create_session_btn_create);
         mTitleEditText = (EditText) view.findViewById(R.id.create_session_editText);
         mBtnDatePicker = (Button) view.findViewById(R.id.session_date_picker);
-        mBtnDatePicker.setText(mDate.get(Calendar.DAY_OF_MONTH) + "/" + mDate.get(Calendar.MONTH));
+        mBtnDatePicker.setText(Session.
+                formatSessionDateToDayMonth(mDate.get(Calendar.DAY_OF_MONTH) + "/" + mDate.get(Calendar.MONTH)));
 
     }
 }
