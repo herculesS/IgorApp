@@ -22,7 +22,7 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
-    <string name="action_sign_in_short">Registrar</string>
+    <string name="action_sign_in_short">CRIAR</string>
     <string name="email">Email</string>
     <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
     <string name="auth_failed">Authentication failed, check your email and password or sign up</string>
@@ -35,11 +35,11 @@
     <string name="hint_email">Email</string>
     <string name="hint_password">Senha</string>
     <string name="hint_name">Fullname</string>
-    <string name="btn_login">LOGIN</string>
-    <string name="btn_link_to_register">Cadastrar</string>
+    <string name="btn_login">ENTRAR</string>
+    <string name="btn_link_to_register">criar conta</string>
     <string name="btn_link_to_login">Already registered. Login Me!</string>
     <string name="title_activity_reset_password">ResetPasswordActivity</string>
-    <string name="btn_forgot_password">Esqueceu sua senha?</string>
+    <string name="btn_forgot_password">esqueci minha senha</string>
     <string name="btn_reset_password">Reset Password</string>
     <string name="btn_back"><![CDATA[<< Back]]></string>
     <string name="hint_new_email">New Email</string>
