@@ -12,4 +12,7 @@
     <color name="lightBlue">#06E2BA</color>
     <color name="gray2">#E2E2E1</color>
     <color name="text_color_1">#666666</color>
+    <color name="CreationLabelBlue">#00e2ba</color>
+    <color name="CreationLabelGray">#877D91</color>
+    <color name="CreationLabelBlack">#000000</color>
 </resources>

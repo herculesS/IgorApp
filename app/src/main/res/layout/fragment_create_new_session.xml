@@ -7,15 +7,15 @@
 
     <ImageView
         android:id="@+id/create_session_btn_create"
-        android:layout_width="111dp"
-        android:layout_height="77dp"
+        android:layout_width="76dp"
+        android:layout_height="76dp"
         android:layout_gravity="right"
         app:srcCompat="@drawable/btn_close_edit_mode"/>
 
     <ImageView
         android:id="@+id/create_session_btn_close"
-        android:layout_width="13dp"
-        android:layout_height="13dp"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
         android:layout_gravity="left"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="20dp"
@@ -37,7 +37,8 @@
             android:layout_gravity="left"
             android:layout_marginLeft="43dp"
             android:paddingBottom="15dp"
-            android:text="Criar Sessão"/>
+            android:text="@string/create_session_label"
+            android:textColor="@color/CreationLabelBlue"/>
 
 
         <TextView
@@ -45,7 +46,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="43dp"
-            android:text="Dê um nome à próxima sessão"/>
+            android:text="@string/create_session_hint_label"
+            android:textColor="@color/CreationLabelGray"/>
 
 
         <EditText
@@ -54,8 +56,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_marginLeft="43dp"
-            android:hint="Dê um nome pra sua sessão"
-            android:inputType="text|textNoSuggestions"/>
+            android:background="@android:color/transparent"
+            android:hint="@string/create_session_edit_text_hint"
+            android:inputType="text|textNoSuggestions"
+            android:textColor="@color/CreationLabelBlack"/>
 
 
         <FrameLayout

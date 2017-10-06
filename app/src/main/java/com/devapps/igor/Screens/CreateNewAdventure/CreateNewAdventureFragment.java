@@ -1,11 +1,13 @@
 package com.devapps.igor.Screens.CreateNewAdventure;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -14,6 +16,8 @@ import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
 import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
 import com.google.firebase.database.DatabaseReference;
+
+import static android.content.Context.INPUT_METHOD_SERVICE;
 
 
 public class CreateNewAdventureFragment extends Fragment {
@@ -57,6 +61,7 @@ public class CreateNewAdventureFragment extends Fragment {
                 ref.setValue(adventure);
                 String key = ref.getKey();
 
+
                 Fragment fragment = AdventureProgressFragment.newInstance(key);
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, fragment).commit();
@@ -84,6 +89,11 @@ public class CreateNewAdventureFragment extends Fragment {
         mCloseButton = (ImageView) view.findViewById(R.id.create_adventure_btn_close);
         mFinishButton = (ImageView) view.findViewById(R.id.create_adventure_btn_create);
         mNameEditText = (EditText) view.findViewById(R.id.create_adventure_editText);
+        mNameEditText.requestFocus();
+        if (getActivity() != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(mNameEditText, InputMethodManager.SHOW_IMPLICIT);
+        }
 
     }
 }

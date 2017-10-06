@@ -4,12 +4,14 @@ import android.app.DatePickerDialog;
 
 import java.util.Calendar;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -24,6 +26,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+
+import static android.content.Context.INPUT_METHOD_SERVICE;
 
 public class CreateNewSessionFragment extends Fragment {
     private static final String ADVENTURE_ID = "ADVENTURE_ID";
@@ -87,6 +91,10 @@ public class CreateNewSessionFragment extends Fragment {
                 DatabaseReference ref = Database.getAdventuresReference();
                 ref.child(mAdventureId).setValue(mAdventure);
 
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+
+
                 Fragment fragment = AdventureProgressFragment.newInstance(mAdventureId);
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, fragment).commit();
@@ -97,6 +105,7 @@ public class CreateNewSessionFragment extends Fragment {
         mFinishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Fragment fragment = AdventureProgressFragment.newInstance(mAdventureId);
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, fragment).commit();
@@ -106,6 +115,7 @@ public class CreateNewSessionFragment extends Fragment {
         mCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Fragment fragment = AdventureProgressFragment.newInstance(mAdventureId);
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, fragment).commit();
@@ -147,6 +157,7 @@ public class CreateNewSessionFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         initializeMembers(view);
         DatabaseReference ref = Database.getAdventuresReference();
         ref.child(mAdventureId).addValueEventListener(new ValueEventListener() {
@@ -173,6 +184,11 @@ public class CreateNewSessionFragment extends Fragment {
         mCloseButton = (ImageView) view.findViewById(R.id.create_session_btn_close);
         mFinishButton = (ImageView) view.findViewById(R.id.create_session_btn_create);
         mTitleEditText = (EditText) view.findViewById(R.id.create_session_editText);
+        mTitleEditText.requestFocus();
+        if (getActivity() != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(mTitleEditText, InputMethodManager.SHOW_IMPLICIT);
+        }
         mBtnDatePicker = (Button) view.findViewById(R.id.session_date_picker);
         mBtnDatePicker.setText(Session.
                 formatSessionDateToDayMonth(mDate.get(Calendar.DAY_OF_MONTH) + "/" + mDate.get(Calendar.MONTH)));

@@ -9,38 +9,36 @@
 
     <ImageView
         android:id="@+id/create_adventure_btn_create"
-        android:layout_width="99dp"
+        android:layout_width="76dp"
         android:layout_height="76dp"
         android:layout_gravity="right"
         app:srcCompat="@drawable/btn_close_edit_mode"/>
 
+    <ImageView
+        android:id="@+id/create_adventure_btn_close"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        app:srcCompat="@drawable/btn_close"/>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/create_adventure_btn_close"
-                android:layout_width="13dp"
-                android:layout_height="13dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="20dp"
-                app:srcCompat="@drawable/btn_close"/>
-
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:paddingBottom="15dp"
-                android:text="@string/criar_aventura_title"/>
-        </LinearLayout>
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="43dp"
+            android:paddingBottom="15dp"
+            android:text="@string/criar_aventura_title"
+            android:textColor="@color/CreationLabelBlue"/>
 
 
         <TextView
@@ -48,16 +46,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="43dp"
-            android:paddingBottom="5dp"
-            android:text="@string/criar_aventura_nome"/>
+            android:text="@string/create_adventure_hint"
+            android:textColor="@color/CreationLabelGray"/>
 
         <EditText
             android:id="@+id/create_adventure_editText"
-            android:layout_width="250dp"
-            android:layout_height="25dp"
-            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="43dp"
             android:background="@android:color/transparent"
-            android:hint="De um nome pra sua aventura"/>
+            android:hint="@string/create_adventure_hint"
+            android:textColor="@color/CreationLabelBlack"/>
 
         <ImageView
             android:id="@+id/criar_adventure_botao_pronto"
@@ -69,12 +69,6 @@
             android:layout_marginRight="43dp"
             android:layout_marginTop="26dp"
             app:srcCompat="@drawable/btn_ready"/>
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="260dp"
-            android:layout_height="1dp"
-            app:srcCompat="@drawable/barra_de_progressao_jogadas"/>
 
 
     </LinearLayout>

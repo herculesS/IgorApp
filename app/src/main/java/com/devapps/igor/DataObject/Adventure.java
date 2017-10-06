@@ -12,6 +12,7 @@ import java.util.List;
 public class Adventure implements Serializable {
     public static final String DefaultAdventureName = "Aventura sem título";
     public static final String DefaultAdventureSummary = "Aventura sem resumo";
+    public static final String ADVENTURE_TAG = "Adventure";
 
     private String mName;
     private String mSummary;

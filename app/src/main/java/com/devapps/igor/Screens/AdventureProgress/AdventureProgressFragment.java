@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -17,12 +18,15 @@ import com.devapps.igor.DataObject.Session;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
 import com.devapps.igor.Screens.CreateNewSession.CreateNewSessionFragment;
+import com.devapps.igor.Screens.EditSummary.EditSummaryFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+
+import static android.content.Context.INPUT_METHOD_SERVICE;
 
 public class AdventureProgressFragment extends Fragment {
     private static final String ADVENTURE_ID = "ADVENTURE_ID";
@@ -53,6 +57,7 @@ public class AdventureProgressFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mAdventureId = getArguments().getString(ADVENTURE_ID);
             Log.d("AdventureId", mAdventureId);
@@ -71,6 +76,10 @@ public class AdventureProgressFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         InitializeMembers(view);
+        if (getActivity().getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        }
 
         DatabaseReference ref = Database.getAdventuresReference();
         ref.child(mAdventureId).addValueEventListener(new ValueEventListener() {
@@ -79,6 +88,14 @@ public class AdventureProgressFragment extends Fragment {
 
                 mAdventure = dataSnapshot.getValue(Adventure.class);
                 mAdventureTitleTextView.setText(mAdventure.getName());
+                mAdventureSummaryTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Fragment fragment = EditSummaryFragment.newInstance(Adventure.ADVENTURE_TAG, mAdventureId, 0);
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragment_container, fragment).commit();
+                    }
+                });
                 mAdventureSummaryTextView.setText(mAdventure.getSummary());
                 mAdventureSummaryTextView.post(new Runnable() {
                     @Override
@@ -162,6 +179,16 @@ public class AdventureProgressFragment extends Fragment {
             sessionDateTextView.setText(Session.formatSessionDateToDayMonth(s.getDate()));
             sessionTitleTextView.setText(s.getTitle());
             sessionSummaryTextView.setText(s.getSummary());
+            sessionSummaryTextView.setTag(position);
+            sessionSummaryTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int sessionId = (Integer) view.getTag();
+                    Fragment fragment = EditSummaryFragment.newInstance(Session.SESSION_TAG, mAdventureId, sessionId);
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, fragment).commit();
+                }
+            });
 
 
             sessionTitleTextView.setOnClickListener(new View.OnClickListener() {
