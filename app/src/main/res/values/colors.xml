@@ -11,4 +11,5 @@
     <color name="accentColor">#E33A51</color>
     <color name="lightBlue">#06E2BA</color>
     <color name="gray2">#E2E2E1</color>
+    <color name="text_color_1">#666666</color>
 </resources>

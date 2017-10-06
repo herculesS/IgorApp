@@ -10,7 +10,9 @@ public class Profile implements Serializable {
     private String name;
     private String email;
     private Utils.Sex sex;
-    private String birthdate;
+    private int birthDay;
+    private int birthMonth;
+    private int birthYear;
 
     public String getId() {
         return id;
@@ -36,19 +38,35 @@ public class Profile implements Serializable {
         this.email = email;
     }
 
-    public String getBirthdate() {
-        return birthdate;
-    }
-
-    public void setBirthdate(String birthdate) {
-        this.birthdate = birthdate;
-    }
-
     public Utils.Sex getSex() {
         return sex;
     }
 
     public void setSex(Utils.Sex sex) {
         this.sex = sex;
+    }
+
+    public int getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(int birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    public int getBirthMonth() {
+        return birthMonth;
+    }
+
+    public void setBirthMonth(int birthMonth) {
+        this.birthMonth = birthMonth;
+    }
+
+    public int getBirthYear() {
+        return birthYear;
+    }
+
+    public void setBirthYear(int birthYear) {
+        this.birthYear = birthYear;
     }
 }

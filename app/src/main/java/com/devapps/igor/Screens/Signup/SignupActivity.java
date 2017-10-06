@@ -1,5 +1,7 @@
 package com.devapps.igor.Screens.Signup;
 
+import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -7,8 +9,10 @@ import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.R;
@@ -23,11 +27,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.Calendar;
+
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class SignupActivity extends AppCompatActivity {
 
     private static final String TAG = "SignupActivity";
+
+    private Activity mActivity;
 
     private EditText _inputEmail;
     private EditText _inputPassword;
@@ -35,6 +43,12 @@ public class SignupActivity extends AppCompatActivity {
     private EditText _userName;
     private Utils.Sex userSex = Utils.Sex.MALE;
     private Button _btnSignUp;
+    private TextView _birthDate;
+
+    private int birthYear;
+    private int birthDay;
+    private int birthMonth;
+    private Calendar today = Calendar.getInstance();
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -46,6 +60,8 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        mActivity = this;
 
         //Get Firebase auth instance
         userDatabaseReference = Database.getUsersReference();
@@ -66,7 +82,9 @@ public class SignupActivity extends AppCompatActivity {
                     userProfile.setName(name);
                     userProfile.setEmail(email);
                     userProfile.setSex(userSex);
-                    //TODO Birth date
+                    userProfile.setBirthDay(birthDay);
+                    userProfile.setBirthMonth(birthMonth);
+                    userProfile.setBirthYear(birthYear);
 
                     userDatabaseReference.child(user.getUid()).setValue(userProfile)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -94,6 +112,7 @@ public class SignupActivity extends AppCompatActivity {
         _inputPassword = (EditText) findViewById(R.id.password);
         _inputRetypePassword = (EditText) findViewById(R.id.r_password);
         _userName = (EditText) findViewById(R.id.name);
+        _birthDate = (TextView) findViewById(R.id.birthDate);
 
         _btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +120,33 @@ public class SignupActivity extends AppCompatActivity {
                 signup();
             }
         });
+
+        birthDay = today.get(Calendar.DAY_OF_MONTH);
+        birthMonth = today.get(Calendar.MONTH);
+        birthYear = today.get(Calendar.YEAR);
+
+        _birthDate.setText(birthDay + "\\" + (birthMonth + 1) + "\\" + birthYear);
+
+        _birthDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePickerDialog mDatePicker = new DatePickerDialog(mActivity, new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                        //Change date on TextView
+                        setDate(selectedday, selectedmonth, selectedyear);
+                        _birthDate.setText(selectedday + "\\" + (selectedmonth + 1) + "\\" + selectedyear);
+                    }
+                }, birthYear, birthMonth, birthDay);
+                mDatePicker.setTitle("Início");
+                mDatePicker.show();
+            }
+        });
+    }
+
+    private void setDate (int day, int month, int year) {
+        birthDay = day;
+        birthMonth = month;
+        birthYear = year;
     }
 
     public void signup() {
@@ -128,7 +174,6 @@ public class SignupActivity extends AppCompatActivity {
                         if (!task.isSuccessful()) {
                             onSignupFailed();
                         }
-                        // ...
                     }
                 });
     }
@@ -227,15 +272,15 @@ public class SignupActivity extends AppCompatActivity {
         boolean checked = ((RadioButton) view).isChecked();
 
         // Check which radio button was clicked
-        switch(view.getId()) {
-            case R.id.male_rbutton:
-                if (checked)
+        if(checked) {
+            switch(view.getId()) {
+                case R.id.male_rbutton:
                     userSex = Utils.Sex.MALE;
                     break;
-            case R.id.female_rbutton:
-                if (checked)
+                case R.id.female_rbutton:
                     userSex = Utils.Sex.FEMALE;
                     break;
+            }
         }
     }
 

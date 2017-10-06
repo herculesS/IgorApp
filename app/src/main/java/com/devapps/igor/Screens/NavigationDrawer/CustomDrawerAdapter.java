@@ -2,6 +2,7 @@ package com.devapps.igor.Screens.NavigationDrawer;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,11 +56,17 @@ public class CustomDrawerAdapter extends ArrayAdapter<DrawerItem> {
 
         }
 
-        DrawerItem dItem = this.drawerItemList.get(position);
+        /*if (position == 0) {
+            view.getLayoutParams().height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 56, context.getResources().getDisplayMetrics());;
+            drawerHolder.icon.setImageDrawable(null);
+            drawerHolder.ItemName.setText("");
+        } else {*/
+            DrawerItem dItem = this.drawerItemList.get(position);
 
-        drawerHolder.icon.setImageDrawable(view.getResources().getDrawable(
-                dItem.getImgResID()));
-        drawerHolder.ItemName.setText(dItem.getItemName());
+            drawerHolder.icon.setImageDrawable(view.getResources().getDrawable(
+                    dItem.getImgResID()));
+            drawerHolder.ItemName.setText(dItem.getItemName());
+        //}
 
         return view;
     }
