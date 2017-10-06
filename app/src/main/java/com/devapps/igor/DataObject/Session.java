@@ -11,6 +11,7 @@ public class Session implements Serializable {
     public static final String DefaultSessionTitle = "Sessão sem título";
     public static final String DefaultSessionSummary = "Sessão sem resumo";
     public static final String DefaultSessionDate = "00/00/0000";
+    public static final String SESSION_TAG = "session";
 
     private String mTitle;
     private String mDate;

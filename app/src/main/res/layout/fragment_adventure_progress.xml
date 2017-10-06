@@ -77,7 +77,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="65dp"
-                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit amet pretium nunc, non tempor sem. Maecenas eget quam sem. Phasellus metus ante, vulputate congue metus semper, tristique vestibulum eros. Vestibulum vehicula nisl est, et semper nisl molestie eu. Cras sed erat sagittis, porttitor dolor non, convallis lacus. In hendrerit convallis enim at vulputate. Nam velit eros, accumsan sit amet dolor eget, viverra tincidunt nunc. "/>
+                android:text="Aventura Sem Resumo"/>
 
             <ImageView
                 android:id="@+id/adventure_progress_btn_see_more"
@@ -99,9 +99,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="bottom"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
                 android:divider="@null">
             </ListView>
         </LinearLayout>

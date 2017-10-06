@@ -54,9 +54,18 @@
     <string name="retype_password">Repita a senha</string>
     <string name="user_name">Nome</string>
 
-    <!-- Strings related to criarAventura -->
+    <!-- Strings related to createAdventure -->
 
     <string name="criar_aventura_title">Criar Aventura</string>
-    <string name="criar_aventura_nome">De um nome a sua aventura</string>
+
+    <!-- Strings related to Edit sessions and adventure-->
+    <string name="edit_session_label">Editar Sessão</string>
+    <string name="edit_session_summary_hint">Crie um resumo para a próxima sessão</string>
+    <string name="edit_adventure_label">Editar Aventura</string>
+    <string name="edit_adventure_summary_hint">Crie um resumo para a aventura</string>
+    <string name="create_adventure_hint">Dê um nome para sua aventura</string>
+    <string name="create_session_label">Criar Sessão</string>
+    <string name="create_session_hint_label">Dê um nome à próxima sessão</string>
+    <string name="create_session_edit_text_hint">Dê um nome para sua sessão</string>
 
 </resources>
