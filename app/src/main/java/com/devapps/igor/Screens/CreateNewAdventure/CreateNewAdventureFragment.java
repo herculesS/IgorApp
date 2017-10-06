@@ -90,8 +90,10 @@ public class CreateNewAdventureFragment extends Fragment {
         mFinishButton = (ImageView) view.findViewById(R.id.create_adventure_btn_create);
         mNameEditText = (EditText) view.findViewById(R.id.create_adventure_editText);
         mNameEditText.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(mNameEditText, InputMethodManager.SHOW_IMPLICIT);
+        if (getActivity() != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(mNameEditText, InputMethodManager.SHOW_IMPLICIT);
+        }
 
     }
 }

@@ -185,8 +185,10 @@ public class CreateNewSessionFragment extends Fragment {
         mFinishButton = (ImageView) view.findViewById(R.id.create_session_btn_create);
         mTitleEditText = (EditText) view.findViewById(R.id.create_session_editText);
         mTitleEditText.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(mTitleEditText, InputMethodManager.SHOW_IMPLICIT);
+        if (getActivity() != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(mTitleEditText, InputMethodManager.SHOW_IMPLICIT);
+        }
         mBtnDatePicker = (Button) view.findViewById(R.id.session_date_picker);
         mBtnDatePicker.setText(Session.
                 formatSessionDateToDayMonth(mDate.get(Calendar.DAY_OF_MONTH) + "/" + mDate.get(Calendar.MONTH)));
