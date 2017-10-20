@@ -10,10 +10,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
 import com.devapps.igor.R;
 import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
+import com.devapps.igor.Screens.Books.BooksFragment;
 import com.devapps.igor.Screens.CreateNewAdventure.CreateNewAdventureFragment;
+import com.devapps.igor.Screens.HomeJogosFrontend.HomeJogosFrontendFragment;
+import com.devapps.igor.Screens.HomeJogosFrontend.HomeJogosFrontendFragmentAdventure;
 import com.devapps.igor.Screens.Login.LoginActivity;
 import com.devapps.igor.Screens.NavigationDrawer.CustomDrawerAdapter;
 import com.devapps.igor.Screens.NavigationDrawer.DrawerItem;
@@ -21,8 +23,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.security.AccessController.getContext;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -82,11 +82,19 @@ public class MainActivity extends AppCompatActivity {
         Fragment newFragment;
         switch (position) {
             case 0:
-                newFragment = AdventureProgressFragment.newInstance("-KvV1jHurj0sGVPXP9GO");
+                newFragment = new HomeJogosFrontendFragmentAdventure();
+                //newFragment = new CreateNewAdventureFragment();
                 break;
             case 1:
+                newFragment = new BooksFragment();
+                break;
+            case 2:
                 newFragment = new CreateNewAdventureFragment();
                 break;
+            case 3:
+                newFragment = AdventureProgressFragment.newInstance("-KvV1jHurj0sGVPXP9GO");
+                break;
+
             case 5:
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 mAuth.signOut();
@@ -105,5 +113,4 @@ public class MainActivity extends AppCompatActivity {
         mDrawerList.setItemChecked(position, true);
         mDrawerLayout.closeDrawer(mDrawerList);
     }
-
 }

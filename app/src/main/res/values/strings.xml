@@ -69,4 +69,7 @@
     <string name="create_session_hint_label">Dê um nome à próxima sessão</string>
     <string name="create_session_edit_text_hint">Dê um nome para sua sessão</string>
 
+
+    <string name="placeholder">Placeholder</string>
+    <string name="singapore">Singapore</string>
 </resources>
