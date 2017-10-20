@@ -3,6 +3,8 @@ package com.devapps.igor.Screens.AdventureProgress;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +12,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.devapps.igor.DataObject.Adventure;
@@ -37,7 +38,8 @@ public class AdventureProgressFragment extends Fragment {
     private TextView mAdventureTitleTextView;
     private TextView mAdventureSummaryTextView;
     private ImageView mBtnSeeMore;
-    private ListView mSessionsListView;
+    private RecyclerView mSessionsRecyclerView;
+    private RecyclerView.LayoutManager mSessionLayoutManager;
     private ImageView mBtnAddSession;
     private Context mContext;
 
@@ -108,7 +110,7 @@ public class AdventureProgressFragment extends Fragment {
                     }
                 });
 
-                mSessionsListView.setAdapter(new SessionsAdapter(mContext, mAdventure.getSessions()));
+                mSessionsRecyclerView.setAdapter(new SessionsListAdapter(mAdventure.getSessions(), getActivity(), mAdventureId));
                 mBtnSeeMore.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -145,81 +147,15 @@ public class AdventureProgressFragment extends Fragment {
     }
 
     private void InitializeMembers(View view) {
+        mContext = view.getContext();
         mAdventureTitleTextView = (TextView) view.findViewById(R.id.adventure_progress_adventure_title);
         mAdventureSummaryTextView = (TextView) view.findViewById(R.id.adventure_progress_adventure_summary);
         mBtnSeeMore = (ImageView) view.findViewById(R.id.adventure_progress_btn_see_more);
-        mSessionsListView = (ListView) view.findViewById(R.id.adventure_progress_sessions_list);
+        mSessionsRecyclerView = (RecyclerView) view.findViewById(R.id.adventure_progress_sessions_list);
+        mSessionLayoutManager = new LinearLayoutManager(mContext);
+        mSessionsRecyclerView.setLayoutManager(mSessionLayoutManager);
         mBtnAddSession = (ImageView) view.findViewById(R.id.adventure_progress_btn_add_session);
-        mContext = view.getContext();
-        mSessionsListView.setItemsCanFocus(true);
         mBtnSeeMore.setVisibility(View.GONE);
-    }
-
-
-    /* Adapter class implementation for the items of the listView that contains the sessions */
-    private class SessionsAdapter extends ArrayAdapter<Session> {
-        public SessionsAdapter(Context context, ArrayList<Session> sessions) {
-            super(context, 0, sessions);
-        }
-
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            Session s = getItem(position);
-            if (convertView == null) {
-                convertView = LayoutInflater.from(mContext).inflate(R.layout.sessions_list_view_elem, parent, false);
-            }
-
-
-            TextView sessionDateTextView = (TextView) convertView.findViewById(R.id.session_list_view_item_date);
-            TextView sessionTitleTextView = (TextView) convertView.findViewById(R.id.session_list_view_item_title);
-            TextView sessionSummaryTextView = (TextView) convertView.findViewById(R.id.session_list_view_item_summary);
-
-
-            sessionDateTextView.setText(Session.formatSessionDateToDayMonth(s.getDate()));
-            sessionTitleTextView.setText(s.getTitle());
-            sessionSummaryTextView.setText(s.getSummary());
-            sessionSummaryTextView.setTag(position);
-            sessionSummaryTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int sessionId = (Integer) view.getTag();
-                    Fragment fragment = EditSummaryFragment.newInstance(Session.SESSION_TAG, mAdventureId, sessionId);
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, fragment).commit();
-                }
-            });
-
-
-            sessionTitleTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    View parent = (View) view.getParent();
-                    if (parent != null) {
-                        View root = (View) view.getParent().getParent();
-                        if (root != null) {
-                            setSummarySeeMoreBehavior(root);
-                        }
-                    }
-                }
-            });
-
-            return convertView;
-        }
-
-        private void setSummarySeeMoreBehavior(View root) {
-            TextView sessionSummaryTextView = (TextView) root.findViewById(R.id.session_list_view_item_summary);
-            if (sessionSummaryTextView != null) {
-
-                if (!sessionSummaryTextView.isShown()) {
-
-                    sessionSummaryTextView.setVisibility(View.VISIBLE);
-                } else {
-                    sessionSummaryTextView.setVisibility(View.GONE);
-                }
-            }
-        }
-
     }
 
 
