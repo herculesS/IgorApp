@@ -15,11 +15,66 @@
       },
       "oauth_client": [
         {
+          "client_id": "768575352254-hopk4v6pua161iqcggfbp42rp9bq0ht4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.devapps.igor",
+            "certificate_hash": "0cb9f376d7da812490ae149df08660e08200ddd8"
+          }
+        },
+        {
           "client_id": "768575352254-jip6ej96498phmm6429lia1vqg92n8qg.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.devapps.igor",
             "certificate_hash": "1c046a58b6817b9aad408f211ff5daf819c4326d"
+          }
+        },
+        {
+          "client_id": "768575352254-rck3ujku9uivmed9958ovdv1pjsovrpq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAy7TvAlLt8eg-Mh5oEoFhBIXiNB5rUVjo"
+        },
+        {
+          "current_key": "AIzaSyDdU_94lh1ewv8GQvRtbBz5T9ihEBKQFY8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768575352254-rck3ujku9uivmed9958ovdv1pjsovrpq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768575352254:android:aa33d7b97f33fed8",
+        "android_client_info": {
+          "package_name": "com.example.danielbarboni.recyclerview_firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768575352254-qap9ngfofk5v096iqfm1g9tb4d7q20l6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.danielbarboni.recyclerview_firebase",
+            "certificate_hash": "0cb9f376d7da812490ae149df08660e08200ddd8"
           }
         },
         {

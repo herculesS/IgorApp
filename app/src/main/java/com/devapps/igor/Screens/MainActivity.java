@@ -14,8 +14,7 @@ import com.devapps.igor.R;
 import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
 import com.devapps.igor.Screens.Books.BooksFragment;
 import com.devapps.igor.Screens.CreateNewAdventure.CreateNewAdventureFragment;
-import com.devapps.igor.Screens.HomeJogosFrontend.HomeJogosFrontendFragment;
-import com.devapps.igor.Screens.HomeJogosFrontend.HomeJogosFrontendFragmentAdventure;
+import com.devapps.igor.Screens.HomeJogosFrontend.FragmentAdventure;
 import com.devapps.igor.Screens.Login.LoginActivity;
 import com.devapps.igor.Screens.NavigationDrawer.CustomDrawerAdapter;
 import com.devapps.igor.Screens.NavigationDrawer.DrawerItem;
@@ -82,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment newFragment;
         switch (position) {
             case 0:
-                newFragment = new HomeJogosFrontendFragmentAdventure();
+                newFragment = new FragmentAdventure();
                 //newFragment = new CreateNewAdventureFragment();
                 break;
             case 1:

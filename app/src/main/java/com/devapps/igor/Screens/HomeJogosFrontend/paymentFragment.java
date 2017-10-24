@@ -20,7 +20,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.devapps.igor.R.id.recyclerViewAdventures;
+//import static com.devapps.igor.R.id.recyclerViewAdventures;
+import static com.devapps.igor.R.id.showadventuresRecyclerView;
 
 /**
  * Created by danielbarboni on 20/10/17.
@@ -32,7 +33,7 @@ public class paymentFragment extends Fragment {
     View v;
     ProgressDialog progress;
 
-    private List<HomeJogosFrontEndListAdventure> adventureList = new ArrayList<>();
+    private List<AdventureList> adventureList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -66,7 +67,7 @@ public class paymentFragment extends Fragment {
                 adventureList.clear();
                 for (DataSnapshot single:dataSnapshot.getChildren()) {
 
-                    adventureList.add(single.getValue(HomeJogosFrontEndListAdventure.class));
+                    adventureList.add(single.getValue(AdventureList.class));
                 }
                 progress.dismiss();
             }
@@ -79,9 +80,10 @@ public class paymentFragment extends Fragment {
     }
 
     private void init() {
-        re=(RecyclerView)v.findViewById(recyclerViewAdventures);
+       // re=(RecyclerView)v.findViewById(recyclerViewAdventures);
+        re=(RecyclerView)v.findViewById(showadventuresRecyclerView);
         re.setLayoutManager(new LinearLayoutManager(getContext()));
-       // HomeJogosFrontendAdapterAdventure adapter = new HomeJogosFrontendAdapterAdventure(getActivity(),adventureList);
-        //recyclerViewAdventures.setAdapter(adapter);
+       // RecyclerViewAdapter adapter = new RecyclerViewAdapter(getActivity(),AdventureList);
+        //recyclerViewShowAdventures.setAdapter(adapter);
     }
 }
