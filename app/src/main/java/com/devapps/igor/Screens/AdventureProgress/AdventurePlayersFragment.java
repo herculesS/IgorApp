@@ -2,10 +2,10 @@ package com.devapps.igor.Screens.AdventureProgress;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +21,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -78,35 +77,39 @@ public class AdventurePlayersFragment extends Fragment {
         mImageViewMasterImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mAdventure != null) {
-                    if (mAdventure.getDMChar() != null) {
-                        if (mAdventure.getDMChar().getPlayerId().equals(mUserId)) {
-                            mAdventure.setDMChar(null);
-                            notifyChangeInAdventure(mAdventure);
-
-                        }
-                    } else {
-                        DatabaseReference ref = Database.getUsersReference();
-                        ref.child(mUserId).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                Profile profile = dataSnapshot.getValue(Profile.class);
-                                mAdventure.setDMChar(new Character(mUserId, profile.getName(), "TODO: Summary"));
-                                notifyChangeInAdventure(mAdventure);
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-
-                    }
-                }
+                DMImageOnclick();
             }
         });
 
+    }
+
+    private void DMImageOnclick() {
+        if (mAdventure != null) {
+            if (mAdventure.getDMChar() != null) {
+                if (mAdventure.getDMChar().getPlayerId().equals(mUserId)) {
+                    mAdventure.setDMChar(null);
+                    notifyChangeInAdventure(mAdventure);
+
+                }
+            } else {
+                DatabaseReference ref = Database.getUsersReference();
+                ref.child(mUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Profile profile = dataSnapshot.getValue(Profile.class);
+                        mAdventure.setDMChar(new Character(mUserId, profile.getName(), "TODO: Summary"));
+                        notifyChangeInAdventure(mAdventure);
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+        }
     }
 
     private void notifyChangeInAdventure(Adventure adventure) {
@@ -119,21 +122,40 @@ public class AdventurePlayersFragment extends Fragment {
         ref.child(mAdventureId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                AdventureOnDataChange(dataSnapshot);
+            }
 
-                mAdventure = dataSnapshot.getValue(Adventure.class);
-                DatabaseReference refUser = Database.getUsersReference();
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                if (mAdventure.getDMChar() != null) {
+            }
+        });
+    }
 
-                    refUser.child(mAdventure.getDMChar().getPlayerId()).addListenerForSingleValueEvent(new ValueEventListener() {
+    private void AdventureOnDataChange(DataSnapshot dataSnapshot) {
+        mAdventure = dataSnapshot.getValue(Adventure.class);
+        DatabaseReference refUser = Database.getUsersReference();
+
+        setDmViews(refUser);
+        final ArrayList<Profile> profiles = getProfilesArray(refUser);
+        mCharacterListAdapter = new CharacterListAdapter(mAdventure.getCharacters(), profiles);
+        mRecyclerViewCharacter.setLayoutManager(new LinearLayoutManager(mContext));
+        mRecyclerViewCharacter.setAdapter(mCharacterListAdapter);
+    }
+
+    @NonNull
+    private ArrayList<Profile> getProfilesArray(DatabaseReference refUser) {
+        final ArrayList<Profile> profiles = new ArrayList<Profile>();
+        if (mAdventure.getCharacters() != null) {
+            for (Character character : mAdventure.getCharacters()) {
+                if (character.getPlayerId() != null) {
+
+                    refUser.child(character.getPlayerId()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            mDM = dataSnapshot.getValue(Profile.class);
-                            mTextViewDMName.setText(mDM.getName());
-                            mTextViewDMSummary.setText(mAdventure.getDMChar().getSummary());
-                            mTextViewDMSummary.setVisibility(View.VISIBLE);
-
-
+                            Profile p = dataSnapshot.getValue(Profile.class);
+                            profiles.add(p);
+                            mCharacterListAdapter.notifyDataSetChanged();
                         }
 
                         @Override
@@ -142,51 +164,42 @@ public class AdventurePlayersFragment extends Fragment {
                         }
                     });
                 } else {
-                    mTextViewDMName.setText(R.string.no_master_assigned);
-                    mTextViewDMSummary.setVisibility(View.GONE);
+                    Profile p = new Profile();
+                    p.setName("");
+                    profiles.add(p);
+                    mCharacterListAdapter.notifyDataSetChanged();
+                }
+            }
+        }
+        return profiles;
+    }
+
+    private void setDmViews(DatabaseReference refUser) {
+        if (mAdventure.getDMChar() != null) {
+
+            refUser.child(mAdventure.getDMChar().getPlayerId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    dmOnDataChange(dataSnapshot);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
                 }
-                final ArrayList<Profile> profiles = new ArrayList<Profile>();
-                if (mAdventure.getCharacters() != null) {
-                    for (Character character : mAdventure.getCharacters()) {
-                        if (character.getPlayerId() != null) {
-                            Log.d("LogPlayers", character.getPlayerId());
+            });
+        } else {
+            mTextViewDMName.setText(R.string.no_master_assigned);
+            mTextViewDMSummary.setVisibility(View.GONE);
 
-                            refUser.child(character.getPlayerId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    Profile p = dataSnapshot.getValue(Profile.class);
-                                    profiles.add(p);
-                                    mCharacterListAdapter.notifyDataSetChanged();
-                                    Log.d("LogPlayers", p.getId());
-                                }
+        }
+    }
 
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
-                        } else {
-                            Profile p = new Profile();
-                            p.setName("");
-                            profiles.add(p);
-                            mCharacterListAdapter.notifyDataSetChanged();
-                        }
-                    }
-                }
-                Log.d("LogPlayers", mAdventure.getCharacters().size() + " --- " + profiles.size());
-                mCharacterListAdapter =  new CharacterListAdapter(mAdventure.getCharacters(), profiles);
-                mRecyclerViewCharacter.setLayoutManager(new LinearLayoutManager(mContext));
-                mRecyclerViewCharacter.setAdapter(mCharacterListAdapter);
-
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+    private void dmOnDataChange(DataSnapshot dataSnapshot) {
+        mDM = dataSnapshot.getValue(Profile.class);
+        mTextViewDMName.setText(mDM.getName());
+        mTextViewDMSummary.setText(mAdventure.getDMChar().getSummary());
+        mTextViewDMSummary.setVisibility(View.VISIBLE);
     }
 
     private void initializeMembers(View view) {
