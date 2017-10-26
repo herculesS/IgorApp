@@ -45,7 +45,7 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
 
     @Override
     public int getItemCount() {
-        return mCharacters.size();
+        return mCharacters.size() < mProfiles.size() ? mCharacters.size() : mProfiles.size();
     }
 
     public class CharacterViewHolder extends RecyclerView.ViewHolder {

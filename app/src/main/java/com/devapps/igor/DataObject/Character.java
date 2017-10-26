@@ -11,6 +11,17 @@ public class Character implements Serializable {
     private String mName;
     private String mSummary;
 
+    public Character(String playerId, String name, String summary) {
+        mPlayerId = playerId;
+        mName = name;
+        mSummary = summary;
+    }
+
+    public Character() {
+
+    }
+
+
     public String getPlayerId() {
         return mPlayerId;
     }
@@ -34,7 +45,6 @@ public class Character implements Serializable {
     public void setSummary(String summary) {
         mSummary = summary;
     }
-
 
 
 }

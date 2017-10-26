@@ -1,11 +1,15 @@
 package com.devapps.igor.Screens.AdventureProgress;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.devapps.igor.DataObject.Adventure;
@@ -13,9 +17,11 @@ import com.devapps.igor.DataObject.Character;
 import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -28,8 +34,12 @@ public class AdventurePlayersFragment extends Fragment {
     private Profile mDM;
 
     private RecyclerView mRecyclerViewCharacter;
+    private CharacterListAdapter mCharacterListAdapter;
     private TextView mTextViewDMName;
     private TextView mTextViewDMSummary;
+    private Context mContext;
+    private ImageView mImageViewMasterImage;
+    private String mUserId;
 
 
     public AdventurePlayersFragment() {
@@ -62,12 +72,50 @@ public class AdventurePlayersFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        mTextViewDMName = (TextView) view.findViewById(R.id.text_view_dm_name);
-        mTextViewDMSummary = (TextView) view.findViewById(R.id.text_view_dm_summary);
-        mRecyclerViewCharacter = (RecyclerView) view.findViewById(R.id.recycler_view_characters);
+        initializeMembers(view);
+        setDatabaseListeners();
 
+        mImageViewMasterImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mAdventure != null) {
+                    if (mAdventure.getDMChar() != null) {
+                        if (mAdventure.getDMChar().getPlayerId().equals(mUserId)) {
+                            mAdventure.setDMChar(null);
+                            notifyChangeInAdventure(mAdventure);
+
+                        }
+                    } else {
+                        DatabaseReference ref = Database.getUsersReference();
+                        ref.child(mUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Profile profile = dataSnapshot.getValue(Profile.class);
+                                mAdventure.setDMChar(new Character(mUserId, profile.getName(), "TODO: Summary"));
+                                notifyChangeInAdventure(mAdventure);
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                    }
+                }
+            }
+        });
+
+    }
+
+    private void notifyChangeInAdventure(Adventure adventure) {
         DatabaseReference ref = Database.getAdventuresReference();
+        ref.child(mAdventureId).setValue(adventure);
+    }
 
+    private void setDatabaseListeners() {
+        DatabaseReference ref = Database.getAdventuresReference();
         ref.child(mAdventureId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -75,27 +123,17 @@ public class AdventurePlayersFragment extends Fragment {
                 mAdventure = dataSnapshot.getValue(Adventure.class);
                 DatabaseReference refUser = Database.getUsersReference();
 
-                refUser.child(mAdventure.getDMid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        mDM = dataSnapshot.getValue(Profile.class);
-                        mTextViewDMName.setText(mDM.getName());
+                if (mAdventure.getDMChar() != null) {
 
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-                final ArrayList<Profile> profiles = new ArrayList<Profile>();
-                for (Character character : mAdventure.getCharacters()) {
-
-                    refUser.child(character.getPlayerId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    refUser.child(mAdventure.getDMChar().getPlayerId()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            profiles.add(dataSnapshot.getValue(Profile.class));
+                            mDM = dataSnapshot.getValue(Profile.class);
+                            mTextViewDMName.setText(mDM.getName());
+                            mTextViewDMSummary.setText(mAdventure.getDMChar().getSummary());
+                            mTextViewDMSummary.setVisibility(View.VISIBLE);
+
+
                         }
 
                         @Override
@@ -103,7 +141,43 @@ public class AdventurePlayersFragment extends Fragment {
 
                         }
                     });
+                } else {
+                    mTextViewDMName.setText(R.string.no_master_assigned);
+                    mTextViewDMSummary.setVisibility(View.GONE);
+
                 }
+                final ArrayList<Profile> profiles = new ArrayList<Profile>();
+                if (mAdventure.getCharacters() != null) {
+                    for (Character character : mAdventure.getCharacters()) {
+                        if (character.getPlayerId() != null) {
+                            Log.d("LogPlayers", character.getPlayerId());
+
+                            refUser.child(character.getPlayerId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Profile p = dataSnapshot.getValue(Profile.class);
+                                    profiles.add(p);
+                                    mCharacterListAdapter.notifyDataSetChanged();
+                                    Log.d("LogPlayers", p.getId());
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                        } else {
+                            Profile p = new Profile();
+                            p.setName("");
+                            profiles.add(p);
+                            mCharacterListAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+                Log.d("LogPlayers", mAdventure.getCharacters().size() + " --- " + profiles.size());
+                mCharacterListAdapter =  new CharacterListAdapter(mAdventure.getCharacters(), profiles);
+                mRecyclerViewCharacter.setLayoutManager(new LinearLayoutManager(mContext));
+                mRecyclerViewCharacter.setAdapter(mCharacterListAdapter);
 
 
             }
@@ -113,7 +187,15 @@ public class AdventurePlayersFragment extends Fragment {
 
             }
         });
+    }
 
+    private void initializeMembers(View view) {
+        mTextViewDMName = (TextView) view.findViewById(R.id.text_view_dm_name);
+        mTextViewDMSummary = (TextView) view.findViewById(R.id.text_view_dm_summary);
+        mRecyclerViewCharacter = (RecyclerView) view.findViewById(R.id.recycler_view_characters);
+        mContext = view.getContext();
+        mImageViewMasterImage = (ImageView) view.findViewById(R.id.image_view_set_master);
+        mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     }
 

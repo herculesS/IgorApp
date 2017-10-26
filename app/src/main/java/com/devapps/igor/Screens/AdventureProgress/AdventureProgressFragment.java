@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
+import com.devapps.igor.Screens.CreateCharacter.CreateCharacterFragment;
 import com.devapps.igor.Screens.CreateNewSession.CreateNewSessionFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -161,7 +162,9 @@ public class AdventureProgressFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-
+            CreateCharacterFragment fragment = CreateCharacterFragment.newInstance(mAdventureId);
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, fragment).commit();
 
         }
     }

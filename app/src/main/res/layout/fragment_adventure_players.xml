@@ -11,7 +11,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/image_view_set_master"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_weight="1"

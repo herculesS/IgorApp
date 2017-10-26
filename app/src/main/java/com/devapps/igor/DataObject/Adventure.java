@@ -1,9 +1,7 @@
 package com.devapps.igor.DataObject;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by hercules on 09/09/17.
@@ -20,13 +18,13 @@ public class Adventure implements Serializable {
 
 
     private ArrayList<Character> mCharacters;
-    private String mDMid;
+    private Character mDMChar;
 
     public Adventure(String name) {
         mName = name;
         mSummary = DefaultAdventureSummary;
         mSessions = new ArrayList<Session>();
-        mDMid = null;
+        mDMChar = null;
         mCharacters = new ArrayList<Character>();
     }
 
@@ -34,7 +32,7 @@ public class Adventure implements Serializable {
         mName = DefaultAdventureName;
         mSummary = DefaultAdventureSummary;
         mSessions = new ArrayList<Session>();
-        mDMid = null;
+        mDMChar = null;
         mCharacters = new ArrayList<Character>();
     }
 
@@ -80,11 +78,23 @@ public class Adventure implements Serializable {
         mCharacters = characters;
     }
 
-    public String getDMid() {
-        return mDMid;
+    public void addCharacter(Character character) {
+        if (mCharacters != null) {
+            mCharacters.add(character);
+        }
     }
 
-    public void setDMid(String DMid) {
-        mDMid = DMid;
+    public void removeCharacter(Character character) {
+        if (mCharacters != null)
+            mCharacters.remove(character);
+    }
+
+
+    public Character getDMChar() {
+        return mDMChar;
+    }
+
+    public void setDMChar(Character DMChar) {
+        mDMChar = DMChar;
     }
 }
