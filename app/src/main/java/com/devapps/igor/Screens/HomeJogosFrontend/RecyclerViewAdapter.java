@@ -56,7 +56,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.Proxima_Sessao.setText(listItem.getNextsession());
         holder.Barra_Progresso.setTag(listItem.getProgressbar());
 
-      //  holder.homejogosfrontendconstraintLayout.setOnClickListener(new View.OnClickListener() {
+        //holder.homejogosfrontendconstraintLayout.setOnClickListener(new View.OnClickListener() {
         holder.Layout_Relativo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,19 +101,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public SeekBar Barra_Progresso;
       //  public ImageView adventureWindow;
        // public ImageView favorite;
-  //      public ConstraintLayout homejogosfrontendconstraintLayout;
+       // public ConstraintLayout homejogosfrontendconstraintLayout;
         public RelativeLayout Layout_Relativo;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            Titulo_Aventura = (TextView) itemView.findViewById(R.id.textViewTitle);
+            Titulo_Aventura = (TextView) itemView.findViewById(R.id.home_jogos_textViewTitle);
             Proxima_Sessao = (TextView) itemView.findViewById(R.id.textViewNextSession);
             Barra_Progresso = (SeekBar) itemView.findViewById(R.id.progressBar);
            // adventureWindow = (ImageView) itemView.findViewById(R.id.adventureWindow);
           //  favorite = (ImageView) itemView.findViewById(R.id.favorite);
-  //          homejogosfrontendconstraintLayout = (ConstraintLayout) itemView.findViewById(R.id.homejogosfrontendconstraintLayout);
+           // homejogosfrontendconstraintLayout = (ConstraintLayout) itemView.findViewById(R.id.homejogosfrontendconstraintLayout);
             Layout_Relativo = (RelativeLayout) itemView.findViewById(R.id.homejogosfrontendrelativeLayout);
         }
 
