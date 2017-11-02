@@ -3,12 +3,18 @@ package com.devapps.igor.Screens;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.devapps.igor.R;
@@ -29,8 +35,10 @@ public class MainActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
 
+    private ImageView _navAppBarButton;
+
     private DrawerLayout mDrawerLayout;
-    CustomDrawerAdapter drawerAdapter;
+    private CustomDrawerAdapter drawerAdapter;
     private ListView mDrawerList;
 
     List<DrawerItem> dataList;
@@ -41,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        //myToolbar.setNavigationIcon(R.drawable.buttom_drawer_menu);
+        //myToolbar.setLogo(R.drawable.appbar_logo);
         setSupportActionBar(myToolbar);
 
         fragmentManager = getSupportFragmentManager();
@@ -48,10 +58,8 @@ public class MainActivity extends AppCompatActivity {
         dataList = new ArrayList<DrawerItem>();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        //mDrawerList.addHeaderView(getLayoutInflater().inflate(R.layout.drawer_header, null));
 
         String[] mMenuItens = getResources().getStringArray(R.array.menu_array);
-        //dataList.add(new DrawerItem("", 0));
         dataList.add(new DrawerItem(mMenuItens[0], R.drawable.adventure_icon));
         dataList.add(new DrawerItem(mMenuItens[1], R.drawable.books_icon));
         dataList.add(new DrawerItem(mMenuItens[2], R.drawable.profile_icon));
@@ -66,6 +74,15 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             selectItem(0);
         }
+
+        _navAppBarButton = (ImageView) findViewById(R.id.nav_image_button);
+
+        _navAppBarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDrawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
     }
 
     /* The click listner for ListView in the navigation drawer */
@@ -106,4 +123,24 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.actionbar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
 }
