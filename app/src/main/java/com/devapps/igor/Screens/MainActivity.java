@@ -1,5 +1,6 @@
 package com.devapps.igor.Screens;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,6 +10,8 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 
 import com.devapps.igor.R;
 import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
@@ -32,6 +36,8 @@ import static java.security.AccessController.getContext;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity";
 
     private FragmentManager fragmentManager;
 
@@ -133,14 +139,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.actionbar_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
+    }
+
+    public void openMenu(View view) {
+        Context wrapper = new ContextThemeWrapper(this, R.style.MyPopupMenu);
+        PopupMenu popupMenu = new PopupMenu(wrapper, view);
+        // This activity implements OnMenuItemClickListener
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.action_edit:
+                        Log.d(TAG, "Botão edit.");
+                        //TODO action
+                        return true;
+                    case R.id.action_order:
+                        Log.d(TAG, "Botão order.");
+                        //TODO action
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+        popupMenu.inflate(R.menu.actionbar_menu);
+        popupMenu.show();
     }
 }

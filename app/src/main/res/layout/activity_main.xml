@@ -49,7 +49,8 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="12dp"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/buttom_dropdown_menu"/>
+                    android:src="@drawable/buttom_dropdown_menu"
+                    android:onClick="openMenu"/>
 
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
