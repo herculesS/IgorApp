@@ -87,7 +87,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.adventureWindow.setImageResource(R.drawable.miniatura_heartlands);
         }
 
-        holder.Barra_Progresso.setMax(listItem.getSessions().size());
+        holder.Barra_Progresso.setMax(listItem.getSessions().size()-1);
         holder.text_view.setText("Covered : " + 0 + " / " +holder.Barra_Progresso.getMax());;
 
 //        holder.text_view.setText("Covered : " + FragmentAdventure.batata + " / " +holder.Barra_Progresso.getMax());;
@@ -111,10 +111,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         progress_value = progress;
-                        holder.text_view.setText("Covered : " + progress + " / " +holder.Barra_Progresso.getMax());
-                        Toast.makeText(context,"SeekBar in progress" + task.get(position).getSessions().size(),Toast.LENGTH_LONG).show();
-                        holder.Proxima_Sessao.setText(task.get(position).getSessions().get(progress).getTitle());
-                        // if(task.get(position).getSessions().size()!=0) {
+                        holder.text_view.setText("Covered : " + progress + " / " + holder.Barra_Progresso.getMax());
+                        Toast.makeText(context, "SeekBar in progress" + task.get(position).getSessions().size(), Toast.LENGTH_LONG).show();
+                        if (task.get(position).getSessions().size() != 0) {
+                            holder.Proxima_Sessao.setText(task.get(position).getSessions().get(progress).getTitle());
+                        }
+                            // if(task.get(position).getSessions().size()!=0) {
                          //   Toast.makeText(context,"SeekBar in progress",Toast.LENGTH_LONG).show();
                            // holder.Proxima_Sessao.setText(sessoes.get(progress).getTitle());
                        // }
