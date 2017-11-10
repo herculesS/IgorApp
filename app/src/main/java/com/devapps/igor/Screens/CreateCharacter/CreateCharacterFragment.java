@@ -74,22 +74,17 @@ public class CreateCharacterFragment extends Fragment {
         mButtonReady.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 final String playerName = mEditTextPlayerName.getText().toString().trim();
                 final String characterName = mEditTextCharacterName.getText().toString().trim();
                 final String characterSummary = mEditTextSummary.getText().toString().trim();
 
                 if (characterName.length() == 0 || characterSummary.length() == 0) {
-                    if (getActivity() != null) {
-                        Toast.makeText(getActivity().getApplicationContext(), "Nome do personagem ou Resumo deve ser informado!", Toast.LENGTH_SHORT).show();
-                    }
+                    createToast("Nome do personagem ou Resumo deve ser informado!");
                     return;
                 }
                 if (mRadioButtonPlayerName.isChecked()) {
                     if (playerName.length() == 0) {
-                        if (getActivity() != null) {
-                            Toast.makeText(getActivity().getApplicationContext(), "Nome do jogador deve ser informado!", Toast.LENGTH_SHORT).show();
-                        }
+                        createToast("Nome do jogador deve ser informado!");
                         return;
                     }
                 }
@@ -100,7 +95,6 @@ public class CreateCharacterFragment extends Fragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         mAdventure = dataSnapshot.getValue(Adventure.class);
                         if (mRadioButtonPlayerName.isChecked()) {
-                            Log.d("RadioButton", "IsChecked");
                             DatabaseReference userRef = Database.getUsersReference();
                             userRef.orderByChild("name").equalTo(playerName).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
@@ -108,32 +102,33 @@ public class CreateCharacterFragment extends Fragment {
                                     if (dataSnapshot.exists()) {
                                         String id = null;
                                         if (dataSnapshot.getChildrenCount() > 1) {
-                                            if (getActivity() != null) {
-                                                Toast.makeText(getActivity().getApplicationContext(), "Nome do personagem retorna multiplos resultados!", Toast.LENGTH_SHORT).show();
-                                            }
+                                            createToast("Jogador com esse nome não encontrado!");
                                             return;
                                         }
                                         for (DataSnapshot child : dataSnapshot.getChildren()) {
                                             id = child.child("id").getValue(String.class);
                                         }
-                                        if(id==null){
-                                            if (getActivity() != null) {
-                                                Toast.makeText(getActivity().getApplicationContext(), "Nome do personagem ou Resumo deve ser informado!", Toast.LENGTH_SHORT).show();
-                                            }
+                                        if (id == null) {
+                                            createToast("Jogador com esse nome não encontrado!");
                                             return;
                                         }
+
                                         Character character = new Character(id, characterName, characterSummary);
                                         mAdventure.addCharacter(character);
                                         DatabaseReference ref = Database.getAdventuresReference();
                                         ref.child(mAdventureId).setValue(mAdventure);
+
+
+                                        backToAdventureProgress();
+
                                     } else {
+                                        createToast("Jogador com esse nome não encontrado!");
                                         return;
                                     }
                                 }
 
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
-
                                 }
                             });
 
@@ -143,22 +138,32 @@ public class CreateCharacterFragment extends Fragment {
                             mAdventure.addCharacter(character);
                             DatabaseReference ref = Database.getAdventuresReference();
                             ref.child(mAdventureId).setValue(mAdventure);
+
+                            backToAdventureProgress();
                         }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
                     }
                 });
 
-                Fragment fragment = AdventureProgressFragment.newInstance(mAdventureId);
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, fragment).commit();
             }
 
 
         });
+    }
+
+    private void backToAdventureProgress() {
+        Fragment fragment = AdventureProgressFragment.newInstance(mAdventureId);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment).commit();
+    }
+
+    private void createToast(String text) {
+        if (getActivity() != null) {
+            Toast.makeText(getActivity().getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+        }
     }
 
 
