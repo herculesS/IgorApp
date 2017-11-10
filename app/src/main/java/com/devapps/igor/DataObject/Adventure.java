@@ -2,6 +2,8 @@ package com.devapps.igor.DataObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by hercules on 09/09/17.
@@ -14,6 +16,7 @@ public class Adventure implements Serializable {
 
     private String mName;
     private String mSummary;
+    private int mBackground;
     private ArrayList<Session> mSessions;
 
 
@@ -24,6 +27,8 @@ public class Adventure implements Serializable {
         mName = name;
         mSummary = DefaultAdventureSummary;
         mSessions = new ArrayList<Session>();
+        Random rand = new Random();
+        mBackground = rand.nextInt(5)+1;
         mDMChar = null;
         mCharacters = new ArrayList<Character>();
     }
@@ -32,6 +37,9 @@ public class Adventure implements Serializable {
         mName = DefaultAdventureName;
         mSummary = DefaultAdventureSummary;
         mSessions = new ArrayList<Session>();
+       // mBackground = DefaultBackground;
+        Random rand = new Random();
+        mBackground = rand.nextInt(5)+1;
         mDMChar = null;
         mCharacters = new ArrayList<Character>();
     }
@@ -61,6 +69,13 @@ public class Adventure implements Serializable {
             mSessions.remove(s);
     }
 
+    public int getBackground() {
+        return mBackground;
+    }
+
+    public void setBackground(int mBackground) {
+        this.mBackground = mBackground;
+    }
 
     public String getName() {
         return mName;

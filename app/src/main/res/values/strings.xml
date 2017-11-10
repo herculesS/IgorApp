@@ -83,4 +83,7 @@
     <string name="create_character_name_hint">Dê nome para o personagem</string>
     <string name="create_character_no_player_name_selected">Selecione para adicionar \no nome do jogador</string>
 
+
+    <string name="placeholder">Placeholder</string>
+    <string name="singapore">Singapore</string>
 </resources>

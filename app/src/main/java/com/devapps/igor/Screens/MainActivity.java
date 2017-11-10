@@ -20,11 +20,12 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-
 import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.R;
 import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
+import com.devapps.igor.Screens.Books.BooksFragment;
 import com.devapps.igor.Screens.CreateNewAdventure.CreateNewAdventureFragment;
+import com.devapps.igor.Screens.HomeJogosFrontend.FragmentAdventure;
 import com.devapps.igor.Screens.DiceRoller.DiceRollerFragment;
 import com.devapps.igor.Screens.Login.LoginActivity;
 import com.devapps.igor.Screens.NavigationDrawer.CustomDrawerAdapter;
@@ -33,8 +34,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.security.AccessController.getContext;
 
 
 public class MainActivity extends AppCompatActivity implements DiceRollerFragment.OnListFragmentInteractionListener {
@@ -113,10 +112,13 @@ public class MainActivity extends AppCompatActivity implements DiceRollerFragmen
         Fragment newFragment;
         switch (position) {
             case 0:
-                newFragment = AdventureProgressFragment.newInstance("-KvV1jHurj0sGVPXP9GO");
+                newFragment = new FragmentAdventure();
                 break;
             case 1:
-                newFragment = new CreateNewAdventureFragment();
+                newFragment = new BooksFragment();
+                break;
+            case 2:
+                newFragment = AdventureProgressFragment.newInstance("-KvV1jHurj0sGVPXP9GO");
                 break;
             case 3:
                 newFragment = DiceRollerFragment.newInstance();
