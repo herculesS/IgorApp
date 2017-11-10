@@ -1,6 +1,6 @@
 package com.devapps.igor.Screens.HomeJogosFrontend;
 
-/**
+/*
  * Created by danielbarboni on 20/10/17.
  */
 
@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.DataObject.Session;
@@ -46,8 +47,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
+import static com.devapps.igor.R.id.adventureWindow;
+import static com.devapps.igor.R.id.progressBar;
 import static com.devapps.igor.R.id.showadventuresRecyclerView;
 import static com.devapps.igor.R.id.textViewPublisher;
+import static com.devapps.igor.R.layout.fragment_home_jogos_frontend;
+import static com.devapps.igor.R.layout.fragment_home_jogos_frontend_list_adventures;
 
 
 /**
@@ -57,92 +62,20 @@ import static com.devapps.igor.R.id.textViewPublisher;
 
 public class FragmentAdventure extends Fragment {
 
-/*
-    private FirebaseDatabase database; //novo
-    DatabaseReference databaseAdventures;
-    List<AdventureList> task;
-    RecyclerView showadventuresRecyclerView;
-    RecyclerView.Adapter showadventuresrecyclerviewAdapter;
-    RecyclerView.LayoutManager showadventuresrecyclerviewLayoutManager;
+//novo abaixo
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        //Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home_jogos_frontend, container, false);
-
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-
-        showadventuresRecyclerView = (RecyclerView) getActivity().findViewById(R.id.showadventuresRecyclerView);
-        // used to improve performance, once changes
-        // in content do not change the layout size of the RecyclerView
-        showadventuresRecyclerView.setHasFixedSize(true);
-        // using a linear layout manager
-        showadventuresrecyclerviewLayoutManager = new LinearLayoutManager(getActivity());
-        showadventuresRecyclerView.setLayoutManager(showadventuresrecyclerviewLayoutManager);
-
-        database = FirebaseDatabase.getInstance();
-        databaseAdventures = database.getReference("adventures");
-
-        databaseAdventures.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                task.clear();
-                task = new ArrayList<AdventureList>();
-                for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren()){
-                    AdventureList value = dataSnapshot1.getValue(AdventureList.class);
-                    AdventureList adventure = new AdventureList();
-                    String Titulo_Aventura = value.getTitle();
-                    String Proxima_Sessao = value.getNextsession();
-                    String Barra_Progresso = value.getProgressbar();
-                    adventure.setTitle(Titulo_Aventura);
-                    adventure.setNextsession(Proxima_Sessao);
-                    adventure.setProgressbar(Barra_Progresso);
-                    task.add(adventure);
-
-                }
-                // specifying an adapter
-                showadventuresrecyclerviewAdapter = new RecyclerViewAdapter(getActivity(),task);
-                showadventuresRecyclerView.setAdapter(showadventuresrecyclerviewAdapter);
-                showadventuresRecyclerView.setItemAnimator( new DefaultItemAnimator());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Failed to read value
-                Log.w("Hello", "Failed to read value.", databaseError.toException());
-            }
-        });
-        task = new ArrayList<>();
-    }
-*/
-
-
-    private static final String ADVENTURE_ID = "ADVENTURE_ID";
-
+    private static SeekBar seek_bar;
+    private static TextView text_view;
+    private static ImageView adventureWindow;
     private String mAdventureId;
     private Adventure mAdventure;
+    private static final String ADVENTURE_ID = "ADVENTURE_ID";
+    public static ArrayList<Session> sessoes;
+    public static int batata = 0;
 
-    private TextView textViewTitle;
-
-    private ListView mSessionsListView;
-    private ImageView mBtnAddAdventure;
-    private Context mContext;
-    FirebaseDatabase database; //apagar
-    DatabaseReference databaseAdventures; //apagar
-    private RecyclerView mshowadventuresRecyclerView;
-
-    List<AdventureList> task; //apagar
     public FragmentAdventure() {
         // Required empty public constructor
     }
-
 
     public static FragmentAdventure newInstance(String adventureId) {
         FragmentAdventure fragment = new FragmentAdventure();
@@ -158,150 +91,98 @@ public class FragmentAdventure extends Fragment {
 
         if (getArguments() != null) {
             mAdventureId = getArguments().getString(ADVENTURE_ID);
-            Log.d("Adventure_Id", mAdventureId);
+            Log.d("AdventureId", mAdventureId);
 
         }
     }
+
+    private TextView textViewTitle;
+    private Context mContext;
+    private ListView mSessionsListView;
+
+    private FirebaseDatabase database;
+    DatabaseReference databaseAdventures;
+    List<Adventure> task;
+    RecyclerView showadventuresRecyclerView;
+    RecyclerView.Adapter showadventuresrecyclerviewAdapter;
+    RecyclerView.LayoutManager showadventuresrecyclerviewLayoutManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
 
-
-        // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_home_jogos_frontend, container, false);
-
-        return v;
+        //Inflate the layout for this fragment
+        return inflater.inflate(fragment_home_jogos_frontend, container, false);
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
+        InitializeMembers(view); // novo
+        showadventuresRecyclerView = (RecyclerView) getActivity().findViewById(R.id.showadventuresRecyclerView);
+        // used to improve performance, once changes
+        // in content do not change the layout size of the RecyclerView
 
-        //Recycler View
-        mshowadventuresRecyclerView = (RecyclerView) getActivity().findViewById(R.id.showadventuresRecyclerView);
-        mshowadventuresRecyclerView.setHasFixedSize(true);
-        mshowadventuresRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        //Send a Query to the database
+        showadventuresRecyclerView.setHasFixedSize(true);
+        // using a linear layout manager
+        showadventuresrecyclerviewLayoutManager = new LinearLayoutManager(getActivity());
+        showadventuresRecyclerView.setLayoutManager(showadventuresrecyclerviewLayoutManager);
         database = FirebaseDatabase.getInstance();
         databaseAdventures = database.getReference("adventures");
-
-        FirebaseRecyclerAdapter<Adventure, AdventureListViewHolder> firebaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<Adventure, AdventureListViewHolder>(
-                        Adventure.class,
-                        R.layout.fragment_home_jogos_frontend_list_adventures,
-                        AdventureListViewHolder.class,
-                        databaseAdventures) {
-
-                    @Override
-                    protected void populateViewHolder(AdventureListViewHolder viewHolder, Adventure adventure, int position) { //alterar aqui para AdventureList e os items abaixo também
-                        viewHolder.setName(adventure.getName());
-                        viewHolder.setSummary(adventure.getSummary()); //comentar
-                       // viewHolder.setSessions(adventure.getSessions()); //comentar
-                    }
-                };
-        mshowadventuresRecyclerView.setAdapter(firebaseRecyclerAdapter);
-    }
-
-    //View Holder for Recycler View
-    public static class AdventureListViewHolder extends RecyclerView.ViewHolder {
-        View mView;
-        public AdventureListViewHolder(View itemView) {
-            super(itemView);
-            mView = itemView;
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                            Uri.parse("http://www.androidsquad.space/"));
-                    Intent browserChooserIntent = Intent.createChooser(browserIntent, "Choose browser of yout choice");
-                    v.getContext().startActivity(browserChooserIntent);
-                }
-            });
-        }
-
-        public void setName(String name) {
-            TextView post_Name = (TextView) mView.findViewById(R.id.home_jogos_textViewTitle);
-            post_Name.setText(name);
-        }
-
-        public void setSummary(String summary) {
-            TextView post_Summary = (TextView) mView.findViewById(R.id.textViewNextSession);
-            post_Summary.setText(summary);
-        }
-
-    /*    public void setSessions(ArrayList<Session> sessions) {
-            ListView post_Sessions = (ListView) mView.findViewById(R.id.home_jogos_sessions_list);
-           // post_Sessions.setAdapter(sessions);
-        }*/
-    }
-
-
-
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        InitializeMembers(view);
-
-        DatabaseReference ref = Database.getAdventuresReference();
-        //ref.addValueEventListener(new ValueEventListener() {
-        ref.child("-Kvm7648leSxb2hTdtxX").addValueEventListener(new ValueEventListener() {
-
-            //database = FirebaseDatabase.getInstance();
-            //databaseAdventures = database.getReference("adventures");
-            //databaseAdventures.addValueEventListener(new ValueEventListener() {
+        databaseAdventures.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+              for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren()){
+                    mAdventure = dataSnapshot1.getValue(Adventure.class);
+                    Adventure adventure = new Adventure();
+                    String Titulo_Aventura = mAdventure.getName();
+                    int Background = mAdventure.getBackground();
+                    sessoes = mAdventure.getSessions();
 
-                //task.clear();
-                //task = new ArrayList<AdventureList>();
-            //    for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren()){
-                //mAdventure = dataSnapshot.getValue(Adventure.class);
-                //mAdventure = dataSnapshot1.getValue(Adventure.class);
-               // textViewTitle.setText(mAdventure.getName());
-               // mSessionsListView.setAdapter(new FragmentAdventure.SessionsAdapter(mContext, mAdventure.getSessions()));
+                    String Proxima_Sessao = "Aventura sem sessao";
+                    if(sessoes.size()!=0) {
+                        Proxima_Sessao = sessoes.get(0).getTitle();
+                    }
 
-           //     }
-                //mSessionsListView.setAdapter(new FragmentAdventure.SessionsAdapter(mContext, mAdventure.getSessions()));
+                    adventure.setName(Titulo_Aventura);
+                    adventure.setSummary(Proxima_Sessao);
+                    adventure.setBackground(Background);
+                    adventure.setSessions(sessoes);
 
+                    task.add(adventure);
+
+                }
+
+                // specifying an adapter
+                showadventuresrecyclerviewAdapter = new RecyclerViewAdapter(getActivity(),task);
+                showadventuresRecyclerView.setAdapter(showadventuresrecyclerviewAdapter);
+                showadventuresRecyclerView.setItemAnimator( new DefaultItemAnimator());
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                // Failed to read value
+                Log.w("Hello", "Failed to read value.", databaseError.toException());
             }
         });
-
-       /* mBtnAddAdventure.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment fragment = CreateNewSessionFragment.newInstance(mAdventureId);
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, fragment).commit();
-            }
-        });*/
+        task = new ArrayList<>();
 
     }
-
 
     private void InitializeMembers(View view) {
         textViewTitle = (TextView) view.findViewById(R.id.home_jogos_textViewTitle);
-
-        //mSessionsListView = (ListView) view.findViewById(R.id.home_jogos_sessions_list);
-      //  mBtnAddAdventure = (ImageView) view.findViewById(R.id.home_jogos_btn_add_adventure); //ok
+        seek_bar = (SeekBar)view.findViewById(R.id.progressBar);
+        text_view =(TextView)view.findViewById(R.id.textView);
+        adventureWindow = (ImageView) view.findViewById(R.id.adventureWindow);
         mContext = view.getContext();
-        //mSessionsListView.setItemsCanFocus(true);
     }
 
-
-    /* Adapter class implementation for the items of the listView that contains the sessions */
     private class SessionsAdapter extends ArrayAdapter<Session> {
         public SessionsAdapter(Context context, ArrayList<Session> sessions) {
             super(context, 0, sessions);
         }
+
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -310,11 +191,12 @@ public class FragmentAdventure extends Fragment {
                 convertView = LayoutInflater.from(mContext).inflate(R.layout.sessions_list_view_elem, parent, false);
             }
 
-
             TextView sessionDateTextView = (TextView) convertView.findViewById(R.id.session_list_view_item_date);
             TextView sessionTitleTextView = (TextView) convertView.findViewById(R.id.session_list_view_item_title);
             TextView sessionSummaryTextView = (TextView) convertView.findViewById(R.id.session_list_view_item_summary);
 
+            text_view.setText("Covered : " + seek_bar.getProgress() + " / " +seek_bar.getMax());
+            seek_bar.setMax(30);
 
             sessionDateTextView.setText(Session.formatSessionDateToDayMonth(s.getDate()));
             sessionTitleTextView.setText(s.getTitle());
@@ -329,8 +211,6 @@ public class FragmentAdventure extends Fragment {
                             .replace(R.id.fragment_container, fragment).commit();
                 }
             });
-
-
             sessionTitleTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -338,7 +218,7 @@ public class FragmentAdventure extends Fragment {
                     if (parent != null) {
                         View root = (View) view.getParent().getParent();
                         if (root != null) {
-                            setSummarySeeMoreBehavior(root);
+                           // setSummarySeeMoreBehavior(root);
                         }
                     }
                 }
@@ -347,18 +227,34 @@ public class FragmentAdventure extends Fragment {
             return convertView;
         }
 
-        private void setSummarySeeMoreBehavior(View root) {
-            TextView sessionSummaryTextView = (TextView) root.findViewById(R.id.session_list_view_item_summary);
-            if (sessionSummaryTextView != null) {
+    }
 
-                if (!sessionSummaryTextView.isShown()) {
+    public void seebbarr(){
 
-                    sessionSummaryTextView.setVisibility(View.VISIBLE);
-                } else {
-                    sessionSummaryTextView.setVisibility(View.GONE);
+       // text_view.setText("Covered : " + seek_bar.getProgress() + " / " +seek_bar.getMax());
+        seek_bar.setOnSeekBarChangeListener(
+                new SeekBar.OnSeekBarChangeListener() {
+
+                    int progress_value;
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        progress_value = progress;
+                        text_view.setText("Covered : " + progress + " / " +seek_bar.getMax());
+                        Toast.makeText(getActivity(),"SeekBar in progress",Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                        Toast.makeText(getActivity(),"SeekBar in StartTracking",Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        text_view.setText("Covered : " + progress_value + " / " +seek_bar.getMax());
+                        Toast.makeText(getActivity(),"SeekBar in StopTracking",Toast.LENGTH_LONG).show();
+                    }
                 }
-            }
-        }
+        );
 
     }
 
