@@ -21,9 +21,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 
+import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.R;
 import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
 import com.devapps.igor.Screens.CreateNewAdventure.CreateNewAdventureFragment;
+import com.devapps.igor.Screens.DiceRoller.DiceRollerFragment;
 import com.devapps.igor.Screens.Login.LoginActivity;
 import com.devapps.igor.Screens.NavigationDrawer.CustomDrawerAdapter;
 import com.devapps.igor.Screens.NavigationDrawer.DrawerItem;
@@ -35,9 +37,10 @@ import java.util.List;
 import static java.security.AccessController.getContext;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DiceRollerFragment.OnListFragmentInteractionListener {
 
     private static final String TAG = "MainActivity";
+    private Profile mUserProfile;
 
     private FragmentManager fragmentManager;
 
@@ -46,13 +49,17 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private CustomDrawerAdapter drawerAdapter;
     private ListView mDrawerList;
-
     List<DrawerItem> dataList;
+
+    private enum menuItens {ADVENTURES, BOOKS, PROFILE, DICE, NOTIFICATION, SETTINGS, LOGOUT}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = getIntent();
+        mUserProfile = (Profile) intent.getSerializableExtra("userProfile");
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         //myToolbar.setNavigationIcon(R.drawable.buttom_drawer_menu);
@@ -69,9 +76,10 @@ public class MainActivity extends AppCompatActivity {
         dataList.add(new DrawerItem(mMenuItens[0], R.drawable.adventure_icon));
         dataList.add(new DrawerItem(mMenuItens[1], R.drawable.books_icon));
         dataList.add(new DrawerItem(mMenuItens[2], R.drawable.profile_icon));
-        dataList.add(new DrawerItem(mMenuItens[3], R.drawable.notification_icon));
-        dataList.add(new DrawerItem(mMenuItens[4], R.drawable.settings_icon));
-        dataList.add(new DrawerItem(mMenuItens[5], R.drawable.logout_icon));
+        dataList.add(new DrawerItem(mMenuItens[3], R.drawable.profile_icon));
+        dataList.add(new DrawerItem(mMenuItens[4], R.drawable.notification_icon));
+        dataList.add(new DrawerItem(mMenuItens[5], R.drawable.settings_icon));
+        dataList.add(new DrawerItem(mMenuItens[6], R.drawable.logout_icon));
 
         drawerAdapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item, dataList);
         mDrawerList.setAdapter(drawerAdapter);
@@ -110,7 +118,10 @@ public class MainActivity extends AppCompatActivity {
             case 1:
                 newFragment = new CreateNewAdventureFragment();
                 break;
-            case 5:
+            case 3:
+                newFragment = DiceRollerFragment.newInstance();
+                break;
+            case 6:
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 mAuth.signOut();
                 Intent intent = new Intent(this, LoginActivity.class);
@@ -166,5 +177,10 @@ public class MainActivity extends AppCompatActivity {
         });
         popupMenu.inflate(R.menu.actionbar_menu);
         popupMenu.show();
+    }
+
+    @Override
+    public Profile getUserProfile() {
+        return mUserProfile;
     }
 }

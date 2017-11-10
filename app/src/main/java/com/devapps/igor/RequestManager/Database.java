@@ -23,4 +23,11 @@ public class Database {
         databaseReference.keepSynced(true);
         return databaseReference;
     }
+
+    public static DatabaseReference getDicesReference(){
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
+                .child(FirebaseReference.DATABASE_DICEROLLER_REFERENCE);
+        databaseReference.keepSynced(true);
+        return databaseReference;
+    }
 }
