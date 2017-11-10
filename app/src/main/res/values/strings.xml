@@ -6,6 +6,7 @@
         <item>Aventuras</item>
         <item>Livros</item>
         <item>Conta</item>
+        <item>Dados</item>
         <item>Notificações</item>
         <item>Configurações</item>
         <item>Sair</item>
@@ -68,9 +69,10 @@
     <string name="create_session_label">Criar Sessão</string>
     <string name="create_session_hint_label">Dê um nome à próxima sessão</string>
     <string name="create_session_edit_text_hint">Dê um nome para sua sessão</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_edit">Editar</string>
+    <string name="antion_order">Ordenar</string>
     <string name="no_master_assigned">Aventura sem Mestre</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="create_character_label">Criar Personagem</string>
     <string name="create_character_name_player_hint">Dê nome do Jogador</string>

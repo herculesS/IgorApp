@@ -1,19 +1,31 @@
 package com.devapps.igor.Screens;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.ContextThemeWrapper;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 
+import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.R;
 import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
 import com.devapps.igor.Screens.CreateNewAdventure.CreateNewAdventureFragment;
+import com.devapps.igor.Screens.DiceRoller.DiceRollerFragment;
 import com.devapps.igor.Screens.Login.LoginActivity;
 import com.devapps.igor.Screens.NavigationDrawer.CustomDrawerAdapter;
 import com.devapps.igor.Screens.NavigationDrawer.DrawerItem;
@@ -25,22 +37,33 @@ import java.util.List;
 import static java.security.AccessController.getContext;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DiceRollerFragment.OnListFragmentInteractionListener {
+
+    private static final String TAG = "MainActivity";
+    private Profile mUserProfile;
 
     private FragmentManager fragmentManager;
 
-    private DrawerLayout mDrawerLayout;
-    CustomDrawerAdapter drawerAdapter;
-    private ListView mDrawerList;
+    private ImageView _navAppBarButton;
 
+    private DrawerLayout mDrawerLayout;
+    private CustomDrawerAdapter drawerAdapter;
+    private ListView mDrawerList;
     List<DrawerItem> dataList;
+
+    private enum menuItens {ADVENTURES, BOOKS, PROFILE, DICE, NOTIFICATION, SETTINGS, LOGOUT}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent intent = getIntent();
+        mUserProfile = (Profile) intent.getSerializableExtra("userProfile");
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        //myToolbar.setNavigationIcon(R.drawable.buttom_drawer_menu);
+        //myToolbar.setLogo(R.drawable.appbar_logo);
         setSupportActionBar(myToolbar);
 
         fragmentManager = getSupportFragmentManager();
@@ -48,16 +71,15 @@ public class MainActivity extends AppCompatActivity {
         dataList = new ArrayList<DrawerItem>();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        //mDrawerList.addHeaderView(getLayoutInflater().inflate(R.layout.drawer_header, null));
 
         String[] mMenuItens = getResources().getStringArray(R.array.menu_array);
-        //dataList.add(new DrawerItem("", 0));
         dataList.add(new DrawerItem(mMenuItens[0], R.drawable.adventure_icon));
         dataList.add(new DrawerItem(mMenuItens[1], R.drawable.books_icon));
         dataList.add(new DrawerItem(mMenuItens[2], R.drawable.profile_icon));
-        dataList.add(new DrawerItem(mMenuItens[3], R.drawable.notification_icon));
-        dataList.add(new DrawerItem(mMenuItens[4], R.drawable.settings_icon));
-        dataList.add(new DrawerItem(mMenuItens[5], R.drawable.logout_icon));
+        dataList.add(new DrawerItem(mMenuItens[3], R.drawable.profile_icon));
+        dataList.add(new DrawerItem(mMenuItens[4], R.drawable.notification_icon));
+        dataList.add(new DrawerItem(mMenuItens[5], R.drawable.settings_icon));
+        dataList.add(new DrawerItem(mMenuItens[6], R.drawable.logout_icon));
 
         drawerAdapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item, dataList);
         mDrawerList.setAdapter(drawerAdapter);
@@ -66,6 +88,15 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             selectItem(0);
         }
+
+        _navAppBarButton = (ImageView) findViewById(R.id.nav_image_button);
+
+        _navAppBarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDrawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
     }
 
     /* The click listner for ListView in the navigation drawer */
@@ -87,7 +118,10 @@ public class MainActivity extends AppCompatActivity {
             case 1:
                 newFragment = new CreateNewAdventureFragment();
                 break;
-            case 5:
+            case 3:
+                newFragment = DiceRollerFragment.newInstance();
+                break;
+            case 6:
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 mAuth.signOut();
                 Intent intent = new Intent(this, LoginActivity.class);
@@ -106,4 +140,47 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void openMenu(View view) {
+        Context wrapper = new ContextThemeWrapper(this, R.style.MyPopupMenu);
+        PopupMenu popupMenu = new PopupMenu(wrapper, view);
+        // This activity implements OnMenuItemClickListener
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.action_edit:
+                        Log.d(TAG, "Botão edit.");
+                        //TODO action
+                        return true;
+                    case R.id.action_order:
+                        Log.d(TAG, "Botão order.");
+                        //TODO action
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+        popupMenu.inflate(R.menu.actionbar_menu);
+        popupMenu.show();
+    }
+
+    @Override
+    public Profile getUserProfile() {
+        return mUserProfile;
+    }
 }
