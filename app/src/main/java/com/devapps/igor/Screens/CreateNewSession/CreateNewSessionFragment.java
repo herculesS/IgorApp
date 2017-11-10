@@ -90,9 +90,10 @@ public class CreateNewSessionFragment extends Fragment {
 
                 DatabaseReference ref = Database.getAdventuresReference();
                 ref.child(mAdventureId).setValue(mAdventure);
-
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                if (getActivity() != null) {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                }
 
 
                 Fragment fragment = AdventureProgressFragment.newInstance(mAdventureId);
