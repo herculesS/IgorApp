@@ -73,7 +73,6 @@
     <string name="action_edit">Editar</string>
     <string name="antion_order">Ordenar</string>
     <string name="no_master_assigned">Aventura sem Mestre</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="create_character_label">Criar Personagem</string>
     <string name="create_character_name_player_hint">Dê nome do Jogador</string>
     <string name="create_character_summary_label">Resumo do Personagem</string>

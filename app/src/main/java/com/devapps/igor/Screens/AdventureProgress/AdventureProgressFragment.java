@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
+import com.devapps.igor.Screens.AddPlayer.AddPlayerFragment;
 import com.devapps.igor.Screens.CreateCharacter.CreateCharacterFragment;
 import com.devapps.igor.Screens.CreateNewSession.CreateNewSessionFragment;
 import com.google.firebase.database.DataSnapshot;
@@ -144,6 +145,7 @@ public class AdventureProgressFragment extends Fragment {
         mBgTab = (ImageView) view.findViewById(R.id.bg_tab_select);
         mAddPlayerListener = new AddPlayerListener();
         mAddSessionListener = new AddSessionListener();
+        mBgTab.setOnClickListener(mAddSessionListener);
 
     }
 
@@ -162,7 +164,7 @@ public class AdventureProgressFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            CreateCharacterFragment fragment = CreateCharacterFragment.newInstance(mAdventureId);
+            AddPlayerFragment fragment = AddPlayerFragment.newInstance(mAdventureId);
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, fragment).commit();
 
