@@ -29,13 +29,13 @@ import java.util.Map;
 
 public class CreateCharacterFragment extends Fragment {
     private static final String ADVENTURE_ID = "ADVENTURE_ID";
+    private static final String PLAYER_ID = "PLAYER_ID";
 
     private String mAdventureId;
+    private String mPlayerId;
     private Adventure mAdventure;
 
-    private EditText mEditTextCharacterName, mEditTextPlayerName, mEditTextSummary;
-    private TextView mTextViewPlayerNameLabel;
-    private RadioButton mRadioButtonPlayerName;
+    private EditText mEditTextCharacterName, mEditTextSummary;
     private ImageView mButtonReady;
     private ImageView mButtonClose, mButtonCloseEdit;
 
@@ -44,10 +44,11 @@ public class CreateCharacterFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static CreateCharacterFragment newInstance(String adventureId) {
+    public static CreateCharacterFragment newInstance(String adventureId, String playerId) {
         CreateCharacterFragment fragment = new CreateCharacterFragment();
         Bundle args = new Bundle();
         args.putString(ADVENTURE_ID, adventureId);
+        args.putString(PLAYER_ID, playerId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,6 +58,7 @@ public class CreateCharacterFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mAdventureId = getArguments().getString(ADVENTURE_ID);
+            mPlayerId = getArguments().getString(PLAYER_ID);
         }
     }
 
@@ -70,11 +72,9 @@ public class CreateCharacterFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         initializeMembers(view);
-        setRadioButtonListener();
         mButtonReady.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String playerName = mEditTextPlayerName.getText().toString().trim();
                 final String characterName = mEditTextCharacterName.getText().toString().trim();
                 final String characterSummary = mEditTextSummary.getText().toString().trim();
 
@@ -82,71 +82,26 @@ public class CreateCharacterFragment extends Fragment {
                     createToast("Nome do personagem ou Resumo deve ser informado!");
                     return;
                 }
-                if (mRadioButtonPlayerName.isChecked()) {
-                    if (playerName.length() == 0) {
-                        createToast("Nome do jogador deve ser informado!");
-                        return;
-                    }
-                }
 
                 DatabaseReference ref = Database.getAdventuresReference();
                 ref.child(mAdventureId).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         mAdventure = dataSnapshot.getValue(Adventure.class);
-                        if (mRadioButtonPlayerName.isChecked()) {
-                            DatabaseReference userRef = Database.getUsersReference();
-                            userRef.orderByChild("name").equalTo(playerName).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if (dataSnapshot.exists()) {
-                                        String id = null;
-                                        if (dataSnapshot.getChildrenCount() > 1) {
-                                            createToast("Jogador com esse nome não encontrado!");
-                                            return;
-                                        }
-                                        for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                            id = child.child("id").getValue(String.class);
-                                        }
-                                        if (id == null) {
-                                            createToast("Jogador com esse nome não encontrado!");
-                                            return;
-                                        }
+                        Character c = new Character(mPlayerId, characterName, characterSummary);
+                        mAdventure.addCharacter(c);
+                        DatabaseReference ref = Database.getAdventuresReference();
+                        ref.child(mAdventureId).setValue(mAdventure);
+                        backToAdventureProgress();
 
-                                        Character character = new Character(id, characterName, characterSummary);
-                                        mAdventure.addCharacter(character);
-                                        DatabaseReference ref = Database.getAdventuresReference();
-                                        ref.child(mAdventureId).setValue(mAdventure);
-
-
-                                        backToAdventureProgress();
-
-                                    } else {
-                                        createToast("Jogador com esse nome não encontrado!");
-                                        return;
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                }
-                            });
-
-
-                        } else {
-                            Character character = new Character(null, characterName, characterSummary);
-                            mAdventure.addCharacter(character);
-                            DatabaseReference ref = Database.getAdventuresReference();
-                            ref.child(mAdventureId).setValue(mAdventure);
-
-                            backToAdventureProgress();
-                        }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
+
                     }
                 });
+
 
             }
 
@@ -167,30 +122,9 @@ public class CreateCharacterFragment extends Fragment {
     }
 
 
-    private void setRadioButtonListener() {
-        mRadioButtonPlayerName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (((RadioButton) view).isChecked()) {
-                    mTextViewPlayerNameLabel.setText(R.string.create_character_name_label);
-                    mEditTextPlayerName.setText("");
-                    mEditTextPlayerName.setVisibility(View.VISIBLE);
-                } else {
-                    mTextViewPlayerNameLabel.setText(R.string.create_character_no_player_name_selected);
-                    mEditTextPlayerName.setText("");
-                    mEditTextPlayerName.setVisibility(View.GONE);
-                }
-            }
-        });
-    }
-
     private void initializeMembers(View view) {
-
-        mTextViewPlayerNameLabel = (TextView) view.findViewById(R.id.text_view_player_name_label);
         mEditTextCharacterName = (EditText) view.findViewById(R.id.edit_text_name_character);
-        mEditTextPlayerName = (EditText) view.findViewById(R.id.edit_text_name_player);
         mEditTextSummary = (EditText) view.findViewById(R.id.edit_text_summary_character);
-        mRadioButtonPlayerName = (RadioButton) view.findViewById(R.id.radio_button_player_name);
         mButtonReady = (ImageView) view.findViewById(R.id.button_ready);
         mButtonClose = (ImageView) view.findViewById(R.id.create_character_btn_close);
         mButtonCloseEdit = (ImageView) view.findViewById(R.id.create_character_btn_create);

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -36,6 +37,7 @@ public class AddPlayerFragment extends Fragment {
     Context mContext;
     SearchedPlayersListAdapter mListAdapter;
     private String mAdventureId;
+    private FragmentActivity mActivity;
 
 
     public AddPlayerFragment() {
@@ -83,6 +85,7 @@ public class AddPlayerFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
+        mActivity = getActivity();
 
     }
 
@@ -107,7 +110,7 @@ public class AddPlayerFragment extends Fragment {
         mBtn_search = (Button) view.findViewById(R.id.button_search);
         mEditTextPlayerName = (EditText) view.findViewById(R.id.edit_text_name_player);
         mSearchedPlayerList = (RecyclerView) view.findViewById(R.id.recycler_view_players);
-        mListAdapter = new SearchedPlayersListAdapter(new ArrayList<Profile>());
+        mListAdapter = new SearchedPlayersListAdapter(new ArrayList<Profile>(), mAdventureId, mActivity);
         mSearchedPlayerList.setLayoutManager(new LinearLayoutManager(mContext));
         mSearchedPlayerList.setAdapter(mListAdapter);
     }
