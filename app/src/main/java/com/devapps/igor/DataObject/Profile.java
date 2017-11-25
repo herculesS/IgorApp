@@ -3,6 +3,7 @@ package com.devapps.igor.DataObject;
 import com.devapps.igor.Util.Utils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Profile implements Serializable {
 
@@ -13,6 +14,7 @@ public class Profile implements Serializable {
     private int birthDay;
     private int birthMonth;
     private int birthYear;
+    private ArrayList<Notification> notifications;
 
     public String getId() {
         return id;
@@ -68,5 +70,32 @@ public class Profile implements Serializable {
 
     public void setBirthYear(int birthYear) {
         this.birthYear = birthYear;
+    }
+
+    public ArrayList<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(ArrayList<Notification> notifications) {
+        this.notifications = notifications;
+    }
+
+    public void addNotification(Notification notification) {
+        if (notifications == null) {
+            notifications = new ArrayList<Notification>();
+        }
+        notifications.add(notification);
+    }
+
+    public void removeNotification(Notification notification) {
+        if (notifications != null) {
+            notifications.remove(notification);
+        }
+    }
+
+    public void removeNotification(int position) {
+        if (notifications != null) {
+            notifications.remove(position);
+        }
     }
 }

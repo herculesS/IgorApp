@@ -51,15 +51,16 @@ public class CreateNewAdventureFragment extends Fragment {
             public void onClick(View view) {
                 String name = mNameEditText.getText().toString().trim();
                 Adventure adventure;
-                if (!name.equals("")) {
-                    adventure = new Adventure(name);
-                } else {
-                    adventure = new Adventure();
-                }
                 DatabaseReference ref = Database.getAdventuresReference();
                 ref = ref.push();
-                ref.setValue(adventure);
                 String key = ref.getKey();
+                if (!name.equals("")) {
+                    adventure = new Adventure(name, key);
+                } else {
+                    adventure = new Adventure(key);
+                }
+
+                ref.setValue(adventure);
 
 
                 Fragment fragment = AdventureProgressFragment.newInstance(key);

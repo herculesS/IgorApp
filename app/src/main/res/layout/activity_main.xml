@@ -18,12 +18,12 @@
             android:layout_height="?android:attr/actionBarSize"
             android:background="@color/primaryColor"
             android:elevation="4dp"
-            app:contentInsetLeft="0dp"
-            app:contentInsetStart="0dp"
             android:fitsSystemWindows="true"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            android:weightSum="1">
+            android:weightSum="1"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -50,16 +50,51 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="12dp"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/buttom_dropdown_menu"
-                    android:onClick="openMenu"/>
+                    android:onClick="openMenu"
+                    android:src="@drawable/buttom_dropdown_menu"/>
 
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 
+        <LinearLayout
+            android:id="@+id/notification_box"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/notification_box_bg"
+            android:clickable="true"
+            android:elevation="20dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+            <!--android:textColor="#648767" -->
+
+
+            <ImageView
+                android:layout_width="19dp"
+                android:layout_height="19dp"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:gravity="right"
+                app:srcCompat="@drawable/notification_view_icon"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="Você possui novas notificações!"
+                android:textColor="#00635d"/>
+
+
+        </LinearLayout>
+
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
     </LinearLayout>
 
     <!-- android:layout_gravity="start" tells DrawerLayout to treat
@@ -73,10 +108,10 @@
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:background="@color/primaryColor"
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp"
-        android:background="@color/primaryColor"
         tools:listheader="@layout/drawer_header"/>
 </android.support.v4.widget.DrawerLayout>
 

@@ -21,7 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 
-public class AdventureDetailsFragment extends Fragment {
+public class DetailsFragment extends Fragment {
     private static final String ADVENTURE_ID = "ADVENTURE_ID";
 
     private String mAdventureId;
@@ -35,12 +35,12 @@ public class AdventureDetailsFragment extends Fragment {
     private Context mContext;
 
 
-    public AdventureDetailsFragment() {
+    public DetailsFragment() {
         // Required empty public constructor
     }
 
-    public static AdventureDetailsFragment newInstance(String adventureId) {
-        AdventureDetailsFragment fragment = new AdventureDetailsFragment();
+    public static DetailsFragment newInstance(String adventureId) {
+        DetailsFragment fragment = new DetailsFragment();
         Bundle args = new Bundle();
         args.putString(ADVENTURE_ID, adventureId);
         fragment.setArguments(args);

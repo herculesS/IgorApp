@@ -16,7 +16,6 @@ import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
 import com.devapps.igor.Screens.AddPlayer.AddPlayerFragment;
-import com.devapps.igor.Screens.CreateCharacter.CreateCharacterFragment;
 import com.devapps.igor.Screens.CreateNewSession.CreateNewSessionFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -107,7 +106,7 @@ public class AdventureProgressFragment extends Fragment {
                     mBgTab.setImageResource(R.drawable.adventure_tab_first_selected);
                     mBtnAdd.setOnClickListener(mAddSessionListener);
                     mBtnAdd.setImageResource(R.drawable.btn_add_session);
-                    Fragment fragment = AdventureDetailsFragment.newInstance(mAdventureId);
+                    Fragment fragment = DetailsFragment.newInstance(mAdventureId);
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.adventure_players_container, fragment).commit();
                     mFirstTabSelected = true;
@@ -123,7 +122,7 @@ public class AdventureProgressFragment extends Fragment {
                     mBgTab.setImageResource(R.drawable.adventure_tab_second_selected);
                     mBtnAdd.setOnClickListener(mAddPlayerListener);
                     mBtnAdd.setImageResource(R.drawable.btn_add_player);
-                    Fragment fragment = AdventurePlayersFragment.newInstance(mAdventureId);
+                    Fragment fragment = PlayersFragment.newInstance(mAdventureId);
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.adventure_players_container, fragment).commit();
                     mFirstTabSelected = false;
@@ -131,7 +130,7 @@ public class AdventureProgressFragment extends Fragment {
             }
         });
 
-        Fragment fragment = AdventureDetailsFragment.newInstance(mAdventureId);
+        Fragment fragment = DetailsFragment.newInstance(mAdventureId);
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.adventure_players_container, fragment).commit();
 
@@ -145,8 +144,7 @@ public class AdventureProgressFragment extends Fragment {
         mBgTab = (ImageView) view.findViewById(R.id.bg_tab_select);
         mAddPlayerListener = new AddPlayerListener();
         mAddSessionListener = new AddSessionListener();
-        mBgTab.setOnClickListener(mAddSessionListener);
-
+        mBtnAdd.setOnClickListener(mAddSessionListener);
     }
 
     private class AddSessionListener implements View.OnClickListener {
@@ -167,7 +165,6 @@ public class AdventureProgressFragment extends Fragment {
             AddPlayerFragment fragment = AddPlayerFragment.newInstance(mAdventureId);
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, fragment).commit();
-
         }
     }
 }

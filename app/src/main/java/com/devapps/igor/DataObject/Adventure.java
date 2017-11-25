@@ -18,13 +18,15 @@ public class Adventure implements Serializable {
     private String mSummary;
     private int mBackground;
     private ArrayList<Session> mSessions;
+    private String mId;
 
 
     private ArrayList<Character> mCharacters;
     private Character mDMChar;
 
-    public Adventure(String name) {
+    public Adventure(String name, String id) {
         mName = name;
+        mId = id;
         mSummary = DefaultAdventureSummary;
         mSessions = new ArrayList<Session>();
         Random rand = new Random();
@@ -32,8 +34,12 @@ public class Adventure implements Serializable {
         mDMChar = null;
         mCharacters = new ArrayList<Character>();
     }
-
     public Adventure() {
+        mSessions = new ArrayList<Session>();
+        mCharacters = new ArrayList<Character>();
+    }
+    public Adventure(String id) {
+        mId = id;
         mName = DefaultAdventureName;
         mSummary = DefaultAdventureSummary;
         mSessions = new ArrayList<Session>();
@@ -111,5 +117,13 @@ public class Adventure implements Serializable {
 
     public void setDMChar(Character DMChar) {
         mDMChar = DMChar;
+    }
+
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String id) {
+        mId = id;
     }
 }

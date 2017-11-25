@@ -133,15 +133,15 @@ public class FragmentAdventure extends Fragment {
         databaseAdventures.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-              for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren()){
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     mAdventure = dataSnapshot1.getValue(Adventure.class);
-                    Adventure adventure = new Adventure();
+                    Adventure adventure = new Adventure(mAdventure.getId());
                     String Titulo_Aventura = mAdventure.getName();
                     int Background = mAdventure.getBackground();
                     sessoes = mAdventure.getSessions();
 
                     String Proxima_Sessao = "Aventura sem sessao";
-                    if(sessoes.size()!=0) {
+                    if (sessoes.size() != 0) {
                         Proxima_Sessao = sessoes.get(0).getTitle();
                     }
 
@@ -155,9 +155,9 @@ public class FragmentAdventure extends Fragment {
                 }
 
                 // specifying an adapter
-                showadventuresrecyclerviewAdapter = new RecyclerViewAdapter(getActivity(),task);
+                showadventuresrecyclerviewAdapter = new RecyclerViewAdapter(getActivity(), task);
                 showadventuresRecyclerView.setAdapter(showadventuresrecyclerviewAdapter);
-                showadventuresRecyclerView.setItemAnimator( new DefaultItemAnimator());
+                showadventuresRecyclerView.setItemAnimator(new DefaultItemAnimator());
             }
 
             @Override
@@ -172,8 +172,8 @@ public class FragmentAdventure extends Fragment {
 
     private void InitializeMembers(View view) {
         textViewTitle = (TextView) view.findViewById(R.id.home_jogos_textViewTitle);
-        seek_bar = (SeekBar)view.findViewById(R.id.progressBar);
-        text_view =(TextView)view.findViewById(R.id.textView);
+        seek_bar = (SeekBar) view.findViewById(R.id.progressBar);
+        text_view = (TextView) view.findViewById(R.id.textView);
         adventureWindow = (ImageView) view.findViewById(R.id.adventureWindow);
         mContext = view.getContext();
     }
@@ -195,7 +195,7 @@ public class FragmentAdventure extends Fragment {
             TextView sessionTitleTextView = (TextView) convertView.findViewById(R.id.session_list_view_item_title);
             TextView sessionSummaryTextView = (TextView) convertView.findViewById(R.id.session_list_view_item_summary);
 
-            text_view.setText("Covered : " + seek_bar.getProgress() + " / " +seek_bar.getMax());
+            text_view.setText("Covered : " + seek_bar.getProgress() + " / " + seek_bar.getMax());
             seek_bar.setMax(30);
 
             sessionDateTextView.setText(Session.formatSessionDateToDayMonth(s.getDate()));
@@ -218,7 +218,7 @@ public class FragmentAdventure extends Fragment {
                     if (parent != null) {
                         View root = (View) view.getParent().getParent();
                         if (root != null) {
-                           // setSummarySeeMoreBehavior(root);
+                            // setSummarySeeMoreBehavior(root);
                         }
                     }
                 }
@@ -229,29 +229,30 @@ public class FragmentAdventure extends Fragment {
 
     }
 
-    public void seebbarr(){
+    public void seebbarr() {
 
-       // text_view.setText("Covered : " + seek_bar.getProgress() + " / " +seek_bar.getMax());
+        // text_view.setText("Covered : " + seek_bar.getProgress() + " / " +seek_bar.getMax());
         seek_bar.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
 
                     int progress_value;
+
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         progress_value = progress;
-                        text_view.setText("Covered : " + progress + " / " +seek_bar.getMax());
-                        Toast.makeText(getActivity(),"SeekBar in progress",Toast.LENGTH_LONG).show();
+                        text_view.setText("Covered : " + progress + " / " + seek_bar.getMax());
+                        Toast.makeText(getActivity(), "SeekBar in progress", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-                        Toast.makeText(getActivity(),"SeekBar in StartTracking",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "SeekBar in StartTracking", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-                        text_view.setText("Covered : " + progress_value + " / " +seek_bar.getMax());
-                        Toast.makeText(getActivity(),"SeekBar in StopTracking",Toast.LENGTH_LONG).show();
+                        text_view.setText("Covered : " + progress_value + " / " + seek_bar.getMax());
+                        Toast.makeText(getActivity(), "SeekBar in StopTracking", Toast.LENGTH_LONG).show();
                     }
                 }
         );

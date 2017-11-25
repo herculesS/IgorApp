@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
@@ -38,6 +38,8 @@ public class AddPlayerFragment extends Fragment {
     SearchedPlayersListAdapter mListAdapter;
     private String mAdventureId;
     private FragmentActivity mActivity;
+    private Adventure mAdventure;
+    private AdventureLoader mAdventureLoader;
 
 
     public AddPlayerFragment() {
@@ -72,14 +74,20 @@ public class AddPlayerFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        //load Adventure
+        mAdventureLoader = new AdventureLoader();
+
         //initializeMenbers
         initializeMembers(view);
-
         //setClickListeners
         setClickListeners();
-        //setDatabaseListners
-        setDataBaseListeners();
     }
+
+    private void onAdventureLoaderFinished() {
+        mListAdapter.setAdventure(mAdventure);
+
+    }
+
 
     @Override
     public void onAttach(Context context) {
@@ -89,17 +97,14 @@ public class AddPlayerFragment extends Fragment {
 
     }
 
-    private void setDataBaseListeners() {
-        DatabaseReference userref = Database.getUsersReference();
-
-    }
-
     private void setClickListeners() {
         mBtn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new SearchPlayersValueEventListener(mEditTextPlayerName.getText()
-                        .toString().trim());
+                if (mAdventureLoader.isFinished()) {
+                    new PlayerSearcher(mEditTextPlayerName.getText()
+                            .toString().trim());
+                }
             }
         });
     }
@@ -110,16 +115,63 @@ public class AddPlayerFragment extends Fragment {
         mBtn_search = (Button) view.findViewById(R.id.button_search);
         mEditTextPlayerName = (EditText) view.findViewById(R.id.edit_text_name_player);
         mSearchedPlayerList = (RecyclerView) view.findViewById(R.id.recycler_view_players);
-        mListAdapter = new SearchedPlayersListAdapter(new ArrayList<Profile>(), mAdventureId, mActivity);
+        mListAdapter = new SearchedPlayersListAdapter(new ArrayList<Profile>(), mAdventureId, mActivity, mAdventure);
         mSearchedPlayerList.setLayoutManager(new LinearLayoutManager(mContext));
         mSearchedPlayerList.setAdapter(mListAdapter);
     }
 
-    private class SearchPlayersValueEventListener implements ValueEventListener {
+    private class AdventureLoader implements ValueEventListener {
+        private boolean finished = false;
+
+        AdventureLoader() {
+            DatabaseReference ref = Database.getAdventuresReference();
+            ref.child(mAdventureId).addListenerForSingleValueEvent(this);
+        }
+
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            new LoadAdventureTask(dataSnapshot).execute();
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+
+        public boolean isFinished() {
+            return finished;
+        }
+
+        private class LoadAdventureTask extends AsyncTask<Void, Void, Void> {
+            DataSnapshot mAdventureSnapshot;
+
+            public LoadAdventureTask(DataSnapshot adventureSnapshot) {
+                mAdventureSnapshot = adventureSnapshot;
+                finished = false;
+            }
+
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                mAdventure = mAdventureSnapshot.getValue(Adventure.class);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                finished = true;
+                onAdventureLoaderFinished();
+            }
+
+        }
+    }
+
+    private class PlayerSearcher implements ValueEventListener {
         DatabaseReference mUserRef;
         String mNameToSearch;
 
-        SearchPlayersValueEventListener(String nameToSearch) {
+        PlayerSearcher(String nameToSearch) {
             mNameToSearch = nameToSearch;
             mUserRef = Database.getUsersReference();
             mUserRef.orderByChild("name").startAt(mNameToSearch).endAt(mNameToSearch + "\uf8ff")
@@ -131,37 +183,48 @@ public class AddPlayerFragment extends Fragment {
         }
 
         @Override
-        public void onDataChange(final DataSnapshot dataSnapshot) {
-            final ProgressDialog dialog = ProgressDialog.show(mContext, "", "Loading. Please wait...", true);
-            final ArrayList<Profile> profiles = new ArrayList<Profile>();
-            new AsyncTask<Void, Void, Void>() {
-                @Override
-                protected Void doInBackground(Void... params) {
-
-                    for (DataSnapshot child : dataSnapshot.getChildren()) {
-                        Profile pf = child.getValue(Profile.class);
-                        profiles.add(pf);
-                        Log.d("ADD", "HI");
-
-                    }
-
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(Void result) {
-                    endTask(profiles);
-                    dialog.dismiss();
-                }
-            }.execute();
-
-
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            new AddPlayerTask(dataSnapshot).execute();
         }
 
         @Override
         public void onCancelled(DatabaseError databaseError) {
 
         }
-    }
 
+        private class AddPlayerTask extends AsyncTask<Void, Void, Void> {
+            DataSnapshot mPlayersSnapshot;
+            ArrayList<Profile> mPlayersList;
+            ProgressDialog mDialog;
+
+
+            public AddPlayerTask(DataSnapshot playersSnapshot) {
+                mPlayersSnapshot = playersSnapshot;
+                mPlayersList = new ArrayList<Profile>();
+                mDialog = ProgressDialog.show(mContext, "", "Loading. Please wait...", true);
+            }
+
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                for (DataSnapshot child : mPlayersSnapshot.getChildren()) {
+                    Profile pf = child.getValue(Profile.class);
+                    mPlayersList.add(pf);
+
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                endTask(mPlayersList);
+                mDialog.dismiss();
+            }
+        }
+    }
 }
+
+
+
+
+
