@@ -1,30 +1,21 @@
 package com.devapps.igor.Screens.AddPlayer;
 
-import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.devapps.igor.DataObject.Adventure;
-import com.devapps.igor.DataObject.Character;
 import com.devapps.igor.DataObject.Notification;
 import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
-import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
-import com.devapps.igor.Screens.AdventureProgress.SessionsListAdapter;
-import com.devapps.igor.Screens.CreateCharacter.CreateCharacterFragment;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.devapps.igor.Util.DataObjectUtils;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -54,23 +45,38 @@ public class SearchedPlayersListAdapter extends
     }
 
     @Override
-    public void onBindViewHolder(SearchedPlayersViewHolder holder, int position) {
+    public void onBindViewHolder(final SearchedPlayersViewHolder holder, final int position) {
         holder.mNameTextView.setText(mSearchedPlayersList.get(position).getName());
         holder.mBtnAdd.setTag(mSearchedPlayersList.get(position));
         holder.mBtnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BtnAddOnClick(view);
+                BtnAddOnClick(view, holder, position);
             }
         });
 
+        updateVisibility(holder, position);
+
     }
 
-    private void BtnAddOnClick(View view) {
+    private void updateVisibility(SearchedPlayersViewHolder holder, int position) {
+        if (DataObjectUtils.isPlayerInTheAdventure(mAdventure, mSearchedPlayersList.get(position).getId())) {
+            holder.mBtnAdd.setVisibility(View.GONE);
+            holder.mAlreadyAdded.setVisibility(View.VISIBLE);
+        }
+        if (DataObjectUtils.isAddPlayerNotificationAlreadyAdded(mAdventure, mSearchedPlayersList.get(position))) {
+            holder.mBtnAdd.setVisibility(View.GONE);
+            holder.mAlreadyAdded.setVisibility(View.VISIBLE);
+            holder.mAlreadyAdded.setImageResource(R.drawable.waiting_invite_icon);
+        }
+    }
+
+    private void BtnAddOnClick(View view, SearchedPlayersViewHolder holder, int position) {
+
         if (mAdventure != null) {
             Profile p = (Profile) view.getTag();
-            if (!isPlayerInTheAdventure(p.getId())) {
-                if (!isNotificationAlreadyAdded(p)) {
+            if (!DataObjectUtils.isPlayerInTheAdventure(mAdventure, p.getId())) {
+                if (!DataObjectUtils.isAddPlayerNotificationAlreadyAdded(mAdventure, p)) {
                     Notification notification = new Notification();
                     notification.setAdventureId(mAdventureId);
                     notification.setNotificationType(Notification.NotificationType.AddedAsPlayer);
@@ -79,46 +85,12 @@ public class SearchedPlayersListAdapter extends
 
                     DatabaseReference ref = Database.getUsersReference();
                     ref.child(p.getId()).setValue(p);
-
-                    Toast.makeText(mActivity, "Notificação enviada ao jogador",
-                            Toast.LENGTH_SHORT).show();
-
-                } else {
-                    Toast.makeText(mActivity, "Notificação já foi enviada ao jogador",
-                            Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Toast.makeText(mActivity, "Jogador já foi adicionado à aventura",
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private boolean isNotificationAlreadyAdded(Profile p) {
-        if (p.getNotifications() != null) {
-            for (Notification n : p.getNotifications()) {
-                if (n.getAdventureId().equals(mAdventureId) && n.getNotificationType()
-                        == Notification.NotificationType.AddedAsPlayer) {
-                    return true;
                 }
             }
-            return false;
-
-        } else {
-            return false;
         }
+        updateVisibility(holder, position);
     }
 
-    private boolean isPlayerInTheAdventure(String playerId) {
-        boolean isPlayerInTheAdventure = false;
-        for (Character c : mAdventure.getCharacters()) {
-            if (c.getPlayerId().equals(playerId)) {
-                isPlayerInTheAdventure = true;
-                break;
-            }
-        }
-        return isPlayerInTheAdventure;
-    }
 
     @Override
     public int getItemCount() {
@@ -137,11 +109,13 @@ public class SearchedPlayersListAdapter extends
     public class SearchedPlayersViewHolder extends RecyclerView.ViewHolder {
         public TextView mNameTextView;
         public Button mBtnAdd;
+        public ImageView mAlreadyAdded;
 
         public SearchedPlayersViewHolder(View itemView) {
             super(itemView);
             mNameTextView = (TextView) itemView.findViewById(R.id.player_name);
             mBtnAdd = (Button) itemView.findViewById(R.id.button_search);
+            mAlreadyAdded = (ImageView) itemView.findViewById(R.id.added_icon);
 
         }
     }

@@ -12,6 +12,7 @@
         android:layout_gravity="top">
 
         <ImageView
+            android:id="@+id/adventure_bg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -25,7 +26,7 @@
             android:paddingLeft="20dp"
             android:paddingTop="15dp"
             android:text="Aventura sem título"
-            android:textColor="@color/gray_btn_bg_color"
+            android:textColor="#FFF"
             android:textSize="24dp"/>
     </RelativeLayout>
 
@@ -34,10 +35,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="110dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:orientation="vertical"
         android:paddingBottom="40dp"
-        android:orientation="vertical">
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <FrameLayout
             android:layout_width="match_parent"

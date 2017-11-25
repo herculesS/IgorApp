@@ -27,5 +27,12 @@
         android:text="+"
         android:textColor="#FFF"/>
 
-
+    <ImageView
+        android:id="@+id/added_icon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="left"
+        android:visibility="gone"
+        app:srcCompat="@drawable/already_added_icon"/>
 </RelativeLayout>

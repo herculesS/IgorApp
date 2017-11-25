@@ -5,20 +5,17 @@ package com.devapps.igor.Screens.HomeJogosFrontend;
  */
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -27,32 +24,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.devapps.igor.DataObject.Adventure;
+import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.DataObject.Session;
 import com.devapps.igor.R;
-import com.devapps.igor.RequestManager.Database;
-import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
-import com.devapps.igor.Screens.HomeJogosFrontend.FragmentAdventure;
-import com.devapps.igor.Screens.CreateNewSession.CreateNewSessionFragment;
+import com.devapps.igor.Screens.CreateAdventure.CreateAdventureFragment;
 import com.devapps.igor.Screens.EditSummary.EditSummaryFragment;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.devapps.igor.Screens.MainActivity;
+import com.devapps.igor.Util.DataObjectUtils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.content.Context.INPUT_METHOD_SERVICE;
-import static com.devapps.igor.R.id.adventureWindow;
-import static com.devapps.igor.R.id.progressBar;
-import static com.devapps.igor.R.id.showadventuresRecyclerView;
-import static com.devapps.igor.R.id.textViewPublisher;
 import static com.devapps.igor.R.layout.fragment_home_jogos_frontend;
-import static com.devapps.igor.R.layout.fragment_home_jogos_frontend_list_adventures;
 
 
 /**
@@ -69,6 +57,8 @@ public class FragmentAdventure extends Fragment {
     private static ImageView adventureWindow;
     private String mAdventureId;
     private Adventure mAdventure;
+    private ImageView mBtnAddAdventure;
+    private FragmentActivity mActivity;
     private static final String ADVENTURE_ID = "ADVENTURE_ID";
     public static ArrayList<Session> sessoes;
     public static int batata = 0;
@@ -94,6 +84,13 @@ public class FragmentAdventure extends Fragment {
             Log.d("AdventureId", mAdventureId);
 
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = getActivity();
+
     }
 
     private TextView textViewTitle;
@@ -135,22 +132,28 @@ public class FragmentAdventure extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     mAdventure = dataSnapshot1.getValue(Adventure.class);
-                    Adventure adventure = new Adventure(mAdventure.getId());
-                    String Titulo_Aventura = mAdventure.getName();
-                    int Background = mAdventure.getBackground();
-                    sessoes = mAdventure.getSessions();
+                    MainActivity activity = (MainActivity) mActivity;
+                    Profile user = activity.getUserProfile();
+                    if (DataObjectUtils.isPlayerInTheAdventure(mAdventure, user.getId())) {
 
-                    String Proxima_Sessao = "Aventura sem sessao";
-                    if (sessoes.size() != 0) {
-                        Proxima_Sessao = sessoes.get(0).getTitle();
+
+                        Adventure adventure = new Adventure(mAdventure.getId());
+                        String Titulo_Aventura = mAdventure.getName();
+                        int Background = mAdventure.getBackground();
+                        sessoes = mAdventure.getSessions();
+
+                        String Proxima_Sessao = "Aventura sem sessao";
+                        if (sessoes.size() != 0) {
+                            Proxima_Sessao = sessoes.get(0).getTitle();
+                        }
+
+                        adventure.setName(Titulo_Aventura);
+                        adventure.setSummary(Proxima_Sessao);
+                        adventure.setBackground(Background);
+                        adventure.setSessions(sessoes);
+
+                        task.add(adventure);
                     }
-
-                    adventure.setName(Titulo_Aventura);
-                    adventure.setSummary(Proxima_Sessao);
-                    adventure.setBackground(Background);
-                    adventure.setSessions(sessoes);
-
-                    task.add(adventure);
 
                 }
 
@@ -168,6 +171,15 @@ public class FragmentAdventure extends Fragment {
         });
         task = new ArrayList<>();
 
+        mBtnAddAdventure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = new CreateAdventureFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, fragment).commit();
+            }
+        });
+
     }
 
     private void InitializeMembers(View view) {
@@ -175,6 +187,7 @@ public class FragmentAdventure extends Fragment {
         seek_bar = (SeekBar) view.findViewById(R.id.progressBar);
         text_view = (TextView) view.findViewById(R.id.textView);
         adventureWindow = (ImageView) view.findViewById(R.id.adventureWindow);
+        mBtnAddAdventure = (ImageView) view.findViewById(R.id.home_jogos_btn_add_adventure);
         mContext = view.getContext();
     }
 

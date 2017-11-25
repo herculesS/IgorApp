@@ -38,6 +38,7 @@ public class AdventureProgressFragment extends Fragment {
     private Button mBtnPlayers;
     private ImageView mBgTab;
     private boolean mFirstTabSelected = true;
+    private ImageView mBgImageView;
     private AddSessionListener mAddSessionListener;
     private AddPlayerListener mAddPlayerListener;
 
@@ -89,6 +90,23 @@ public class AdventureProgressFragment extends Fragment {
 
                 mAdventure = dataSnapshot.getValue(Adventure.class);
                 mAdventureTitleTextView.setText(mAdventure.getName());
+                switch (mAdventure.getBackground()) {
+                    case 1:
+                        mBgImageView.setImageResource(R.drawable.miniatura_imagem_automatica);
+                        break;
+                    case 2:
+                        mBgImageView.setImageResource(R.drawable.miniatura_krevast);
+                        break;
+                    case 3:
+                        mBgImageView.setImageResource(R.drawable.miniatura_coast);
+                        break;
+                    case 4:
+                        mBgImageView.setImageResource(R.drawable.miniatura_corvali);
+                        break;
+                    case 5:
+                        mBgImageView.setImageResource(R.drawable.miniatura_heartlands);
+                        break;
+                }
 
             }
 
@@ -139,6 +157,7 @@ public class AdventureProgressFragment extends Fragment {
     private void InitializeMembers(View view) {
         mAdventureTitleTextView = (TextView) view.findViewById(R.id.adventure_progress_adventure_title);
         mBtnAdd = (ImageView) view.findViewById(R.id.adventure_progress_btn_add_session);
+        mBgImageView = (ImageView) view.findViewById(R.id.adventure_bg);
         mBtnProgress = (Button) view.findViewById(R.id.btn_progress);
         mBtnPlayers = (Button) view.findViewById(R.id.btn_players);
         mBgTab = (ImageView) view.findViewById(R.id.bg_tab_select);
