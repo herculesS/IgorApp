@@ -22,6 +22,7 @@ import com.devapps.igor.DataObject.Session;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
 import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
+import com.devapps.igor.Screens.BackableFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,7 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
-public class CreateNewSessionFragment extends Fragment {
+public class CreateNewSessionFragment extends Fragment implements BackableFragment {
     private static final String ADVENTURE_ID = "ADVENTURE_ID";
 
     private String mAdventureId;
@@ -194,5 +195,12 @@ public class CreateNewSessionFragment extends Fragment {
         mBtnDatePicker.setText(Session.
                 formatSessionDateToDayMonth(mDate.get(Calendar.DAY_OF_MONTH) + "/" + mDate.get(Calendar.MONTH)));
 
+    }
+
+    @Override
+    public void back() {
+        Fragment fragment = AdventureProgressFragment.newInstance(mAdventureId);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment).commit();
     }
 }

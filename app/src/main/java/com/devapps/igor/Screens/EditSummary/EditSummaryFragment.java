@@ -15,6 +15,8 @@ import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
 import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
+import com.devapps.igor.Screens.BackableFragment;
+import com.devapps.igor.Screens.HomeJogosFrontend.FragmentAdventure;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
 
-public class EditSummaryFragment extends Fragment {
+public class EditSummaryFragment extends Fragment implements BackableFragment {
     private static final String ARG_ADVENTURE_OR_SESSION = "ADVENTURE";
     private static final String ARG_ADVENTURE_ID = "ADVENTURE_ID";
     private static final String ARG_SESSION_ID = "SESSION_ID";
@@ -152,6 +154,13 @@ public class EditSummaryFragment extends Fragment {
         ref.child(mAdventureId).setValue(mAdventure);
 
 
+        Fragment fragment = AdventureProgressFragment.newInstance(mAdventureId);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment).commit();
+    }
+
+    @Override
+    public void back() {
         Fragment fragment = AdventureProgressFragment.newInstance(mAdventureId);
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment).commit();

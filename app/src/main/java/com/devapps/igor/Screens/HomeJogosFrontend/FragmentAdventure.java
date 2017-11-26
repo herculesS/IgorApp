@@ -27,6 +27,7 @@ import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.DataObject.Session;
 import com.devapps.igor.R;
+import com.devapps.igor.Screens.BackableFragment;
 import com.devapps.igor.Screens.CreateAdventure.CreateAdventureFragment;
 import com.devapps.igor.Screens.EditSummary.EditSummaryFragment;
 import com.devapps.igor.Screens.MainActivity;
@@ -48,7 +49,7 @@ import static com.devapps.igor.R.layout.fragment_home_jogos_frontend;
  */
 
 
-public class FragmentAdventure extends Fragment {
+public class FragmentAdventure extends Fragment implements BackableFragment {
 
 //novo abaixo
 
@@ -189,6 +190,11 @@ public class FragmentAdventure extends Fragment {
         adventureWindow = (ImageView) view.findViewById(R.id.adventureWindow);
         mBtnAddAdventure = (ImageView) view.findViewById(R.id.home_jogos_btn_add_adventure);
         mContext = view.getContext();
+    }
+
+    @Override
+    public void back() {
+        mActivity.onBackPressed();
     }
 
     private class SessionsAdapter extends ArrayAdapter<Session> {

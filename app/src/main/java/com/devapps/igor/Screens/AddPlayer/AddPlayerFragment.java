@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,9 @@ import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
+import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
+import com.devapps.igor.Screens.AdventureProgress.DetailsFragment;
+import com.devapps.igor.Screens.BackableFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,7 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 
-public class AddPlayerFragment extends Fragment {
+public class AddPlayerFragment extends Fragment implements BackableFragment {
     private static final String ADVENTURE_ID = "ADVENTURE_ID";
 
     ImageView mBtn_close, mBtn_close_edit;
@@ -118,6 +122,13 @@ public class AddPlayerFragment extends Fragment {
         mListAdapter = new SearchedPlayersListAdapter(new ArrayList<Profile>(), mAdventureId, mActivity, mAdventure);
         mSearchedPlayerList.setLayoutManager(new LinearLayoutManager(mContext));
         mSearchedPlayerList.setAdapter(mListAdapter);
+    }
+
+    @Override
+    public void back() {
+        Fragment fragment = AdventureProgressFragment.newInstance(mAdventureId);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment).commit();
     }
 
     private class AdventureLoader implements ValueEventListener {

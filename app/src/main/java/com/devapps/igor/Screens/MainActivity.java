@@ -22,6 +22,7 @@ import android.widget.PopupMenu;
 import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
+import com.devapps.igor.Screens.AddPlayer.AddPlayerFragment;
 import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
 import com.devapps.igor.Screens.Books.BooksFragment;
 import com.devapps.igor.Screens.CreateAdventure.CreateAdventureFragment;
@@ -176,10 +177,21 @@ public class MainActivity extends AppCompatActivity implements DiceRollerFragmen
 
     @Override
     public void onBackPressed() {
+
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+            BackableFragment bf;
+            if (f != null) {
+                bf = (BackableFragment) f;
+                Log.d("Teste","backPressed");
+                bf.back();
+            } else {
+                super.onBackPressed();
+            }
+
+
         }
     }
 

@@ -18,6 +18,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.devapps.igor.R;
+import com.devapps.igor.Screens.BackableFragment;
+import com.devapps.igor.Screens.HomeJogosFrontend.FragmentAdventure;
 import com.devapps.igor.Screens.HomeJogosFrontend.HomeJogosFrontendListItem;
 import com.devapps.igor.Screens.HomeJogosFrontend.HomeJogosFrontendMyAdapter;
 
@@ -32,7 +34,7 @@ import java.util.List;
  * Created by danielbarboni on 07/10/17.
  */
 
-public class BooksFragment extends Fragment {
+public class BooksFragment extends Fragment implements BackableFragment {
     private static final String URL_DATA = "https://simplifiedcoding.net/demos/marvel/";
 
     private RecyclerView recyclerView;
@@ -61,7 +63,7 @@ public class BooksFragment extends Fragment {
         loadRecyclerViewData();
     }
 
-    private void loadRecyclerViewData(){
+    private void loadRecyclerViewData() {
         final ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Loading data...");
         progressDialog.show();
@@ -70,7 +72,7 @@ public class BooksFragment extends Fragment {
                 URL_DATA,
                 new Response.Listener<String>() {
                     @Override
-                    public void onResponse(String s){
+                    public void onResponse(String s) {
                         progressDialog.dismiss();
                         try {
 
@@ -79,7 +81,7 @@ public class BooksFragment extends Fragment {
                             //JSONArray array = jsonObject.getJSONArray("heroes");
 
                             JSONArray array = new JSONArray(s);
-                            for(int i = 0; i<array.length();i++){
+                            for (int i = 0; i < array.length(); i++) {
                                 JSONObject o = array.getJSONObject(i);
                                 BooksListItem item = new BooksListItem(
                                         //o.getString("name"),
@@ -105,9 +107,9 @@ public class BooksFragment extends Fragment {
                         }
                     }
                 },
-                new Response.ErrorListener(){
+                new Response.ErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError volleyError){
+                    public void onErrorResponse(VolleyError volleyError) {
                         progressDialog.dismiss();
                         Toast.makeText(getActivity().getApplicationContext(), volleyError.getMessage(), Toast.LENGTH_LONG).show();
                     }
@@ -115,5 +117,12 @@ public class BooksFragment extends Fragment {
 
         RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
         queue.add(stringRequest);
+    }
+
+    @Override
+    public void back() {
+        Fragment fragment = FragmentAdventure.newInstance("");
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment).commit();
     }
 }
