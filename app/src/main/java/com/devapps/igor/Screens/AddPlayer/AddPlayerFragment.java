@@ -23,6 +23,8 @@ import com.devapps.igor.RequestManager.AdventureLoader;
 import com.devapps.igor.RequestManager.Database;
 import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
 import com.devapps.igor.Screens.BackableFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -104,7 +106,7 @@ public class AddPlayerFragment extends Fragment implements BackableFragment, Adv
         mBtn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("Teste",""+mAdventureLoader.isFinished()+mAdventureId);
+                Log.d("Teste", "" + mAdventureLoader.isFinished() + mAdventureId);
                 if (mAdventureLoader.isFinished()) {
                     new PlayerSearcher(mEditTextPlayerName.getText()
                             .toString().trim());
@@ -179,9 +181,12 @@ public class AddPlayerFragment extends Fragment implements BackableFragment, Adv
 
             @Override
             protected Void doInBackground(Void... voids) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 for (DataSnapshot child : mPlayersSnapshot.getChildren()) {
                     Profile pf = child.getValue(Profile.class);
-                    mPlayersList.add(pf);
+                    if (!user.getUid().equals(pf.getId())) {
+                        mPlayersList.add(pf);
+                    }
 
                 }
                 return null;

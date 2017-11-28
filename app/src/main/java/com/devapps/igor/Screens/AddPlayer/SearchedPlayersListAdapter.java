@@ -63,11 +63,14 @@ public class SearchedPlayersListAdapter extends
         if (DataObjectUtils.isPlayerInTheAdventure(mAdventure, mSearchedPlayersList.get(position).getId())) {
             holder.mBtnAdd.setVisibility(View.GONE);
             holder.mAlreadyAdded.setVisibility(View.VISIBLE);
-        }
-        if (DataObjectUtils.isAddPlayerNotificationAlreadyAdded(mAdventure, mSearchedPlayersList.get(position))) {
+            holder.mAlreadyAdded.setImageResource(R.drawable.already_added_icon);
+        } else if (DataObjectUtils.isAddPlayerNotificationAlreadyAdded(mAdventure, mSearchedPlayersList.get(position))) {
             holder.mBtnAdd.setVisibility(View.GONE);
             holder.mAlreadyAdded.setVisibility(View.VISIBLE);
             holder.mAlreadyAdded.setImageResource(R.drawable.waiting_invite_icon);
+        }else {
+            holder.mBtnAdd.setVisibility(View.VISIBLE);
+            holder.mAlreadyAdded.setVisibility(View.GONE);
         }
     }
 

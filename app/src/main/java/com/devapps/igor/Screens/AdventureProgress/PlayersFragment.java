@@ -4,16 +4,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.DataObject.Character;
@@ -35,15 +31,10 @@ public class PlayersFragment extends Fragment implements AdventureLoader.Adventu
 
     private String mAdventureId;
     private Adventure mAdventure;
-    private Profile mDM;
 
     private RecyclerView mRecyclerViewCharacter;
     private CharacterListAdapter mCharacterListAdapter;
-    private TextView mTextViewDMName;
-    private TextView mTextViewDMSummary;
     private Context mContext;
-    private ImageView mImageViewMasterImage;
-    private String mUserId;
     private AdventureLoader mAdventureLoader;
 
 
@@ -76,107 +67,37 @@ public class PlayersFragment extends Fragment implements AdventureLoader.Adventu
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-
         initializeMembers(view);
         mAdventureLoader = new AdventureLoader();
         mAdventureLoader.setAdventureLoaderListener(this);
         mAdventureLoader.load(mAdventureId);
-
-        mImageViewMasterImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DMImageOnclick();
-            }
-        });
-
     }
 
-    private void DMImageOnclick() {
-        if (mAdventure != null) {
-            if (mAdventure.getDMChar() != null) {
-                if (mAdventure.getDMChar().getPlayerId().equals(mUserId)) {
-                    mAdventure.setDMChar(null);
-                    notifyChangeInAdventure(mAdventure);
-
-                }
-            } else {
-                DatabaseReference ref = Database.getUsersReference();
-                ref.child(mUserId).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Profile profile = dataSnapshot.getValue(Profile.class);
-                        mAdventure.setDMChar(new Character(mUserId, profile.getName(), "TODO: Summary"));
-                        notifyChangeInAdventure(mAdventure);
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-            }
-        }
-    }
-
-    private void notifyChangeInAdventure(Adventure adventure) {
-        DatabaseReference ref = Database.getAdventuresReference();
-        ref.child(mAdventureId).setValue(adventure);
-    }
 
     @Override
     public void onAdventureLoaded(Adventure a) {
         mAdventure = a;
-        DatabaseReference refUser = Database.getUsersReference();
-        setDmViews(refUser);
         if (mAdventure.getCharacters() != null && mAdventure.getCharacters().size() != 0) {
             new LoadCharactersPlayerProfiles().execute();
 
         } else {
-            mCharacterListAdapter = new CharacterListAdapter(new ArrayList<Character>(), new ArrayList<Profile>());
+            mCharacterListAdapter = new CharacterListAdapter(new ArrayList<Character>(), new ArrayList<Profile>(), mAdventure.getDMChar());
             mRecyclerViewCharacter.setLayoutManager(new LinearLayoutManager(mContext));
             mRecyclerViewCharacter.setAdapter(mCharacterListAdapter);
         }
 
     }
 
-    private void setDmViews(DatabaseReference refUser) {
-        if (mAdventure.getDMChar() != null) {
-
-            refUser.child(mAdventure.getDMChar().getPlayerId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    dmOnDataChange(dataSnapshot);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        } else {
-            mTextViewDMName.setText(R.string.no_master_assigned);
-            mTextViewDMSummary.setVisibility(View.GONE);
-
-        }
-    }
-
-    private void dmOnDataChange(DataSnapshot dataSnapshot) {
-        mDM = dataSnapshot.getValue(Profile.class);
-        mTextViewDMName.setText(mDM.getName());
-        mTextViewDMSummary.setText(mAdventure.getDMChar().getSummary());
-        mTextViewDMSummary.setVisibility(View.VISIBLE);
-    }
 
     private void initializeMembers(View view) {
-        mTextViewDMName = (TextView) view.findViewById(R.id.text_view_dm_name);
-        mTextViewDMSummary = (TextView) view.findViewById(R.id.text_view_dm_summary);
         mRecyclerViewCharacter = (RecyclerView) view.findViewById(R.id.recycler_view_characters);
         mContext = view.getContext();
-        mImageViewMasterImage = (ImageView) view.findViewById(R.id.image_view_set_master);
-        mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    }
 
+    private void endTask(ArrayList<Profile> playersList) {
+        mCharacterListAdapter = new CharacterListAdapter(mAdventure.getCharacters(), playersList, mAdventure.getDMChar());
+        mRecyclerViewCharacter.setLayoutManager(new LinearLayoutManager(mContext));
+        mRecyclerViewCharacter.setAdapter(mCharacterListAdapter);
     }
 
 
@@ -225,10 +146,5 @@ public class PlayersFragment extends Fragment implements AdventureLoader.Adventu
         }
     }
 
-    private void endTask(ArrayList<Profile> playersList) {
-        mCharacterListAdapter = new CharacterListAdapter(mAdventure.getCharacters(), playersList);
-        mRecyclerViewCharacter.setLayoutManager(new LinearLayoutManager(mContext));
-        mRecyclerViewCharacter.setAdapter(mCharacterListAdapter);
-    }
 
 }
