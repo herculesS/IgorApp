@@ -85,4 +85,13 @@
 
     <string name="placeholder">Placeholder</string>
     <string name="singapore">Singapore</string>
+
+    <!-- Dice Roll Dialog -->
+    <string name="roll_dialog_title">Escolha os dados</string>
+    <string name="confirm_roll">Lançar</string>
+    <string name="cancel_roll">Cancelar</string>
+    <string name="dice_type">Número de lados:</string>
+    <string name="dice_number">Número de dados:</string>
+    <string name="dice_modifier">Modificador:</string>
+    <string name="incorrect_dice_type">O mínimo de faces de um dado é 1</string>
 </resources>
