@@ -25,6 +25,7 @@ import com.devapps.igor.R;
 import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
 import com.devapps.igor.Screens.Books.BooksFragment;
 import com.devapps.igor.Screens.CreateNewAdventure.CreateNewAdventureFragment;
+import com.devapps.igor.Screens.DiceRoller.NewRollDialogFragment;
 import com.devapps.igor.Screens.HomeJogosFrontend.FragmentAdventure;
 import com.devapps.igor.Screens.DiceRoller.DiceRollerFragment;
 import com.devapps.igor.Screens.Login.LoginActivity;
@@ -36,7 +37,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements DiceRollerFragment.OnListFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements DiceRollerFragment.OnListFragmentInteractionListener,
+        NewRollDialogFragment.NewRollDialogListener {
 
     private static final String TAG = "MainActivity";
     private Profile mUserProfile;
@@ -135,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements DiceRollerFragmen
                 break;
         }
 
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, newFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, newFragment, newFragment.getClass().getName()).commit();
 
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
@@ -184,5 +186,11 @@ public class MainActivity extends AppCompatActivity implements DiceRollerFragmen
     @Override
     public Profile getUserProfile() {
         return mUserProfile;
+    }
+
+    @Override
+    public void onDialogPositiveClick(int diceType, int diceNumber, int diceModifier) {
+        DiceRollerFragment diceRollerFragment = (DiceRollerFragment) getSupportFragmentManager().findFragmentByTag(DiceRollerFragment.class.getName());
+        diceRollerFragment.createDiceRoll(diceType, diceNumber, diceModifier);
     }
 }

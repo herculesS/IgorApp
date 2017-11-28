@@ -1,30 +1,42 @@
 package com.devapps.igor.Screens.DiceRoller;
 
+import java.util.Calendar;
+import java.util.Random;
+
 /**
  * Created by tulio on 09/11/2017.
  */
 
 public class DiceRoll {
+
     private String username;
-    private String dices;
+    private int diceType;
+    private int diceNumber;
+    private int diceModifier;
     private int result;
     private String sendTime;
 
+    private Random randomDice = new Random();
+
     public DiceRoll() {}
 
-    public DiceRoll(String username, String dices, int result, String sendTime) {
+    public DiceRoll(String username, int diceType, int diceNumber, int diceModifier) {
         this.username = username;
-        this.dices = dices;
-        this.result = result;
-        this.sendTime = sendTime;
+        this.diceType = diceType;
+        this.diceNumber = diceNumber;
+        this.diceModifier = diceModifier;
+        roll();
     }
 
-    public String getDices() {
-        return dices;
-    }
+    public void roll(){
+        Calendar today = Calendar.getInstance();
+        sendTime = today.get(Calendar.HOUR_OF_DAY) + ":" + today.get(Calendar.MINUTE);
 
-    public void setDices(String dices) {
-        this.dices = dices;
+        result = 0;
+        for(int i = 0; i<diceNumber; i++) {
+            result += randomDice.nextInt(diceType) + 1;
+        }
+        result += diceModifier;
     }
 
     public int getResult() {

@@ -2,6 +2,7 @@ package com.devapps.igor.Screens.DiceRoller;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +21,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -36,6 +36,7 @@ public class DiceRollerFragment extends Fragment {
     private Profile mUserProfile;
 
     private Button _newRollButton;
+    private RecyclerView diceRollsView;
 
     private List<DiceRoll> diceRolls;
     private DiceRollRecyclerViewAdapter mDiceRollAdapter;
@@ -83,16 +84,16 @@ public class DiceRollerFragment extends Fragment {
 
         // Set the adapter
         Context context = view.getContext();
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.dice_roll_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(mDiceRollAdapter);
+        diceRollsView = (RecyclerView) view.findViewById(R.id.dice_roll_list);
+        diceRollsView.setLayoutManager(new LinearLayoutManager(context));
+        diceRollsView.setAdapter(mDiceRollAdapter);
 
         // New Roll button make a new roll of dices
         _newRollButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DiceRoll newDiceRoll = new DiceRoll(mUserProfile.getName(), "7 + 4", 11, "12:00");
-                mDiceRollDatabaseReference.push().setValue(newDiceRoll);
+                DialogFragment rollSetup = new NewRollDialogFragment();
+                rollSetup.show(getFragmentManager(), "new_roll");
             }
         });
 
@@ -151,6 +152,7 @@ public class DiceRollerFragment extends Fragment {
                     int index = diceRolls.indexOf(newRoll);
                     //TODO testar com size()
                     mDiceRollAdapter.notifyItemInserted(index);
+                    diceRollsView.scrollToPosition(diceRolls.size()-1);
                 }
 
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
@@ -167,5 +169,10 @@ public class DiceRollerFragment extends Fragment {
             mDiceRollDatabaseReference.removeEventListener(mChildEventListener);
             mChildEventListener = null;
         }
+    }
+
+    public void createDiceRoll(int diceType, int diceNumber, int diceModifier) {
+        DiceRoll newDiceRoll = new DiceRoll(mUserProfile.getName(), diceType, diceNumber, diceModifier);
+        mDiceRollDatabaseReference.push().setValue(newDiceRoll);
     }
 }
