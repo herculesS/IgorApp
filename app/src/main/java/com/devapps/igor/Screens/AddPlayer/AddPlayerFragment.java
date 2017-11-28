@@ -19,9 +19,9 @@ import android.widget.ImageView;
 import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.R;
+import com.devapps.igor.RequestManager.AdventureLoader;
 import com.devapps.igor.RequestManager.Database;
 import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
-import com.devapps.igor.Screens.AdventureProgress.DetailsFragment;
 import com.devapps.igor.Screens.BackableFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,7 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 
-public class AddPlayerFragment extends Fragment implements BackableFragment {
+public class AddPlayerFragment extends Fragment implements BackableFragment, AdventureLoader.AdventureLoaderListener {
     private static final String ADVENTURE_ID = "ADVENTURE_ID";
 
     ImageView mBtn_close, mBtn_close_edit;
@@ -78,18 +78,17 @@ public class AddPlayerFragment extends Fragment implements BackableFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        //load Adventure
-        mAdventureLoader = new AdventureLoader();
-
         //initializeMenbers
         initializeMembers(view);
+
+        //load Adventure
+        mAdventureLoader = new AdventureLoader();
+        mAdventureLoader.setAdventureLoaderListener(this);
+        mAdventureLoader.load(mAdventureId);
+
+
         //setClickListeners
         setClickListeners();
-    }
-
-    private void onAdventureLoaderFinished() {
-        mListAdapter.setAdventure(mAdventure);
-
     }
 
 
@@ -105,6 +104,7 @@ public class AddPlayerFragment extends Fragment implements BackableFragment {
         mBtn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("Teste",""+mAdventureLoader.isFinished()+mAdventureId);
                 if (mAdventureLoader.isFinished()) {
                     new PlayerSearcher(mEditTextPlayerName.getText()
                             .toString().trim());
@@ -131,52 +131,13 @@ public class AddPlayerFragment extends Fragment implements BackableFragment {
                 .replace(R.id.fragment_container, fragment).commit();
     }
 
-    private class AdventureLoader implements ValueEventListener {
-        private boolean finished = false;
+    @Override
+    public void onAdventureLoaded(Adventure a) {
+        mAdventure = a;
+        mListAdapter.setAdventure(mAdventure);
 
-        AdventureLoader() {
-            DatabaseReference ref = Database.getAdventuresReference();
-            ref.child(mAdventureId).addListenerForSingleValueEvent(this);
-        }
-
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            new LoadAdventureTask(dataSnapshot).execute();
-
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-
-        }
-
-        public boolean isFinished() {
-            return finished;
-        }
-
-        private class LoadAdventureTask extends AsyncTask<Void, Void, Void> {
-            DataSnapshot mAdventureSnapshot;
-
-            public LoadAdventureTask(DataSnapshot adventureSnapshot) {
-                mAdventureSnapshot = adventureSnapshot;
-                finished = false;
-            }
-
-
-            @Override
-            protected Void doInBackground(Void... voids) {
-                mAdventure = mAdventureSnapshot.getValue(Adventure.class);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                finished = true;
-                onAdventureLoaderFinished();
-            }
-
-        }
     }
+
 
     private class PlayerSearcher implements ValueEventListener {
         DatabaseReference mUserRef;
