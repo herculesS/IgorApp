@@ -8,14 +8,14 @@
 
 
     <ImageView
-        android:id="@+id/create_character_btn_create"
+        android:id="@+id/add_player_btn_close_edit"
         android:layout_width="76dp"
         android:layout_height="76dp"
         android:layout_gravity="right"
         app:srcCompat="@drawable/btn_close_edit_mode"/>
 
     <ImageView
-        android:id="@+id/create_character_btn_close"
+        android:id="@+id/add_player_btn_close"
         android:layout_width="18dp"
         android:layout_height="18dp"
         android:layout_marginLeft="10dp"
@@ -25,7 +25,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="20dp"
         android:orientation="vertical">
 
@@ -36,7 +36,7 @@
             android:layout_gravity="left"
             android:layout_marginLeft="43dp"
             android:paddingBottom="15dp"
-            android:text="@string/create_character_label"
+            android:text="Adicionar Jogador"
             android:textColor="@color/CreationLabelBlue"/>
 
 
@@ -44,64 +44,44 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="43dp"
-            android:text="@string/create_character_name_label"
+            android:text="Nome do Jogador"
             android:textColor="@color/CreationLabelGray"/>
 
         <EditText
-            android:id="@+id/edit_text_name_character"
+            android:id="@+id/edit_text_name_player"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_marginLeft="43dp"
             android:background="@android:color/transparent"
-            android:hint="@string/create_character_name_hint"
+            android:hint="Digite o nome do jogador"
             android:textColor="@color/CreationLabelBlack"
             android:textStyle="bold"/>
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="10dp"/>
 
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="43dp"
-            android:layout_marginRight="43dp"
-            app:srcCompat="@drawable/line"/>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="10dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="43dp"
-            android:text="@string/create_character_summary_label"
-            android:textColor="@color/CreationLabelGray"/>
-
-        <EditText
-            android:id="@+id/edit_text_summary_character"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginLeft="43dp"
-            android:background="@android:color/transparent"
-            android:hint="@string/create_character_summary_hint"
-            android:textColor="@color/CreationLabelBlack"
-            android:textStyle="bold"/>
-
-        <ImageView
-            android:id="@+id/button_ready"
+        <Button
+            android:id="@+id/button_search"
             android:layout_width="118dp"
             android:layout_height="42dp"
             android:layout_gravity="right"
             android:layout_marginRight="43dp"
             android:layout_marginTop="26dp"
-            app:srcCompat="@drawable/btn_ready"/>
+            android:background="@drawable/bg_button_default"
+            android:text="PROCURAR"
+            android:textColor="#FFF"/>
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_players"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:padding="10dp">
+
+        </android.support.v7.widget.RecyclerView>
 
     </LinearLayout>
+
 </FrameLayout>
 
