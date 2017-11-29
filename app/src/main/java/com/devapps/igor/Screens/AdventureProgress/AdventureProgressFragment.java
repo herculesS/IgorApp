@@ -1,6 +1,5 @@
 package com.devapps.igor.Screens.AdventureProgress;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -19,10 +18,8 @@ import com.devapps.igor.Screens.AddPlayer.AddPlayerFragment;
 import com.devapps.igor.Screens.BackableFragment;
 import com.devapps.igor.Screens.CreateNewSession.CreateNewSessionFragment;
 import com.devapps.igor.Screens.HomeJogosFrontend.FragmentAdventure;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
+import com.devapps.igor.Util.DataObjectUtils;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
@@ -35,14 +32,17 @@ public class AdventureProgressFragment extends Fragment implements BackableFragm
 
     private TextView mAdventureTitleTextView;
     private ImageView mBtnAdd;
-    private Context mContext;
     private Button mBtnProgress;
     private Button mBtnPlayers;
+    private ImageView mBtnEdit;
     private ImageView mBgTab;
     private boolean mFirstTabSelected = true;
+    private boolean mEditMode = false;
+    private String mUserId;
     private ImageView mBgImageView;
     private AddSessionListener mAddSessionListener;
     private AddPlayerListener mAddPlayerListener;
+    private ImageView mBtnAdventureEdit;
 
     public AdventureProgressFragment() {
         // Required empty public constructor
@@ -84,18 +84,81 @@ public class AdventureProgressFragment extends Fragment implements BackableFragm
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
         }
+
+        mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         AdventureLoader loader = new AdventureLoader();
         loader.setAdventureLoaderListener(this);
         loader.load(mAdventureId);
 
-        mBtnProgress.setOnClickListener(new View.OnClickListener() {
+        setClickListeners();
+
+        Fragment fragment = DetailsFragment.newInstance(mAdventureId);
+        Editable f = (Editable) fragment;
+        f.editMode(mEditMode);
+        getChildFragmentManager().beginTransaction()
+                .replace(R.id.adventure_players_container, fragment).commit();
+
+    }
+
+    private void setClickListeners() {
+        mBtnAdventureEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        mBtnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mEditMode) {
+                    mEditMode = false;
+
+                } else {
+                    mEditMode = true;
+
+                }
+
+
+                Fragment f = getChildFragmentManager().
+                        findFragmentById(R.id.adventure_players_container);
+                if (mAdventure.getDMChar() != null && mUserId.
+                        equals(mAdventure.getDMChar().getPlayerId())) {
+                    mBtnAdventureEdit.setVisibility(View.VISIBLE);
+                } else {
+                    mBtnAdventureEdit.setVisibility(View.GONE);
+                }
+                Editable editable = (Editable) f;
+                editable.editMode(mEditMode);
+            }
+        });
+        mBtnProgress.setOnClickListener(new View.OnClickListener()
+
+        {
             @Override
             public void onClick(View view) {
                 if (!mFirstTabSelected) {
+                    if (mAdventure.getDMChar() != null) {
+                        if (mAdventure.getDMChar().getPlayerId().equals(mUserId)) {
+                            mBtnEdit.setVisibility(View.VISIBLE);
+                        } else {
+                            mBtnEdit.setVisibility(View.GONE);
+                            mBtnAdventureEdit.setVisibility(View.GONE);
+                            mEditMode = false;
+
+                        }
+                    } else {
+                        mBtnEdit.setVisibility(View.GONE);
+                        mBtnAdventureEdit.setVisibility(View.GONE);
+                        mEditMode = false;
+
+                    }
                     mBgTab.setImageResource(R.drawable.adventure_tab_first_selected);
                     mBtnAdd.setOnClickListener(mAddSessionListener);
                     mBtnAdd.setImageResource(R.drawable.btn_add_session);
                     Fragment fragment = DetailsFragment.newInstance(mAdventureId);
+                    Editable f = (Editable) fragment;
+                    f.editMode(mEditMode);
                     getChildFragmentManager().beginTransaction()
                             .replace(R.id.adventure_players_container, fragment).commit();
                     mFirstTabSelected = true;
@@ -104,30 +167,32 @@ public class AdventureProgressFragment extends Fragment implements BackableFragm
             }
         });
 
-        mBtnPlayers.setOnClickListener(new View.OnClickListener() {
+        mBtnPlayers.setOnClickListener(new View.OnClickListener()
+
+        {
             @Override
             public void onClick(View view) {
                 if (mFirstTabSelected) {
                     mBgTab.setImageResource(R.drawable.adventure_tab_second_selected);
                     mBtnAdd.setOnClickListener(mAddPlayerListener);
                     mBtnAdd.setImageResource(R.drawable.btn_add_player);
+                    mBtnEdit.setVisibility(View.VISIBLE);
                     Fragment fragment = PlayersFragment.newInstance(mAdventureId);
+                    Editable f = (Editable) fragment;
+                    f.editMode(mEditMode);
                     getChildFragmentManager().beginTransaction()
                             .replace(R.id.adventure_players_container, fragment).commit();
                     mFirstTabSelected = false;
                 }
             }
         });
-
-        Fragment fragment = DetailsFragment.newInstance(mAdventureId);
-        getChildFragmentManager().beginTransaction()
-                .replace(R.id.adventure_players_container, fragment).commit();
-
     }
 
     private void InitializeMembers(View view) {
         mAdventureTitleTextView = (TextView) view.findViewById(R.id.adventure_progress_adventure_title);
         mBtnAdd = (ImageView) view.findViewById(R.id.adventure_progress_btn_add_session);
+        mBtnEdit = (ImageView) view.findViewById(R.id.adventure_progress_btn_edit);
+        mBtnAdventureEdit = (ImageView) view.findViewById(R.id.adventure_edit);
         mBgImageView = (ImageView) view.findViewById(R.id.adventure_bg);
         mBtnProgress = (Button) view.findViewById(R.id.btn_progress);
         mBtnPlayers = (Button) view.findViewById(R.id.btn_players);
@@ -148,6 +213,11 @@ public class AdventureProgressFragment extends Fragment implements BackableFragm
     public void onAdventureLoaded(Adventure a) {
         mAdventure = a;
         mAdventureTitleTextView.setText(mAdventure.getName());
+        if (mAdventure.getDMChar() != null) {
+            if (mAdventure.getDMChar().getPlayerId().equals(mUserId)) {
+                mBtnEdit.setVisibility(View.VISIBLE);
+            }
+        }
         switch (mAdventure.getBackground()) {
             case 1:
                 mBgImageView.setImageResource(R.drawable.miniatura_imagem_automatica);

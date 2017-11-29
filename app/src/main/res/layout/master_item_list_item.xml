@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -7,12 +12,12 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp">
 
-    <ImageView
-        android:id="@+id/image_view_set_master"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_weight="1"
-        app:srcCompat="@drawable/master_icon"/>
+        <ImageView
+            android:id="@+id/image_view_set_master"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/master_icon"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -21,9 +26,9 @@
         android:layout_weight="5"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/textView4"
@@ -33,13 +38,13 @@
                 android:text="Mestre"
                 android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/text_view_dm_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:text="TextView"/>
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/text_view_dm_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="TextView"/>
+            </LinearLayout>
 
         <TextView
             android:id="@+id/text_view_dm_summary"
@@ -54,4 +59,14 @@
             android:background="@color/text_color_1"/>
     </LinearLayout>
 
-</LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/dm_item_edit"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_gravity="top|right"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        app:srcCompat="@drawable/edit_field_icon"/>
+</FrameLayout>

@@ -1,47 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-
-        <TextView
-            android:id="@+id/session_list_view_item_date"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:text="TextView"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/session_list_view_item_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:text="TextView"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/session_list_view_item_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="TextView"
+                android:textSize="16sp"/>
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/session_list_view_item_title"
+            android:id="@+id/session_list_view_item_summary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView"
-            android:textSize="16sp"/>
+            android:gravity="center"
+            android:text="Sessão sem resumo"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:srcCompat="@drawable/line"/>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/session_list_view_item_summary"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/sessions_edit_layout"
+        android:layout_width="75dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Sessão sem resumo"
-        android:visibility="gone"/>
+        android:layout_gravity="top|right"
+        android:layout_margin="5dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:srcCompat="@drawable/line"/>
-</LinearLayout>
+        <ImageView
+            android:id="@+id/sessions_item_edit"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="top|left"
+            app:srcCompat="@drawable/edit_field_icon"/>
+
+        <ImageView
+            android:id="@+id/sessions_item_trash_can"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="top|left"
+            android:layout_marginLeft="5dp"
+            app:srcCompat="@drawable/trashcan_icon"/>
+
+
+    </LinearLayout>
+</FrameLayout>

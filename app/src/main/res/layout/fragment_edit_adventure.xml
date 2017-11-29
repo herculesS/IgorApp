@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.devapps.igor.Screens.MainActivity">
+
+    <ImageView
+        android:id="@+id/create_character_btn_close"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        app:srcCompat="@drawable/btn_close"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="43dp"
+            android:paddingBottom="15dp"
+            android:text="Editar aventura"
+            android:textSize="25sp"
+            android:textColor="@color/CreationLabelBlue"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="43dp"
+            android:text="Nome da Aventura"
+            android:textColor="@color/CreationLabelGray"/>
+
+        <EditText
+            android:id="@+id/edit_text_name_character"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="43dp"
+            android:background="@android:color/transparent"
+            android:hint="Dê nome à aventura"
+            android:textColor="@color/CreationLabelBlack"
+            android:textStyle="bold"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp"/>
+
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="43dp"
+            android:layout_marginRight="43dp"
+            app:srcCompat="@drawable/line"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="43dp"
+            android:text="Resumo da Aventura"
+            android:textColor="@color/CreationLabelGray"/>
+
+        <EditText
+            android:id="@+id/edit_text_summary_character"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="43dp"
+            android:background="@android:color/transparent"
+            android:hint="Escreva um resumo para a aventura"
+            android:textColor="@color/CreationLabelBlack"
+            android:textStyle="bold"/>
+
+        <ImageView
+            android:id="@+id/button_ready"
+            android:layout_width="118dp"
+            android:layout_height="42dp"
+            android:layout_gravity="right"
+            android:layout_marginRight="43dp"
+            android:layout_marginTop="26dp"
+            app:srcCompat="@drawable/btn_ready"/>
+
+
+    </LinearLayout>
+</FrameLayout>
+

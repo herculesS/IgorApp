@@ -1,4 +1,4 @@
-package com.devapps.igor.Screens.EditSummary;
+package com.devapps.igor.Screens.Edit;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,13 +16,10 @@ import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
 import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
 import com.devapps.igor.Screens.BackableFragment;
-import com.devapps.igor.Screens.HomeJogosFrontend.FragmentAdventure;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-
-import static android.content.Context.INPUT_METHOD_SERVICE;
 
 
 public class EditSummaryFragment extends Fragment implements BackableFragment {

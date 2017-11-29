@@ -29,7 +29,7 @@ import com.devapps.igor.DataObject.Session;
 import com.devapps.igor.R;
 import com.devapps.igor.Screens.BackableFragment;
 import com.devapps.igor.Screens.CreateAdventure.CreateAdventureFragment;
-import com.devapps.igor.Screens.EditSummary.EditSummaryFragment;
+import com.devapps.igor.Screens.Edit.EditSummaryFragment;
 import com.devapps.igor.Screens.MainActivity;
 import com.devapps.igor.Util.DataObjectUtils;
 import com.google.firebase.database.DataSnapshot;

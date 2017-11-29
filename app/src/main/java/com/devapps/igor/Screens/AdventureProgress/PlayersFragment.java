@@ -26,7 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class PlayersFragment extends Fragment implements AdventureLoader.AdventureLoaderListener {
+public class PlayersFragment extends Fragment implements AdventureLoader.AdventureLoaderListener, Editable {
     private static final String ADVENTURE_ID = "ADVENTURE_ID";
 
     private String mAdventureId;
@@ -36,6 +36,7 @@ public class PlayersFragment extends Fragment implements AdventureLoader.Adventu
     private CharacterListAdapter mCharacterListAdapter;
     private Context mContext;
     private AdventureLoader mAdventureLoader;
+    private boolean mEditMode;
 
 
     public PlayersFragment() {
@@ -81,7 +82,8 @@ public class PlayersFragment extends Fragment implements AdventureLoader.Adventu
             new LoadCharactersPlayerProfiles().execute();
 
         } else {
-            mCharacterListAdapter = new CharacterListAdapter(new ArrayList<Character>(), new ArrayList<Profile>(), mAdventure.getDMChar());
+            mCharacterListAdapter = new CharacterListAdapter(new ArrayList<Character>(),
+                    new ArrayList<Profile>(), mAdventure.getDMChar(), mEditMode);
             mRecyclerViewCharacter.setLayoutManager(new LinearLayoutManager(mContext));
             mRecyclerViewCharacter.setAdapter(mCharacterListAdapter);
         }
@@ -95,9 +97,18 @@ public class PlayersFragment extends Fragment implements AdventureLoader.Adventu
     }
 
     private void endTask(ArrayList<Profile> playersList) {
-        mCharacterListAdapter = new CharacterListAdapter(mAdventure.getCharacters(), playersList, mAdventure.getDMChar());
+        mCharacterListAdapter = new CharacterListAdapter(mAdventure.getCharacters(),
+                playersList, mAdventure.getDMChar(), mEditMode);
         mRecyclerViewCharacter.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerViewCharacter.setAdapter(mCharacterListAdapter);
+    }
+
+    @Override
+    public void editMode(boolean mode) {
+        mEditMode = mode;
+        if (mCharacterListAdapter != null) {
+            mCharacterListAdapter.changeEditMode(mEditMode);
+        }
     }
 
 

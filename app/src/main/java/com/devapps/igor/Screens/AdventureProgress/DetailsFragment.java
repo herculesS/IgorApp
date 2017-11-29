@@ -14,15 +14,11 @@ import android.widget.TextView;
 import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.AdventureLoader;
-import com.devapps.igor.RequestManager.Database;
-import com.devapps.igor.Screens.EditSummary.EditSummaryFragment;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
+import com.devapps.igor.Screens.Edit.EditSummaryFragment;
+import com.google.firebase.auth.FirebaseAuth;
 
 
-public class DetailsFragment extends Fragment implements AdventureLoader.AdventureLoaderListener {
+public class DetailsFragment extends Fragment implements AdventureLoader.AdventureLoaderListener, Editable {
     private static final String ADVENTURE_ID = "ADVENTURE_ID";
 
     private String mAdventureId;
@@ -35,6 +31,9 @@ public class DetailsFragment extends Fragment implements AdventureLoader.Adventu
     private RecyclerView.LayoutManager mSessionLayoutManager;
     private AdventureLoader mAdventureLoader;
     private Context mContext;
+    private String mUserId;
+    boolean mEditMode;
+    private SessionsListAdapter mSessionAdapter;
 
 
     public DetailsFragment() {
@@ -67,6 +66,7 @@ public class DetailsFragment extends Fragment implements AdventureLoader.Adventu
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         InitializeMembers(view);
+        mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         mAdventureLoader = new AdventureLoader();
         mAdventureLoader.setAdventureLoaderListener(this);
@@ -105,8 +105,10 @@ public class DetailsFragment extends Fragment implements AdventureLoader.Adventu
 
             }
         });
+        mSessionAdapter = new SessionsListAdapter(mAdventure.getSessions(),
+                getActivity(), mAdventureId, mEditMode);
+        mSessionsRecyclerView.setAdapter(mSessionAdapter);
 
-        mSessionsRecyclerView.setAdapter(new SessionsListAdapter(mAdventure.getSessions(), getActivity(), mAdventureId));
         mBtnSeeMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,6 +122,15 @@ public class DetailsFragment extends Fragment implements AdventureLoader.Adventu
             }
         });
 
+
+    }
+
+    @Override
+    public void editMode(boolean mode) {
+        mEditMode = mode;
+        if (mSessionAdapter != null) {
+            mSessionAdapter.changeEditMode(mode);
+        }
 
     }
 }

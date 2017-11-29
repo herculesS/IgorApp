@@ -4,11 +4,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.devapps.igor.DataObject.Character;
 import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -20,13 +23,17 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
 
     private ArrayList<Character> mCharacters;
     private ArrayList<Profile> mProfiles;
+    private String mUserId;
     private Character mDmCharacter;
+    private boolean mEditMode = false;
 
     public CharacterListAdapter(ArrayList<Character> characters,
-                                ArrayList<Profile> profiles, Character dmCharacter) {
+                                ArrayList<Profile> profiles, Character dmCharacter, boolean editMode) {
         mCharacters = characters;
         mProfiles = profiles;
         mDmCharacter = dmCharacter;
+        mEditMode = editMode;
+        mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     }
 
@@ -52,10 +59,20 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
         }
     }
 
+    public void changeEditMode(boolean mode) {
+        mEditMode = mode;
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(CharacterViewHolder holder, int position) {
         if (position == 0) {
             if (mDmCharacter != null) {
+                if (mEditMode && mDmCharacter.getPlayerId().equals(mUserId)) {
+                    holder.mBtnEditDm.setVisibility(View.VISIBLE);
+                } else {
+                    holder.mBtnEditDm.setVisibility(View.GONE);
+                }
                 holder.mTextViewDMName.setText(mDmCharacter.getName());
                 holder.mTextViewDMSummary.setText(mDmCharacter.getSummary());
             } else {
@@ -64,6 +81,12 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
             }
         } else {
             position--;
+            if (mEditMode) {
+                if (mUserId.equals(mProfiles.get(position).getId()))
+                    holder.mEditLayout.setVisibility(View.VISIBLE);
+            } else {
+                holder.mEditLayout.setVisibility(View.GONE);
+            }
             holder.mTextViewCharacterName.setText(mCharacters.get(position).getName());
             holder.mTextViewPlayerName.setText(mProfiles.get(position).getName());
         }
@@ -82,6 +105,11 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
         private TextView mTextViewPlayerName;
         private TextView mTextViewDMName;
         private TextView mTextViewDMSummary;
+        private LinearLayout mEditLayout;
+        private ImageView mBtnDelete;
+        private ImageView mBtnEditCharacter;
+        private ImageView mBtnEditDm;
+
 
         public CharacterViewHolder(View itemView) {
             super(itemView);
@@ -89,7 +117,10 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
             mTextViewDMSummary = (TextView) itemView.findViewById(R.id.text_view_dm_summary);
             mTextViewCharacterName = (TextView) itemView.findViewById(R.id.text_view_character_name);
             mTextViewPlayerName = (TextView) itemView.findViewById(R.id.text_view_player_name);
-
+            mBtnDelete = (ImageView) itemView.findViewById(R.id.characters_item_trash_can);
+            mBtnEditCharacter = (ImageView) itemView.findViewById(R.id.characters_item_edit);
+            mBtnEditDm = (ImageView) itemView.findViewById(R.id.dm_item_edit);
+            mEditLayout = (LinearLayout) itemView.findViewById(R.id.characters_edit_layout);
 
         }
     }
