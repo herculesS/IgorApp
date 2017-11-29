@@ -18,11 +18,13 @@ import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
 import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
+import com.devapps.igor.Screens.BackableFragment;
+import com.devapps.igor.Screens.HomeJogosFrontend.FragmentAdventure;
 import com.devapps.igor.Screens.MainActivity;
 import com.google.firebase.database.DatabaseReference;
 
 
-public class CreateAdventureFragment extends Fragment {
+public class CreateAdventureFragment extends Fragment implements BackableFragment {
     private ImageView mReadyButton;
     private ImageView mCloseButton;
     private EditText mNameEditText;
@@ -108,5 +110,12 @@ public class CreateAdventureFragment extends Fragment {
             imm.showSoftInput(mNameEditText, InputMethodManager.SHOW_IMPLICIT);
         }
 
+    }
+
+    @Override
+    public void back() {
+        Fragment fragment = FragmentAdventure.newInstance("");
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment).commit();
     }
 }

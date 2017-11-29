@@ -17,11 +17,14 @@ import android.widget.Toast;
 
 import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.DataObject.Character;
+import com.devapps.igor.DataObject.Notification;
 import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
 import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
+import com.devapps.igor.Screens.BackableFragment;
 import com.devapps.igor.Screens.MainActivity;
+import com.devapps.igor.Screens.Notifications.NotificationsFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,7 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CreateCharacterFragment extends Fragment {
+public class CreateCharacterFragment extends Fragment implements BackableFragment {
     private static final String ADVENTURE_ID = "ADVENTURE_ID";
     private static final String PLAYER_ID = "PLAYER_ID";
     private static final String NOTIFICATION_POSITION = "NOTIFICATION_POSITION";
@@ -157,5 +160,12 @@ public class CreateCharacterFragment extends Fragment {
         mButtonReady = (ImageView) view.findViewById(R.id.button_ready);
         mButtonClose = (ImageView) view.findViewById(R.id.create_character_btn_close);
         mButtonCloseEdit = (ImageView) view.findViewById(R.id.create_character_btn_create);
+    }
+
+    @Override
+    public void back() {
+        Fragment fragment = NotificationsFragment.newInstance(mPlayerId);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment).commit();
     }
 }

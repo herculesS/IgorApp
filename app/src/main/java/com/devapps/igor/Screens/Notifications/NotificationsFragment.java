@@ -12,10 +12,12 @@ import android.view.ViewGroup;
 
 import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.R;
+import com.devapps.igor.Screens.BackableFragment;
+import com.devapps.igor.Screens.HomeJogosFrontend.FragmentAdventure;
 import com.devapps.igor.Screens.MainActivity;
 
 
-public class NotificationsFragment extends Fragment {
+public class NotificationsFragment extends Fragment implements BackableFragment {
     private static final String PLAYER_ID = "PLAYER_ID";
 
     private String mPlayerId;
@@ -70,4 +72,10 @@ public class NotificationsFragment extends Fragment {
     }
 
 
+    @Override
+    public void back() {
+        Fragment fragment = FragmentAdventure.newInstance("");
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment).commit();
+    }
 }

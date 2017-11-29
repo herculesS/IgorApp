@@ -14,6 +14,8 @@ import android.widget.Button;
 import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
+import com.devapps.igor.Screens.BackableFragment;
+import com.devapps.igor.Screens.HomeJogosFrontend.FragmentAdventure;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,7 +31,7 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class DiceRollerFragment extends Fragment {
+public class DiceRollerFragment extends Fragment implements BackableFragment {
 
     private OnListFragmentInteractionListener mListener;
 
@@ -120,6 +122,13 @@ public class DiceRollerFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void back() {
+        Fragment fragment = FragmentAdventure.newInstance("");
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment).commit();
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -155,10 +164,17 @@ public class DiceRollerFragment extends Fragment {
                     diceRollsView.scrollToPosition(diceRolls.size()-1);
                 }
 
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
-                public void onChildRemoved(DataSnapshot dataSnapshot) {}
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
-                public void onCancelled(DatabaseError databaseError) {}
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                }
+
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                }
+
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                }
+
+                public void onCancelled(DatabaseError databaseError) {
+                }
             };
             mDiceRollDatabaseReference.addChildEventListener(mChildEventListener);
         }

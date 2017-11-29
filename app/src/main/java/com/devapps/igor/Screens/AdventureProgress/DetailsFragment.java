@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.R;
+import com.devapps.igor.RequestManager.AdventureLoader;
 import com.devapps.igor.RequestManager.Database;
 import com.devapps.igor.Screens.EditSummary.EditSummaryFragment;
 import com.google.firebase.database.DataSnapshot;
@@ -21,7 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 
-public class DetailsFragment extends Fragment {
+public class DetailsFragment extends Fragment implements AdventureLoader.AdventureLoaderListener {
     private static final String ADVENTURE_ID = "ADVENTURE_ID";
 
     private String mAdventureId;
@@ -32,6 +33,7 @@ public class DetailsFragment extends Fragment {
     private ImageView mBtnSeeMore;
     private RecyclerView mSessionsRecyclerView;
     private RecyclerView.LayoutManager mSessionLayoutManager;
+    private AdventureLoader mAdventureLoader;
     private Context mContext;
 
 
@@ -65,54 +67,10 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         InitializeMembers(view);
-        DatabaseReference ref = Database.getAdventuresReference();
-        ref.child(mAdventureId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                mAdventure = dataSnapshot.getValue(Adventure.class);
-                mAdventureSummaryTextView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Fragment fragment = EditSummaryFragment.newInstance(Adventure.ADVENTURE_TAG, mAdventureId, 0);
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragment_container, fragment).commit();
-                    }
-                });
-                mAdventureSummaryTextView.setText(mAdventure.getSummary());
-                mAdventureSummaryTextView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mAdventureSummaryTextView.getLineCount() > 6) {
-                            mAdventureSummaryTextView.setMaxLines(6);
-                            mBtnSeeMore.setVisibility(View.VISIBLE);
-                        }
-
-                    }
-                });
-
-                mSessionsRecyclerView.setAdapter(new SessionsListAdapter(mAdventure.getSessions(), getActivity(), mAdventureId));
-                mBtnSeeMore.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (mAdventureSummaryTextView.getMaxLines() > 6) {
-                            mAdventureSummaryTextView.setMaxLines(6);
-                            mAdventureSummaryTextView.getMaxLines();
-                        } else {
-                            mAdventureSummaryTextView.setMaxLines(mAdventureSummaryTextView.getLineCount());
-                            mAdventureSummaryTextView.getMaxLines();
-                        }
-                    }
-                });
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
+        mAdventureLoader = new AdventureLoader();
+        mAdventureLoader.setAdventureLoaderListener(this);
+        mAdventureLoader.load(mAdventureId);
     }
 
     private void InitializeMembers(View view) {
@@ -125,6 +83,45 @@ public class DetailsFragment extends Fragment {
         mBtnSeeMore.setVisibility(View.GONE);
     }
 
+    @Override
+    public void onAdventureLoaded(Adventure a) {
+        mAdventure = a;
+        mAdventureSummaryTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = EditSummaryFragment.newInstance(Adventure.ADVENTURE_TAG, mAdventureId, 0);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, fragment).commit();
+            }
+        });
+        mAdventureSummaryTextView.setText(mAdventure.getSummary());
+        mAdventureSummaryTextView.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mAdventureSummaryTextView.getLineCount() > 6) {
+                    mAdventureSummaryTextView.setMaxLines(6);
+                    mBtnSeeMore.setVisibility(View.VISIBLE);
+                }
+
+            }
+        });
+
+        mSessionsRecyclerView.setAdapter(new SessionsListAdapter(mAdventure.getSessions(), getActivity(), mAdventureId));
+        mBtnSeeMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mAdventureSummaryTextView.getMaxLines() > 6) {
+                    mAdventureSummaryTextView.setMaxLines(6);
+                    mAdventureSummaryTextView.getMaxLines();
+                } else {
+                    mAdventureSummaryTextView.setMaxLines(mAdventureSummaryTextView.getLineCount());
+                    mAdventureSummaryTextView.getMaxLines();
+                }
+            }
+        });
+
+
+    }
 }
 
 
