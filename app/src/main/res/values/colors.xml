@@ -18,4 +18,6 @@
     <color name="CreationLabelBlack">#000000</color>
     <color name="AdventureProgressBg">#e2e2e1</color>
     <color name="CreationBg">#e2e2e0</color>
+    <color name="blankBackground">#201D25</color>
+    <color name="textColorGray">#DFDCDC</color>
 </resources>

@@ -27,6 +27,7 @@
         android:layout_marginTop="10dp"
         android:ems="10"
         android:text="Adventure Title"
+        android:textColor="@color/textColorGray"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         app:layout_constraintLeft_toLeftOf="@+id/adventureWindow"
         app:layout_constraintTop_toTopOf="@+id/adventureWindow" />
@@ -39,6 +40,7 @@
         android:layout_marginTop="60dp"
         android:ems="10"
         android:text="Next session"
+        android:textColor="@color/textColorGray"
         android:textAppearance="@style/Base.TextAppearance.AppCompat"
         app:layout_constraintLeft_toLeftOf="@+id/adventureWindow"
         app:layout_constraintTop_toTopOf="@+id/adventureWindow" />
@@ -66,6 +68,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/textColorGray"
         android:layout_alignStart="@+id/textViewNextSession"
         android:layout_below="@+id/textViewNextSession"
         android:text="TextView" />
