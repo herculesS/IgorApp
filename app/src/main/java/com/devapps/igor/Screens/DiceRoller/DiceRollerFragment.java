@@ -80,7 +80,7 @@ public class DiceRollerFragment extends Fragment {
 
         // Initialize message ListView and its adapter
         diceRolls = new ArrayList<>();
-        mDiceRollAdapter = new DiceRollRecyclerViewAdapter(diceRolls, mListener);
+        mDiceRollAdapter = new DiceRollRecyclerViewAdapter(diceRolls, mListener, mUserProfile.getName());
 
         // Set the adapter
         Context context = view.getContext();

@@ -1,9 +1,12 @@
 package com.devapps.igor.Screens.DiceRoller;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.devapps.igor.R;
@@ -19,16 +22,19 @@ public class DiceRollRecyclerViewAdapter extends RecyclerView.Adapter<DiceRollRe
 
     private final List<DiceRoll> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private final String mUsername;
+    private LinearLayout rollLayout;
 
-    public DiceRollRecyclerViewAdapter(List<DiceRoll> items, OnListFragmentInteractionListener listener) {
+    public DiceRollRecyclerViewAdapter(List<DiceRoll> items, OnListFragmentInteractionListener listener, String username) {
         mValues = items;
         mListener = listener;
+        mUsername = username;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_dice_roll, parent, false);
+                .inflate(R.layout.dice_roll, parent, false);
         return new ViewHolder(view);
     }
 
@@ -38,6 +44,13 @@ public class DiceRollRecyclerViewAdapter extends RecyclerView.Adapter<DiceRollRe
         holder.mUsername.setText(mValues.get(position).getUsername());
         holder.mResultView.setText("" + mValues.get(position).getResult());
         holder.mSendTime.setText("" + mValues.get(position).getSendTime());
+
+        rollLayout = (LinearLayout) holder.mView.findViewById(R.id.dice_roll_card);
+        if (holder.mItem.getUsername().equals(mUsername)) {
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)rollLayout.getLayoutParams();
+            params.gravity = Gravity.RIGHT;
+            rollLayout.setLayoutParams(params);
+        }
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
