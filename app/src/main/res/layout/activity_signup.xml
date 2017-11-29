@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/login_background"
     android:layout_height="wrap_content">
 
@@ -25,6 +26,8 @@
             android:padding="16dp">
 
             <android.support.design.widget.TextInputLayout
+                android:theme="@style/TextInputStyleSignup"
+                app:hintTextAppearance="@style/TextInputStyleSignup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -35,10 +38,12 @@
                     android:hint="@string/user_name"
                     android:inputType="textPersonName"
                     android:maxLines="1"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@color/text_color_1" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
+                android:theme="@style/TextInputStyleSignup"
+                app:hintTextAppearance="@style/TextInputStyleSignup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -49,10 +54,12 @@
                     android:hint="@string/email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@color/text_color_1" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
+                android:theme="@style/TextInputStyleSignup"
+                app:hintTextAppearance="@style/TextInputStyleSignup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -64,10 +71,12 @@
                     android:hint="@string/hint_password"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@color/text_color_1" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
+                android:theme="@style/TextInputStyleSignup"
+                app:hintTextAppearance="@style/TextInputStyleSignup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -79,13 +88,13 @@
                     android:hint="@string/retype_password"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@color/text_color_1" />
             </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:orientation="horizontal">
@@ -110,7 +119,7 @@
             <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:orientation="horizontal">

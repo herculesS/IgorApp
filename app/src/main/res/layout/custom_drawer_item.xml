@@ -26,8 +26,8 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/accentColor"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="4dp"
-            android:textSize="15sp"
+            android:layout_marginLeft="12dp"
+            android:textSize="20sp"
             android:text="Teste"/>
 
     </LinearLayout>

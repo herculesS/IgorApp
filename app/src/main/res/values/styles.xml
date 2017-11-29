@@ -26,4 +26,22 @@
         <item name="android:backgroundTint">@color/accentColor</item>
     </style>
 
+    <style name="TextInputStyleLogin">
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColorHint">@color/primaryTextColor</item>
+        <item name="colorControlNormal">@color/primaryTextColor</item>
+        <item name="colorControlActivated">@color/primaryTextColor</item>
+        <item name="colorControlHighlight">@color/primaryTextColor</item>
+    </style>
+
+    <style name="TextInputStyleSignup">
+        <item name="android:textColor">@color/text_color_1</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColorHint">@color/text_color_1</item>
+        <item name="colorControlNormal">@color/text_color_1</item>
+        <item name="colorControlActivated">@color/text_color_1</item>
+        <item name="colorControlHighlight">@color/text_color_1</item>
+    </style>
+
 </resources>
