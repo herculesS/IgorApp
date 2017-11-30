@@ -31,6 +31,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Array;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static com.devapps.igor.Screens.HomeJogosFrontend.FragmentAdventure.batata;
@@ -100,7 +103,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             } else {
                 holder.mEditModeLayout.setVisibility(View.GONE);
-                holder.itemView.setAlpha(0.5f);
+                holder.itemView.setAlpha(0.4f);
             }
         } else {
             holder.Layout_Relativo.setOnClickListener(new View.OnClickListener() {
@@ -180,9 +183,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
                 AdventureRequestManager.deleteAdventure(listItem.getId());
-                notifyDataSetChanged();
-                dialog.cancel();
+                //notifyDataSetChanged();
             }
 
         });
@@ -227,6 +230,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         mIsInEditMode = mode;
         notifyDataSetChanged();
 
+    }
+
+    public void order() {
+        Collections.sort(task, new Comparator<Adventure>() {
+            @Override
+            public int compare(Adventure adventure, Adventure t1) {
+                return adventure.getName().compareTo(t1.getName());
+            }
+        });
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

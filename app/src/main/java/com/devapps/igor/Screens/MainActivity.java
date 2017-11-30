@@ -220,8 +220,11 @@ public class MainActivity extends AppCompatActivity implements DiceRollerFragmen
 
                         return true;
                     case R.id.action_order:
-                        Log.d(TAG, "Botão order.");
-                        //TODO action
+                        Fragment frag = getSupportFragmentManager().
+                                findFragmentById(R.id.fragment_container);
+                        if (frag instanceof FragmentAdventure) {
+                            ((FragmentAdventure) frag).orderAdventures();
+                        }
                         return true;
                     default:
                         return false;

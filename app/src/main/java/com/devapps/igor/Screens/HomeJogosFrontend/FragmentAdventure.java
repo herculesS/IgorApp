@@ -150,13 +150,13 @@ public class FragmentAdventure extends Fragment implements BackableFragment {
                         if (sessoes.size() != 0) {
                             Proxima_Sessao = sessoes.get(0).getTitle();
                         }
-
+                        adventure.setDMChar(mAdventure.getDMChar());
                         adventure.setName(Titulo_Aventura);
                         adventure.setSummary(Proxima_Sessao);
                         adventure.setBackground(Background);
                         adventure.setSessions(sessoes);
 
-                        task.add(mAdventure);
+                        task.add(adventure);
                     }
 
                 }
@@ -220,5 +220,10 @@ public class FragmentAdventure extends Fragment implements BackableFragment {
         }
         showadventuresrecyclerviewAdapter.setEditMode(mode);
     }
+
+    public void orderAdventures() {
+        showadventuresrecyclerviewAdapter.order();
+    }
+
 
 }
