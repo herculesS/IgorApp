@@ -19,7 +19,7 @@ gen/
 out/
 
 # Gradle files
-.gradle
+*.gradle
 .gradle/
 build/
 
@@ -129,4 +129,3 @@ fabric.properties
 .idea/copyright/
 app/libs/
 "DesignResources/Barra de Navega\303\247\303\243o/Objetos/"
-app/src/main/res/menu/

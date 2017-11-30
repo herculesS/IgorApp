@@ -28,15 +28,15 @@
         <activity
             android:name=".Screens.MainActivity"
             android:label="Igor"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Screens.Login.LoginActivity"
             android:label="@string/title_activity_login"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Screens.Signup.SignupActivity"
             android:label="Sign up"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

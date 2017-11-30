@@ -1,7 +1,6 @@
 package com.devapps.igor.DataObject;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -20,13 +19,18 @@ public class Adventure implements Serializable {
     private int mBackground;
     private ArrayList<Session> mSessions;
 
+
+    private ArrayList<Character> mCharacters;
+    private Character mDMChar;
+
     public Adventure(String name) {
         mName = name;
         mSummary = DefaultAdventureSummary;
         mSessions = new ArrayList<Session>();
         Random rand = new Random();
         mBackground = rand.nextInt(5)+1;
-
+        mDMChar = null;
+        mCharacters = new ArrayList<Character>();
     }
 
     public Adventure() {
@@ -36,7 +40,8 @@ public class Adventure implements Serializable {
        // mBackground = DefaultBackground;
         Random rand = new Random();
         mBackground = rand.nextInt(5)+1;
-
+        mDMChar = null;
+        mCharacters = new ArrayList<Character>();
     }
 
     public String getSummary() {
@@ -55,12 +60,12 @@ public class Adventure implements Serializable {
         mSessions = sessions;
     }
 
-    public void addSession(Session s){
+    public void addSession(Session s) {
         mSessions.add(s);
     }
 
     public void removeSession(Session s) {
-        if(mSessions != null)
+        if (mSessions != null)
             mSessions.remove(s);
     }
 
@@ -78,5 +83,33 @@ public class Adventure implements Serializable {
 
     public void setName(String name) {
         mName = name;
+    }
+
+    public ArrayList<Character> getCharacters() {
+        return mCharacters;
+    }
+
+    public void setCharacters(ArrayList<Character> characters) {
+        mCharacters = characters;
+    }
+
+    public void addCharacter(Character character) {
+        if (mCharacters != null) {
+            mCharacters.add(character);
+        }
+    }
+
+    public void removeCharacter(Character character) {
+        if (mCharacters != null)
+            mCharacters.remove(character);
+    }
+
+
+    public Character getDMChar() {
+        return mDMChar;
+    }
+
+    public void setDMChar(Character DMChar) {
+        mDMChar = DMChar;
     }
 }

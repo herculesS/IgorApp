@@ -18,15 +18,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="5"
-            android:textStyle="bold"
-            android:text="TextView"/>
+            android:text="TextView"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/session_list_view_item_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="TextView"/>
+            android:text="TextView"
+            android:textSize="16sp"/>
     </LinearLayout>
 
     <TextView
@@ -34,8 +36,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:visibility="gone"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit amet pretium nunc, non tempor sem. Maecenas eget quam sem. Phasellus metus ante, vulputate congue metus semper, tristique vestibulum eros. Vestibulum vehicula nisl est, et semper nisl molestie eu. Cras sed erat sagittis, porttitor dolor non, convallis lacus. In hendrerit convallis enim at vulputate. Nam velit eros, accumsan sit amet dolor eget, viverra tincidunt nunc."/>
+        android:text="Sessão sem resumo"
+        android:visibility="gone"/>
 
     <ImageView
         android:layout_width="match_parent"
