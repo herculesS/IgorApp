@@ -35,12 +35,12 @@ import static com.devapps.igor.Screens.HomeJogosFrontend.FragmentAdventure.sesso
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    // private List<AdventureList> task;
+
     private List<Adventure> task;
     protected FragmentActivity context;
 
 
-    //public RecyclerViewAdapter(Context context, List<AdventureList> task) {
+
     public RecyclerViewAdapter(FragmentActivity context, List<Adventure> task) {
         this.task = task;
         this.context = context;
@@ -61,12 +61,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(final RecyclerViewAdapter.ViewHolder holder, final int position) {
 
         final Adventure listItem = task.get(position);
-        // final AdventureList listItem = task.get(position);
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        //holder.Titulo_Aventura.setText(listItem.getTitle());
-        //holder.Proxima_Sessao.setText(listItem.getNextsession());
-        //holder.Barra_Progresso.setTag(listItem.getProgressbar());
 
         holder.Titulo_Aventura.setText(listItem.getName());
         holder.Proxima_Sessao.setText(listItem.getSummary());
@@ -91,10 +85,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.text_view.setText("Covered : " + 0 + " / " + holder.Barra_Progresso.getMax());
         ;
 
-//        holder.text_view.setText("Covered : " + FragmentAdventure.batata + " / " +holder.Barra_Progresso.getMax());;
-        //holder.Barra_Progresso.setTag(listItem.getProgressbar());
 
-        //holder.homejogosfrontendconstraintLayout.setOnClickListener(new View.OnClickListener() {
         holder.Layout_Relativo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -102,10 +93,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Fragment fragment = AdventureProgressFragment.newInstance(task.get(position).getId());
                 context.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, fragment).commit();
-                //Toast.makeText(context, "You clicked "+task.get(position).getTitle(), Toast.LENGTH_LONG).show();
-                // Toast.makeText(context, "You clicked "+task.get(position).getProgressbar(), Toast.LENGTH_LONG).show();
-                //Toast.makeText(context, "You clicked "+task.get(position).getName(), Toast.LENGTH_LONG).show();
-                // Toast.makeText(context, "You clicked "+task.get(position).getProgressbar(), Toast.LENGTH_LONG).s
+
             }
         });
 
@@ -122,23 +110,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         if (task.get(position).getSessions().size() != 0) {
                             holder.Proxima_Sessao.setText(task.get(position).getSessions().get(progress).getTitle());
                         }
-                        // if(task.get(position).getSessions().size()!=0) {
-                        //   Toast.makeText(context,"SeekBar in progress",Toast.LENGTH_LONG).show();
-                        // holder.Proxima_Sessao.setText(sessoes.get(progress).getTitle());
-                        // }
-                        // Toast.makeText(context,"SeekBar in progrefgss",Toast.LENGTH_LONG).show();
 
                     }
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-                        //Toast.makeText(context,"SeekBar in StartTracking",Toast.LENGTH_LONG).show();
+
                     }
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
                         holder.text_view.setText("Covered : " + progress_value + " / " + holder.Barra_Progresso.getMax());
-                        //Toast.makeText(context,"SeekBar in StopTracking",Toast.LENGTH_LONG).show();
+
                     }
                 }
         );
@@ -175,8 +158,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public SeekBar Barra_Progresso;
         public TextView text_view;
         public ImageView adventureWindow;
-        // public ImageView favorite;
-        // public ConstraintLayout homejogosfrontendconstraintLayout;
+
         public RelativeLayout Layout_Relativo;
 
 
@@ -188,15 +170,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             Barra_Progresso = (SeekBar) itemView.findViewById(R.id.progressBar);
             text_view = (TextView) itemView.findViewById(R.id.textView);
             adventureWindow = (ImageView) itemView.findViewById(R.id.adventureWindow);
-            //  if (Titulo_Aventura.toString() != "test")
-            // {
-
-            // adventureWindow.setImageResource(R.drawable.miniatura_krevast);
-            // }
-
-
-            //  favorite = (ImageView) itemView.findViewById(R.id.favorite);
-            // homejogosfrontendconstraintLayout = (ConstraintLayout) itemView.findViewById(R.id.homejogosfrontendconstraintLayout);
             Layout_Relativo = (RelativeLayout) itemView.findViewById(R.id.homejogosfrontendrelativeLayout);
         }
 

@@ -3,7 +3,6 @@ package com.devapps.igor.Screens.Notifications;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
 import com.devapps.igor.Screens.CreateCharacter.CreateCharacterFragment;
 import com.devapps.igor.Screens.HomeJogosFrontend.FragmentAdventure;
-import com.devapps.igor.Screens.HomeJogosFrontend.HomeJogosFrontendFragment;
 import com.devapps.igor.Screens.MainActivity;
 import com.google.firebase.database.DatabaseReference;
 

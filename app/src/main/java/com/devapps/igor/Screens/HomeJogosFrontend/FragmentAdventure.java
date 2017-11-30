@@ -250,7 +250,6 @@ public class FragmentAdventure extends Fragment implements BackableFragment {
 
     public void seebbarr() {
 
-        // text_view.setText("Covered : " + seek_bar.getProgress() + " / " +seek_bar.getMax());
         seek_bar.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
 
