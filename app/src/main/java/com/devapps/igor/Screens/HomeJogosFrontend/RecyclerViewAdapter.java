@@ -1,10 +1,13 @@
 package com.devapps.igor.Screens.HomeJogosFrontend;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -19,9 +23,17 @@ import android.widget.Toast;
 
 import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.R;
+import com.devapps.igor.RequestManager.AdventureRequestManager;
+import com.devapps.igor.RequestManager.Database;
 import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
+import com.devapps.igor.Screens.Edit.EditAdventureFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Array;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static com.devapps.igor.Screens.HomeJogosFrontend.FragmentAdventure.batata;
@@ -35,12 +47,12 @@ import static com.devapps.igor.Screens.HomeJogosFrontend.FragmentAdventure.sesso
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    // private List<AdventureList> task;
+
     private List<Adventure> task;
     protected FragmentActivity context;
+    private boolean mIsInEditMode;
 
 
-    //public RecyclerViewAdapter(Context context, List<AdventureList> task) {
     public RecyclerViewAdapter(FragmentActivity context, List<Adventure> task) {
         this.task = task;
         this.context = context;
@@ -59,17 +71,58 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(final RecyclerViewAdapter.ViewHolder holder, final int position) {
-
         final Adventure listItem = task.get(position);
-        // final AdventureList listItem = task.get(position);
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        //holder.Titulo_Aventura.setText(listItem.getTitle());
-        //holder.Proxima_Sessao.setText(listItem.getNextsession());
-        //holder.Barra_Progresso.setTag(listItem.getProgressbar());
+
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        holder.mDeleteAdventure.setTag(listItem.getId());
+        holder.mDeleteAdventure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                onDeleteAdventure(listItem, position);
+            }
+        });
+        holder.mEditAdventure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = EditAdventureFragment.newInstance(listItem.getId());
+                context.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, fragment).commit();
+
+            }
+        });
+        if (mIsInEditMode) {
+            holder.Layout_Relativo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                }
+            });
+            if (listItem.getDMChar() != null &&
+                    listItem.getDMChar().getPlayerId().equals(userId)) {
+                holder.mEditModeLayout.setVisibility(View.VISIBLE);
+                holder.itemView.setAlpha(1f);
+
+            } else {
+                holder.mEditModeLayout.setVisibility(View.GONE);
+                holder.itemView.setAlpha(0.4f);
+            }
+        } else {
+            holder.Layout_Relativo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("LayoutRel", task.get(position).getId());
+                    Fragment fragment = AdventureProgressFragment.newInstance(task.get(position).getId());
+                    context.getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, fragment).commit();
+
+                }
+            });
+            holder.mEditModeLayout.setVisibility(View.GONE);
+            holder.itemView.setAlpha(1f);
+        }
 
         holder.Titulo_Aventura.setText(listItem.getName());
         holder.Proxima_Sessao.setText(listItem.getSummary());
+        holder.Proxima_Sessao.setMaxLines(1);
 
         if (listItem.getBackground() == 1) {
             holder.adventureWindow.setImageResource(R.drawable.miniatura_imagem_automatica);
@@ -91,23 +144,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.text_view.setText("Covered : " + 0 + " / " + holder.Barra_Progresso.getMax());
         ;
 
-//        holder.text_view.setText("Covered : " + FragmentAdventure.batata + " / " +holder.Barra_Progresso.getMax());;
-        //holder.Barra_Progresso.setTag(listItem.getProgressbar());
-
-        //holder.homejogosfrontendconstraintLayout.setOnClickListener(new View.OnClickListener() {
-        holder.Layout_Relativo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("LayoutRel",task.get(position).getId());
-                Fragment fragment = AdventureProgressFragment.newInstance(task.get(position).getId());
-                context.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, fragment).commit();
-                //Toast.makeText(context, "You clicked "+task.get(position).getTitle(), Toast.LENGTH_LONG).show();
-                // Toast.makeText(context, "You clicked "+task.get(position).getProgressbar(), Toast.LENGTH_LONG).show();
-                //Toast.makeText(context, "You clicked "+task.get(position).getName(), Toast.LENGTH_LONG).show();
-                // Toast.makeText(context, "You clicked "+task.get(position).getProgressbar(), Toast.LENGTH_LONG).s
-            }
-        });
 
         holder.Barra_Progresso.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
@@ -122,27 +158,49 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         if (task.get(position).getSessions().size() != 0) {
                             holder.Proxima_Sessao.setText(task.get(position).getSessions().get(progress).getTitle());
                         }
-                        // if(task.get(position).getSessions().size()!=0) {
-                        //   Toast.makeText(context,"SeekBar in progress",Toast.LENGTH_LONG).show();
-                        // holder.Proxima_Sessao.setText(sessoes.get(progress).getTitle());
-                        // }
-                        // Toast.makeText(context,"SeekBar in progrefgss",Toast.LENGTH_LONG).show();
 
                     }
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-                        //Toast.makeText(context,"SeekBar in StartTracking",Toast.LENGTH_LONG).show();
+
                     }
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
                         holder.text_view.setText("Covered : " + progress_value + " / " + holder.Barra_Progresso.getMax());
-                        //Toast.makeText(context,"SeekBar in StopTracking",Toast.LENGTH_LONG).show();
+
                     }
                 }
         );
     }
+
+    private void onDeleteAdventure(final Adventure listItem, int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("Deseja deletar a aventura "
+                + listItem.getName() + "?");
+        builder.setPositiveButton("Sim", new Dialog.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                AdventureRequestManager.deleteAdventure(listItem.getId());
+                //notifyDataSetChanged();
+            }
+
+        });
+
+        builder.setNegativeButton("Não", new Dialog.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+
+        });
+
+        builder.show();
+    }
+
 
     @Override
     public int getItemCount() {
@@ -168,15 +226,33 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     }
 
+    public void setEditMode(boolean mode) {
+        mIsInEditMode = mode;
+        notifyDataSetChanged();
+
+    }
+
+    public void order() {
+        Collections.sort(task, new Comparator<Adventure>() {
+            @Override
+            public int compare(Adventure adventure, Adventure t1) {
+                return adventure.getName().compareTo(t1.getName());
+            }
+        });
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        private LinearLayout mEditModeLayout;
+        private ImageView mEditAdventure;
+        private ImageView mDeleteAdventure;
         public TextView Titulo_Aventura;
         public TextView Proxima_Sessao;
         public SeekBar Barra_Progresso;
         public TextView text_view;
         public ImageView adventureWindow;
-        // public ImageView favorite;
-        // public ConstraintLayout homejogosfrontendconstraintLayout;
+
         public RelativeLayout Layout_Relativo;
 
 
@@ -188,16 +264,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             Barra_Progresso = (SeekBar) itemView.findViewById(R.id.progressBar);
             text_view = (TextView) itemView.findViewById(R.id.textView);
             adventureWindow = (ImageView) itemView.findViewById(R.id.adventureWindow);
-            //  if (Titulo_Aventura.toString() != "test")
-            // {
-
-            // adventureWindow.setImageResource(R.drawable.miniatura_krevast);
-            // }
-
-
-            //  favorite = (ImageView) itemView.findViewById(R.id.favorite);
-            // homejogosfrontendconstraintLayout = (ConstraintLayout) itemView.findViewById(R.id.homejogosfrontendconstraintLayout);
             Layout_Relativo = (RelativeLayout) itemView.findViewById(R.id.homejogosfrontendrelativeLayout);
+            mDeleteAdventure = (ImageView) itemView.findViewById(R.id.adventure_item_trash_can);
+            mEditAdventure = (ImageView) itemView.findViewById(R.id.adventure_item_edit);
+            mEditModeLayout = (LinearLayout) itemView.findViewById(R.id.adventure_edit_layout);
         }
 
 

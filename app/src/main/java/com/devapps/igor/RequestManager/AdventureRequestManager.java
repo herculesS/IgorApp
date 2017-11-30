@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.devapps.igor.DataObject.Adventure;
+import com.devapps.igor.DataObject.Character;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -15,16 +16,30 @@ import java.util.ArrayList;
  * Created by hercules on 26/11/17.
  */
 
-public class AdventureLoader implements ValueEventListener {
+public class AdventureRequestManager implements ValueEventListener {
     private boolean finished = false;
     private Adventure mAdventure;
     private ArrayList<Adventure> mAdventures;
     private ArrayList<AdventureLoaderListener> mAdventureLoaderListeners;
     private ArrayList<AllAdventuresLoaderListener> mAllAdventuresLoaderListeners;
 
-    public AdventureLoader() {
+    public AdventureRequestManager() {
         mAdventureLoaderListeners = new ArrayList<>();
         mAllAdventuresLoaderListeners = new ArrayList<>();
+    }
+
+    static public void saveAdventure(Adventure a) {
+        DatabaseReference ref = Database.getAdventuresReference();
+        ref.child(a.getId()).setValue(a);
+    }
+
+    static public void deleteAdventure(String id) {
+        Database.getAdventuresReference().child(id).removeValue();
+    }
+
+    static public void saveCharacters(String AdventureId, ArrayList<Character> cl) {
+        Database.getAdventuresReference().
+                child(AdventureId).child("characters").setValue(cl);
     }
 
     public void load(String adventureId) {
@@ -35,6 +50,10 @@ public class AdventureLoader implements ValueEventListener {
 
     public void load() {
         Database.getAdventuresReference().addValueEventListener(this);
+    }
+
+    public static void saveDm(String id, Character dmChar) {
+        Database.getAdventuresReference().child(id).child("dmchar").setValue(dmChar);
     }
 
     public interface AdventureLoaderListener {

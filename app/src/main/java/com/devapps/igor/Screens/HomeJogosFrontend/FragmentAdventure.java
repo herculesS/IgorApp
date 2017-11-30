@@ -29,7 +29,7 @@ import com.devapps.igor.DataObject.Session;
 import com.devapps.igor.R;
 import com.devapps.igor.Screens.BackableFragment;
 import com.devapps.igor.Screens.CreateAdventure.CreateAdventureFragment;
-import com.devapps.igor.Screens.EditSummary.EditSummaryFragment;
+
 import com.devapps.igor.Screens.MainActivity;
 import com.devapps.igor.Util.DataObjectUtils;
 import com.google.firebase.database.DataSnapshot;
@@ -63,6 +63,9 @@ public class FragmentAdventure extends Fragment implements BackableFragment {
     private static final String ADVENTURE_ID = "ADVENTURE_ID";
     public static ArrayList<Session> sessoes;
     public static int batata = 0;
+    private boolean mIsInEditMode = false;
+    private View.OnClickListener mBtnAddAdventureListener;
+    private View.OnClickListener mBtnCloseEditModeListner;
 
     public FragmentAdventure() {
         // Required empty public constructor
@@ -102,7 +105,7 @@ public class FragmentAdventure extends Fragment implements BackableFragment {
     DatabaseReference databaseAdventures;
     List<Adventure> task;
     RecyclerView showadventuresRecyclerView;
-    RecyclerView.Adapter showadventuresrecyclerviewAdapter;
+    RecyclerViewAdapter showadventuresrecyclerviewAdapter;
     RecyclerView.LayoutManager showadventuresrecyclerviewLayoutManager;
 
     @Override
@@ -147,7 +150,7 @@ public class FragmentAdventure extends Fragment implements BackableFragment {
                         if (sessoes.size() != 0) {
                             Proxima_Sessao = sessoes.get(0).getTitle();
                         }
-
+                        adventure.setDMChar(mAdventure.getDMChar());
                         adventure.setName(Titulo_Aventura);
                         adventure.setSummary(Proxima_Sessao);
                         adventure.setBackground(Background);
@@ -172,14 +175,23 @@ public class FragmentAdventure extends Fragment implements BackableFragment {
         });
         task = new ArrayList<>();
 
-        mBtnAddAdventure.setOnClickListener(new View.OnClickListener() {
+        mBtnAddAdventureListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Fragment fragment = new CreateAdventureFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, fragment).commit();
             }
-        });
+        };
+
+        mBtnCloseEditModeListner = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setEditMode(false);
+            }
+        };
+
+        mBtnAddAdventure.setOnClickListener(mBtnAddAdventureListener);
 
     }
 
@@ -197,85 +209,21 @@ public class FragmentAdventure extends Fragment implements BackableFragment {
         mActivity.onBackPressed();
     }
 
-    private class SessionsAdapter extends ArrayAdapter<Session> {
-        public SessionsAdapter(Context context, ArrayList<Session> sessions) {
-            super(context, 0, sessions);
+    public void setEditMode(Boolean mode) {
+        mIsInEditMode = mode;
+        if (mIsInEditMode) {
+            mBtnAddAdventure.setOnClickListener(mBtnCloseEditModeListner);
+            mBtnAddAdventure.setImageResource(R.drawable.accept_edit);
+        } else {
+            mBtnAddAdventure.setOnClickListener(mBtnAddAdventureListener);
+            mBtnAddAdventure.setImageResource(R.drawable.botao_criar_nova_aventura);
         }
-
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            Session s = getItem(position);
-            if (convertView == null) {
-                convertView = LayoutInflater.from(mContext).inflate(R.layout.sessions_list_view_elem, parent, false);
-            }
-
-            TextView sessionDateTextView = (TextView) convertView.findViewById(R.id.session_list_view_item_date);
-            TextView sessionTitleTextView = (TextView) convertView.findViewById(R.id.session_list_view_item_title);
-            TextView sessionSummaryTextView = (TextView) convertView.findViewById(R.id.session_list_view_item_summary);
-
-            text_view.setText("Covered : " + seek_bar.getProgress() + " / " + seek_bar.getMax());
-            seek_bar.setMax(30);
-
-            sessionDateTextView.setText(Session.formatSessionDateToDayMonth(s.getDate()));
-            sessionTitleTextView.setText(s.getTitle());
-            sessionSummaryTextView.setText(s.getSummary());
-            sessionSummaryTextView.setTag(position);
-            sessionSummaryTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int sessionId = (Integer) view.getTag();
-                    Fragment fragment = EditSummaryFragment.newInstance(Session.SESSION_TAG, mAdventureId, sessionId);
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, fragment).commit();
-                }
-            });
-            sessionTitleTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    View parent = (View) view.getParent();
-                    if (parent != null) {
-                        View root = (View) view.getParent().getParent();
-                        if (root != null) {
-                            // setSummarySeeMoreBehavior(root);
-                        }
-                    }
-                }
-            });
-
-            return convertView;
-        }
-
+        showadventuresrecyclerviewAdapter.setEditMode(mode);
     }
 
-    public void seebbarr() {
-
-        // text_view.setText("Covered : " + seek_bar.getProgress() + " / " +seek_bar.getMax());
-        seek_bar.setOnSeekBarChangeListener(
-                new SeekBar.OnSeekBarChangeListener() {
-
-                    int progress_value;
-
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        progress_value = progress;
-                        text_view.setText("Covered : " + progress + " / " + seek_bar.getMax());
-                        Toast.makeText(getActivity(), "SeekBar in progress", Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-                        Toast.makeText(getActivity(), "SeekBar in StartTracking", Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-                        text_view.setText("Covered : " + progress_value + " / " + seek_bar.getMax());
-                        Toast.makeText(getActivity(), "SeekBar in StopTracking", Toast.LENGTH_LONG).show();
-                    }
-                }
-        );
-
+    public void orderAdventures() {
+        showadventuresrecyclerviewAdapter.order();
     }
+
 
 }

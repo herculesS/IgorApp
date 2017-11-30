@@ -19,7 +19,7 @@ import android.widget.ImageView;
 import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.R;
-import com.devapps.igor.RequestManager.AdventureLoader;
+import com.devapps.igor.RequestManager.AdventureRequestManager;
 import com.devapps.igor.RequestManager.Database;
 import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
 import com.devapps.igor.Screens.BackableFragment;
@@ -33,7 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 
-public class AddPlayerFragment extends Fragment implements BackableFragment, AdventureLoader.AdventureLoaderListener {
+public class AddPlayerFragment extends Fragment implements BackableFragment, AdventureRequestManager.AdventureLoaderListener {
     private static final String ADVENTURE_ID = "ADVENTURE_ID";
 
     ImageView mBtn_close, mBtn_close_edit;
@@ -45,7 +45,7 @@ public class AddPlayerFragment extends Fragment implements BackableFragment, Adv
     private String mAdventureId;
     private FragmentActivity mActivity;
     private Adventure mAdventure;
-    private AdventureLoader mAdventureLoader;
+    private AdventureRequestManager mAdventureRequestManager;
 
 
     public AddPlayerFragment() {
@@ -84,9 +84,9 @@ public class AddPlayerFragment extends Fragment implements BackableFragment, Adv
         initializeMembers(view);
 
         //load Adventure
-        mAdventureLoader = new AdventureLoader();
-        mAdventureLoader.setAdventureLoaderListener(this);
-        mAdventureLoader.load(mAdventureId);
+        mAdventureRequestManager = new AdventureRequestManager();
+        mAdventureRequestManager.setAdventureLoaderListener(this);
+        mAdventureRequestManager.load(mAdventureId);
 
 
         //setClickListeners
@@ -106,8 +106,8 @@ public class AddPlayerFragment extends Fragment implements BackableFragment, Adv
         mBtn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("Teste", "" + mAdventureLoader.isFinished() + mAdventureId);
-                if (mAdventureLoader.isFinished()) {
+                Log.d("Teste", "" + mAdventureRequestManager.isFinished() + mAdventureId);
+                if (mAdventureRequestManager.isFinished()) {
                     new PlayerSearcher(mEditTextPlayerName.getText()
                             .toString().trim());
                 }

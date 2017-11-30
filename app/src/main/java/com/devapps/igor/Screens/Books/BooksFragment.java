@@ -20,8 +20,6 @@ import com.android.volley.toolbox.Volley;
 import com.devapps.igor.R;
 import com.devapps.igor.Screens.BackableFragment;
 import com.devapps.igor.Screens.HomeJogosFrontend.FragmentAdventure;
-import com.devapps.igor.Screens.HomeJogosFrontend.HomeJogosFrontendListItem;
-import com.devapps.igor.Screens.HomeJogosFrontend.HomeJogosFrontendMyAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
