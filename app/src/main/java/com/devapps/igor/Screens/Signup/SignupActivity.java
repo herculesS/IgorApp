@@ -13,6 +13,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.R;
@@ -179,30 +180,14 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void onSignupSuccess() {
-        new SweetAlertDialog(this,SweetAlertDialog.SUCCESS_TYPE)
-                .setTitleText("Conta criada com sucesso!")
-                .setContentText("Por Favor, verifique seu email para a validação da conta.")
-                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        sweetAlertDialog.dismissWithAnimation();
-                        _btnSignUp.setEnabled(true);
-                        setResult(RESULT_OK, null);
-                        finish();
-                    }
-                }).show();
+        Toast.makeText(this, "Conta criada com sucesso!\nPor Favor, verifique seu email para a validação da conta.", Toast.LENGTH_LONG).show();
+        _btnSignUp.setEnabled(true);
+        finish();
     }
 
     public void onSignupFailed() {
-        new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
-                .setTitleText("Falha ao criar conta.")
-                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        sweetAlertDialog.dismissWithAnimation();
-                        _btnSignUp.setEnabled(true);
-                    }
-                }).show();
+        Toast.makeText(this, "Falha ao criar conta.", Toast.LENGTH_SHORT).show();
+        _btnSignUp.setEnabled(true);
     }
 
     public boolean validate() {

@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements DiceRollerFragmen
         dataList.add(new DrawerItem(mMenuItens[0], R.drawable.adventure_icon));
         dataList.add(new DrawerItem(mMenuItens[1], R.drawable.books_icon));
         dataList.add(new DrawerItem(mMenuItens[2], R.drawable.profile_icon));
-        dataList.add(new DrawerItem(mMenuItens[3], R.drawable.profile_icon));
+        dataList.add(new DrawerItem(mMenuItens[3], R.drawable.dice_icon));
         dataList.add(new DrawerItem(mMenuItens[4], R.drawable.notification_icon));
         dataList.add(new DrawerItem(mMenuItens[5], R.drawable.settings_icon));
         dataList.add(new DrawerItem(mMenuItens[6], R.drawable.logout_icon));
