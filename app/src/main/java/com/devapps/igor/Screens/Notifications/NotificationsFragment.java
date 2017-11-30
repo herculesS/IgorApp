@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.R;
@@ -66,6 +67,10 @@ public class NotificationsFragment extends Fragment implements BackableFragment 
 
         MainActivity activity = (MainActivity) mActivity;
         Profile user = activity.getUserProfile();
+        if (user.getNotifications() == null) {
+            Toast.makeText(mActivity, "Não exitem notificações!", Toast.LENGTH_SHORT);
+            back();
+        }
         mNotificationsRecyclerView.setAdapter(
                 new NotificationsAdapter(user.getNotifications(), mActivity, mPlayerId));
 

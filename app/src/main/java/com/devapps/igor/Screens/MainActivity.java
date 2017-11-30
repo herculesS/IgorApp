@@ -188,8 +188,12 @@ public class MainActivity extends AppCompatActivity implements DiceRollerFragmen
             BackableFragment bf;
             if (f != null) {
                 bf = (BackableFragment) f;
-                Log.d("Teste", "backPressed");
-                bf.back();
+                if (f instanceof FragmentAdventure) {
+                    super.onBackPressed();
+                } else {
+                    Log.d("Teste", "backPressed");
+                    bf.back();
+                }
             } else {
                 super.onBackPressed();
             }
