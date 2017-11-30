@@ -13,18 +13,18 @@ import android.widget.TextView;
 
 import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.R;
-import com.devapps.igor.RequestManager.AdventureLoader;
+import com.devapps.igor.RequestManager.AdventureRequestManager;
 import com.devapps.igor.Screens.AddPlayer.AddPlayerFragment;
 import com.devapps.igor.Screens.BackableFragment;
 import com.devapps.igor.Screens.CreateNewSession.CreateNewSessionFragment;
+import com.devapps.igor.Screens.Edit.EditAdventureFragment;
 import com.devapps.igor.Screens.HomeJogosFrontend.FragmentAdventure;
-import com.devapps.igor.Util.DataObjectUtils;
 import com.google.firebase.auth.FirebaseAuth;
 
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
-public class AdventureProgressFragment extends Fragment implements BackableFragment, AdventureLoader.AdventureLoaderListener {
+public class AdventureProgressFragment extends Fragment implements BackableFragment, AdventureRequestManager.AdventureLoaderListener {
     private static final String ADVENTURE_ID = "ADVENTURE_ID";
 
     private String mAdventureId;
@@ -87,7 +87,7 @@ public class AdventureProgressFragment extends Fragment implements BackableFragm
 
         mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        AdventureLoader loader = new AdventureLoader();
+        AdventureRequestManager loader = new AdventureRequestManager();
         loader.setAdventureLoaderListener(this);
         loader.load(mAdventureId);
 
@@ -105,6 +105,9 @@ public class AdventureProgressFragment extends Fragment implements BackableFragm
         mBtnAdventureEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Fragment fragment = EditAdventureFragment.newInstance(mAdventureId);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, fragment).commit();
 
             }
         });
@@ -113,17 +116,17 @@ public class AdventureProgressFragment extends Fragment implements BackableFragm
             public void onClick(View view) {
                 if (mEditMode) {
                     mEditMode = false;
-
+                    mBtnAdd.setVisibility(View.VISIBLE);
+                    mBtnAdventureEdit.setVisibility(View.GONE);
                 } else {
                     mEditMode = true;
-
+                    mBtnAdd.setVisibility(View.GONE);
                 }
-
 
                 Fragment f = getChildFragmentManager().
                         findFragmentById(R.id.adventure_players_container);
                 if (mAdventure.getDMChar() != null && mUserId.
-                        equals(mAdventure.getDMChar().getPlayerId())) {
+                        equals(mAdventure.getDMChar().getPlayerId()) && mEditMode) {
                     mBtnAdventureEdit.setVisibility(View.VISIBLE);
                 } else {
                     mBtnAdventureEdit.setVisibility(View.GONE);
@@ -151,7 +154,11 @@ public class AdventureProgressFragment extends Fragment implements BackableFragm
                         mBtnEdit.setVisibility(View.GONE);
                         mBtnAdventureEdit.setVisibility(View.GONE);
                         mEditMode = false;
-
+                    }
+                    if (mEditMode) {
+                        mBtnAdd.setVisibility(View.GONE);
+                    } else {
+                        mBtnAdd.setVisibility(View.VISIBLE);
                     }
                     mBgTab.setImageResource(R.drawable.adventure_tab_first_selected);
                     mBtnAdd.setOnClickListener(mAddSessionListener);
@@ -173,6 +180,11 @@ public class AdventureProgressFragment extends Fragment implements BackableFragm
             @Override
             public void onClick(View view) {
                 if (mFirstTabSelected) {
+                    if (mEditMode) {
+                        mBtnAdd.setVisibility(View.GONE);
+                    } else {
+                        mBtnAdd.setVisibility(View.VISIBLE);
+                    }
                     mBgTab.setImageResource(R.drawable.adventure_tab_second_selected);
                     mBtnAdd.setOnClickListener(mAddPlayerListener);
                     mBtnAdd.setImageResource(R.drawable.btn_add_player);

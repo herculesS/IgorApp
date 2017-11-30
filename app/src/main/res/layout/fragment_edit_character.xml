@@ -28,7 +28,7 @@
             android:layout_gravity="left"
             android:layout_marginLeft="43dp"
             android:paddingBottom="15dp"
-            android:text="Editar aventura"
+            android:text="Editar Personagmem"
             android:textSize="25sp"
             android:textColor="@color/CreationLabelBlue"/>
 
@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="43dp"
-            android:text="Nome da Aventura"
+            android:text="Nome do Personagem"
             android:textColor="@color/CreationLabelGray"/>
 
         <EditText
@@ -47,7 +47,7 @@
             android:layout_gravity="left"
             android:layout_marginLeft="43dp"
             android:background="@android:color/transparent"
-            android:hint="Dê nome à aventura"
+            android:hint="Dê nome ao personagem"
             android:textColor="@color/CreationLabelBlack"
             android:textStyle="bold"/>
 
@@ -71,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="43dp"
-            android:text="Resumo da Aventura"
+            android:text="Resumo do Personagem"
             android:textColor="@color/CreationLabelGray"/>
 
         <EditText
@@ -81,7 +81,7 @@
             android:layout_gravity="left"
             android:layout_marginLeft="43dp"
             android:background="@android:color/transparent"
-            android:hint="Escreva um resumo para a aventura"
+            android:hint="Escreva um resumo para personagem"
             android:textColor="@color/CreationLabelBlack"
             android:textStyle="bold"/>
 

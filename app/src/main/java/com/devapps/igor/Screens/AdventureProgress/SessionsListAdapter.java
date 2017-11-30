@@ -13,9 +13,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.DataObject.Session;
 import com.devapps.igor.R;
+import com.devapps.igor.RequestManager.Database;
+import com.devapps.igor.Screens.Edit.EditSessionFragment;
 import com.devapps.igor.Screens.Edit.EditSummaryFragment;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 
@@ -25,12 +29,12 @@ import java.util.ArrayList;
 
 public class SessionsListAdapter extends RecyclerView.Adapter<SessionsListAdapter.SessionViewHolder> {
     private boolean mEditMode;
-    ArrayList<Session> mSessions;
+    Adventure mAdventure;
     String mAdventureId;
     FragmentActivity mActivity;
 
-    SessionsListAdapter(ArrayList<Session> sessions, FragmentActivity activity, String adventureId, boolean editMode) {
-        mSessions = sessions;
+    SessionsListAdapter(Adventure a, FragmentActivity activity, String adventureId, boolean editMode) {
+        mAdventure = a;
         mActivity = activity;
         mAdventureId = adventureId;
         mEditMode = editMode;
@@ -46,73 +50,77 @@ public class SessionsListAdapter extends RecyclerView.Adapter<SessionsListAdapte
     public void onBindViewHolder(SessionViewHolder holder, final int position) {
 
         updateEditMode(holder);
-        holder.mDateTextView.setText(Session.formatSessionDateToDayMonth(mSessions.get(position).getDate()));
-        holder.mTitleView.setText(mSessions.get(position).getTitle());
-        holder.mSummaryTextView.setText(mSessions.get(position).getSummary());
+        holder.mDateTextView.setText(Session.formatSessionDateToDayMonth(mAdventure.getSessions().get(position).getDate()));
+        holder.mTitleView.setText(mAdventure.getSessions().get(position).getTitle());
+        holder.mSummaryTextView.setText(mAdventure.getSessions().get(position).getSummary());
         holder.mSummaryTextView.setTag(position);
-        holder.mSummaryTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int sessionId = (Integer) view.getTag();
-                Fragment fragment = EditSummaryFragment.newInstance(Session.SESSION_TAG, mAdventureId, sessionId);
-                mActivity.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, fragment).commit();
-            }
-        });
+
         holder.mBtnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-                builder.setMessage("Deseja deletar a sessão "
-                        + mSessions.get(position).getTitle() + "?");
-                builder.setPositiveButton("Sim", new Dialog.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        dialog.cancel();
-                    }
-
-                });
-
-                builder.setNegativeButton("Não", new Dialog.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        dialog.cancel();
-
-                    }
-
-                });
-
-                builder.show();
+                onDeleteSession(position);
 
             }
         });
-
+        holder.mBtnEdit.setTag(position);
         holder.mBtnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                onEditSession(view);
             }
         });
 
-
-        holder.mTitleView.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setTag(holder.mSummaryTextView);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                View parent = (View) view.getParent();
-                if (parent != null) {
-                    View root = (View) view.getParent().getParent();
-                    if (root != null) {
-                        setSummarySeeMoreBehavior(root);
+
+                TextView summary = (TextView) view.getTag();
+                if (summary != null) {
+                    if (!summary.isShown()) {
+                        summary.setVisibility(View.VISIBLE);
+                    } else {
+                        summary.setVisibility(View.GONE);
                     }
                 }
             }
         });
+    }
 
+    private void onEditSession(View view) {
+        int position = (int) view.getTag();
+        Fragment fragment = EditSessionFragment.newInstance(mAdventureId, position);
+        mActivity.getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment).commit();
+    }
 
+    private void onDeleteSession(final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+        builder.setMessage("Deseja deletar a sessão "
+                + mAdventure.getSessions().get(position).getTitle() + "?");
+        builder.setPositiveButton("Sim", new Dialog.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mAdventure.getSessions().remove(position);
+                DatabaseReference ref = Database.getAdventuresReference();
+                ref.child(mAdventureId).setValue(mAdventure);
+                notifyDataSetChanged();
+
+                dialog.cancel();
+            }
+
+        });
+
+        builder.setNegativeButton("Não", new Dialog.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+
+        });
+
+        builder.show();
     }
 
     private void updateEditMode(SessionViewHolder holder) {
@@ -125,22 +133,9 @@ public class SessionsListAdapter extends RecyclerView.Adapter<SessionsListAdapte
         }
     }
 
-    private void setSummarySeeMoreBehavior(View root) {
-        TextView sessionSummaryTextView = (TextView) root.findViewById(R.id.session_list_view_item_summary);
-        if (sessionSummaryTextView != null) {
-
-            if (!sessionSummaryTextView.isShown()) {
-
-                sessionSummaryTextView.setVisibility(View.VISIBLE);
-            } else {
-                sessionSummaryTextView.setVisibility(View.GONE);
-            }
-        }
-    }
-
     @Override
     public int getItemCount() {
-        return mSessions.size();
+        return mAdventure.getSessions().size();
     }
 
     public void changeEditMode(Boolean editMode) {

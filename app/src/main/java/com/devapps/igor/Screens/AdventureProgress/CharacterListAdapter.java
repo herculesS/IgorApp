@@ -1,5 +1,11 @@
 package com.devapps.igor.Screens.AdventureProgress;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +14,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.DataObject.Character;
 import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.R;
+import com.devapps.igor.RequestManager.AdventureRequestManager;
+import com.devapps.igor.RequestManager.Database;
+import com.devapps.igor.Screens.Edit.EditCharacterFragment;
+import com.devapps.igor.Screens.Edit.EditSessionFragment;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 
@@ -21,14 +33,19 @@ import java.util.ArrayList;
 
 public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdapter.CharacterViewHolder> {
 
+    private final FragmentActivity mActivity;
     private ArrayList<Character> mCharacters;
     private ArrayList<Profile> mProfiles;
+    private String mAdventureId;
     private String mUserId;
     private Character mDmCharacter;
     private boolean mEditMode = false;
+    private Context mContext;
 
-    public CharacterListAdapter(ArrayList<Character> characters,
-                                ArrayList<Profile> profiles, Character dmCharacter, boolean editMode) {
+    public CharacterListAdapter(String adventureId, ArrayList<Character> characters,
+                                ArrayList<Profile> profiles, Character dmCharacter, boolean editMode, FragmentActivity activity) {
+        mAdventureId = adventureId;
+        mActivity = activity;
         mCharacters = characters;
         mProfiles = profiles;
         mDmCharacter = dmCharacter;
@@ -39,6 +56,7 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
 
     @Override
     public CharacterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        mContext = parent.getContext();
         if (viewType == 0) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.master_item_list_item, parent, false);
             return new CharacterViewHolder(view);
@@ -75,6 +93,14 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
                 }
                 holder.mTextViewDMName.setText(mDmCharacter.getName());
                 holder.mTextViewDMSummary.setText(mDmCharacter.getSummary());
+                holder.mBtnEditDm.setTag(position);
+                holder.mBtnEditDm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        onEditDm(view);
+
+                    }
+                });
             } else {
                 holder.mTextViewDMName.setText(R.string.no_master_assigned);
                 holder.mTextViewDMSummary.setVisibility(View.INVISIBLE);
@@ -84,14 +110,77 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
             if (mEditMode) {
                 if (mUserId.equals(mProfiles.get(position).getId()))
                     holder.mEditLayout.setVisibility(View.VISIBLE);
+                else
+                    holder.mEditLayout.setVisibility(View.GONE);
             } else {
                 holder.mEditLayout.setVisibility(View.GONE);
             }
+
             holder.mTextViewCharacterName.setText(mCharacters.get(position).getName());
             holder.mTextViewPlayerName.setText(mProfiles.get(position).getName());
+            holder.mBtnDelete.setTag(position);
+            final int finalPosition = position;
+            holder.mBtnEditCharacter.setTag(position);
+
+            holder.mBtnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    onDeleteCharacter(view, finalPosition);
+                }
+            });
+            holder.mBtnEditCharacter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onEditCharacter(view);
+                }
+            });
         }
 
 
+    }
+
+    private void onEditDm(View view) {
+        int pos = (int) view.getTag();
+        Fragment fragment = EditCharacterFragment.newInstance(mAdventureId, pos, true);
+        mActivity.getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment).commit();
+    }
+
+    private void onEditCharacter(View view) {
+        int position = (int) view.getTag();
+        Fragment fragment = EditCharacterFragment.newInstance(mAdventureId, position, false);
+        mActivity.getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment).commit();
+    }
+
+    private void onDeleteCharacter(final View view, int finalPosition) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setMessage("Deseja deletar o personagem "
+                + mCharacters.get(finalPosition).getName() + "?");
+
+        builder.setPositiveButton("Sim", new Dialog.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int pos = (int) view.getTag();
+                mCharacters.remove(pos);
+                mProfiles.remove(pos);
+                AdventureRequestManager.saveCharacters(mAdventureId, mCharacters);
+                notifyDataSetChanged();
+
+                dialog.cancel();
+            }
+
+        });
+
+        builder.setNegativeButton("Não", new Dialog.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+
+        });
+        builder.show();
     }
 
     @Override

@@ -28,16 +28,16 @@
             android:layout_gravity="left"
             android:layout_marginLeft="43dp"
             android:paddingBottom="15dp"
-            android:text="Editar aventura"
-            android:textSize="25sp"
-            android:textColor="@color/CreationLabelBlue"/>
+            android:text="Editar sessão"
+            android:textColor="@color/CreationLabelBlue"
+            android:textSize="25sp"/>
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="43dp"
-            android:text="Nome da Aventura"
+            android:text="Nome da Sessão"
             android:textColor="@color/CreationLabelGray"/>
 
         <EditText
@@ -47,7 +47,7 @@
             android:layout_gravity="left"
             android:layout_marginLeft="43dp"
             android:background="@android:color/transparent"
-            android:hint="Dê nome à aventura"
+            android:hint="Dê nome à sessão"
             android:textColor="@color/CreationLabelBlack"
             android:textStyle="bold"/>
 
@@ -71,7 +71,41 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="43dp"
-            android:text="Resumo da Aventura"
+            android:text="Data da Sessão"
+            android:textColor="@color/CreationLabelGray"/>
+
+        <Button
+            android:id="@+id/session_date_picker"
+            android:layout_width="118dp"
+            android:layout_height="42dp"
+            android:layout_gravity="left"
+            android:layout_marginLeft="43dp"
+            android:background="@drawable/bg_button_default"
+            android:text="02/10"
+            android:textColor="#FFF"
+            android:textStyle="bold"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp"/>
+
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="43dp"
+            android:layout_marginRight="43dp"
+            app:srcCompat="@drawable/line"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="43dp"
+            android:text="Resumo da Sessão"
             android:textColor="@color/CreationLabelGray"/>
 
         <EditText
@@ -81,7 +115,7 @@
             android:layout_gravity="left"
             android:layout_marginLeft="43dp"
             android:background="@android:color/transparent"
-            android:hint="Escreva um resumo para a aventura"
+            android:hint="Escreva um resumo para a sessão"
             android:textColor="@color/CreationLabelBlack"
             android:textStyle="bold"/>
 
