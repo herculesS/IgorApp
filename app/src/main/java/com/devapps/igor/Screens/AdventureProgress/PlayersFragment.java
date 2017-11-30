@@ -15,10 +15,8 @@ import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.DataObject.Character;
 import com.devapps.igor.DataObject.Profile;
 import com.devapps.igor.R;
-import com.devapps.igor.RequestManager.AdventureLoader;
+import com.devapps.igor.RequestManager.AdventureRequestManager;
 import com.devapps.igor.RequestManager.Database;
-import com.devapps.igor.Screens.AddPlayer.AddPlayerFragment;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,7 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class PlayersFragment extends Fragment implements AdventureLoader.AdventureLoaderListener {
+public class PlayersFragment extends Fragment implements AdventureRequestManager.AdventureLoaderListener, Editable {
     private static final String ADVENTURE_ID = "ADVENTURE_ID";
 
     private String mAdventureId;
@@ -35,7 +33,8 @@ public class PlayersFragment extends Fragment implements AdventureLoader.Adventu
     private RecyclerView mRecyclerViewCharacter;
     private CharacterListAdapter mCharacterListAdapter;
     private Context mContext;
-    private AdventureLoader mAdventureLoader;
+    private AdventureRequestManager mAdventureRequestManager;
+    private boolean mEditMode;
 
 
     public PlayersFragment() {
@@ -68,9 +67,9 @@ public class PlayersFragment extends Fragment implements AdventureLoader.Adventu
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         initializeMembers(view);
-        mAdventureLoader = new AdventureLoader();
-        mAdventureLoader.setAdventureLoaderListener(this);
-        mAdventureLoader.load(mAdventureId);
+        mAdventureRequestManager = new AdventureRequestManager();
+        mAdventureRequestManager.setAdventureLoaderListener(this);
+        mAdventureRequestManager.load(mAdventureId);
     }
 
 
@@ -81,7 +80,8 @@ public class PlayersFragment extends Fragment implements AdventureLoader.Adventu
             new LoadCharactersPlayerProfiles().execute();
 
         } else {
-            mCharacterListAdapter = new CharacterListAdapter(new ArrayList<Character>(), new ArrayList<Profile>(), mAdventure.getDMChar());
+            mCharacterListAdapter = new CharacterListAdapter(mAdventureId, new ArrayList<Character>(),
+                    new ArrayList<Profile>(), mAdventure.getDMChar(), mEditMode, getActivity());
             mRecyclerViewCharacter.setLayoutManager(new LinearLayoutManager(mContext));
             mRecyclerViewCharacter.setAdapter(mCharacterListAdapter);
         }
@@ -95,9 +95,18 @@ public class PlayersFragment extends Fragment implements AdventureLoader.Adventu
     }
 
     private void endTask(ArrayList<Profile> playersList) {
-        mCharacterListAdapter = new CharacterListAdapter(mAdventure.getCharacters(), playersList, mAdventure.getDMChar());
+        mCharacterListAdapter = new CharacterListAdapter(mAdventureId, mAdventure.getCharacters(),
+                playersList, mAdventure.getDMChar(), mEditMode, getActivity());
         mRecyclerViewCharacter.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerViewCharacter.setAdapter(mCharacterListAdapter);
+    }
+
+    @Override
+    public void editMode(boolean mode) {
+        mEditMode = mode;
+        if (mCharacterListAdapter != null) {
+            mCharacterListAdapter.changeEditMode(mEditMode);
+        }
     }
 
 
