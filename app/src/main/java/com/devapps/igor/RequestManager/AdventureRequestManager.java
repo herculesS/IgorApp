@@ -33,6 +33,10 @@ public class AdventureRequestManager implements ValueEventListener {
         ref.child(a.getId()).setValue(a);
     }
 
+    static public void deleteAdventure(String id) {
+        Database.getAdventuresReference().child(id).removeValue();
+    }
+
     static public void saveCharacters(String AdventureId, ArrayList<Character> cl) {
         Database.getAdventuresReference().
                 child(AdventureId).child("characters").setValue(cl);

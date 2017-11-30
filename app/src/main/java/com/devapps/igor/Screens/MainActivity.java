@@ -3,6 +3,7 @@ package com.devapps.igor.Screens;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -187,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements DiceRollerFragmen
             BackableFragment bf;
             if (f != null) {
                 bf = (BackableFragment) f;
-                Log.d("Teste","backPressed");
+                Log.d("Teste", "backPressed");
                 bf.back();
             } else {
                 super.onBackPressed();
@@ -211,8 +212,12 @@ public class MainActivity extends AppCompatActivity implements DiceRollerFragmen
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.action_edit:
-                        Log.d(TAG, "Botão edit.");
-                        //TODO action
+                        Fragment f = getSupportFragmentManager().
+                                findFragmentById(R.id.fragment_container);
+                        if (f instanceof FragmentAdventure) {
+                            ((FragmentAdventure) f).setEditMode(true);
+                        }
+
                         return true;
                     case R.id.action_order:
                         Log.d(TAG, "Botão order.");

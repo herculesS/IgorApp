@@ -95,8 +95,28 @@ public class PlayersFragment extends Fragment implements AdventureRequestManager
     }
 
     private void endTask(ArrayList<Profile> playersList) {
+        ArrayList<Profile> pl = new ArrayList<>();
+        for (Character c : mAdventure.getCharacters()) {
+            if (c.getPlayerId() == null) {
+                Profile pr = new Profile();
+                pr.setName("");
+                pl.add(pr);
+            } else {
+                for (Profile p : playersList) {
+                    if (c.getPlayerId().equals(p.getId())) {
+                        pl.add(p);
+                        break;
+                    }
+
+                }
+            }
+
+        }
+
+
         mCharacterListAdapter = new CharacterListAdapter(mAdventureId, mAdventure.getCharacters(),
-                playersList, mAdventure.getDMChar(), mEditMode, getActivity());
+                pl, mAdventure.getDMChar(), mEditMode,
+                getActivity());
         mRecyclerViewCharacter.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerViewCharacter.setAdapter(mCharacterListAdapter);
     }
@@ -128,12 +148,7 @@ public class PlayersFragment extends Fragment implements AdventureRequestManager
                 for (Character c : mAdventure.getCharacters()) {
                     if (c.getPlayerId() != null) {
                         refUser.child(c.getPlayerId()).addListenerForSingleValueEvent(this);
-                    } else {
-                        Profile p = new Profile();
-                        p.setName("");
-                        mPlayersList.add(p);
                     }
-
                 }
             }
             return null;

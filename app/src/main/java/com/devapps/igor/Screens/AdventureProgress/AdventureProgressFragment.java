@@ -1,5 +1,6 @@
 package com.devapps.igor.Screens.AdventureProgress;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.support.v4.app.FragmentActivity;
 
 import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.R;
@@ -43,6 +45,7 @@ public class AdventureProgressFragment extends Fragment implements BackableFragm
     private AddSessionListener mAddSessionListener;
     private AddPlayerListener mAddPlayerListener;
     private ImageView mBtnAdventureEdit;
+    private FragmentActivity mActivity;
 
     public AdventureProgressFragment() {
         // Required empty public constructor
@@ -215,37 +218,48 @@ public class AdventureProgressFragment extends Fragment implements BackableFragm
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = getActivity();
+
+    }
+
+    @Override
     public void back() {
         Fragment fragment = FragmentAdventure.newInstance(mAdventureId);
-        getActivity().getSupportFragmentManager().beginTransaction()
+        mActivity.getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment).commit();
     }
 
     @Override
     public void onAdventureLoaded(Adventure a) {
-        mAdventure = a;
-        mAdventureTitleTextView.setText(mAdventure.getName());
-        if (mAdventure.getDMChar() != null) {
-            if (mAdventure.getDMChar().getPlayerId().equals(mUserId)) {
-                mBtnEdit.setVisibility(View.VISIBLE);
+        if (a != null) {
+            mAdventure = a;
+            mAdventureTitleTextView.setText(mAdventure.getName());
+            if (mAdventure.getDMChar() != null) {
+                if (mAdventure.getDMChar().getPlayerId().equals(mUserId)) {
+                    mBtnEdit.setVisibility(View.VISIBLE);
+                }
             }
-        }
-        switch (mAdventure.getBackground()) {
-            case 1:
-                mBgImageView.setImageResource(R.drawable.miniatura_imagem_automatica);
-                break;
-            case 2:
-                mBgImageView.setImageResource(R.drawable.miniatura_krevast);
-                break;
-            case 3:
-                mBgImageView.setImageResource(R.drawable.miniatura_coast);
-                break;
-            case 4:
-                mBgImageView.setImageResource(R.drawable.miniatura_corvali);
-                break;
-            case 5:
-                mBgImageView.setImageResource(R.drawable.miniatura_heartlands);
-                break;
+            switch (mAdventure.getBackground()) {
+                case 1:
+                    mBgImageView.setImageResource(R.drawable.miniatura_imagem_automatica);
+                    break;
+                case 2:
+                    mBgImageView.setImageResource(R.drawable.miniatura_krevast);
+                    break;
+                case 3:
+                    mBgImageView.setImageResource(R.drawable.miniatura_coast);
+                    break;
+                case 4:
+                    mBgImageView.setImageResource(R.drawable.miniatura_corvali);
+                    break;
+                case 5:
+                    mBgImageView.setImageResource(R.drawable.miniatura_heartlands);
+                    break;
+            }
+        } else {
+            back();
         }
 
     }

@@ -81,36 +81,36 @@ public class DetailsFragment extends Fragment implements AdventureRequestManager
 
     @Override
     public void onAdventureLoaded(Adventure a) {
-        mAdventure = a;
-        mAdventureSummaryTextView.setText(mAdventure.getSummary());
-        mAdventureSummaryTextView.post(new Runnable() {
-            @Override
-            public void run() {
-                if (mAdventureSummaryTextView.getLineCount() > 6) {
-                    mAdventureSummaryTextView.setMaxLines(6);
-                    mBtnSeeMore.setVisibility(View.VISIBLE);
+        if (a != null) {
+            mAdventure = a;
+            mAdventureSummaryTextView.setText(mAdventure.getSummary());
+            mAdventureSummaryTextView.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (mAdventureSummaryTextView.getLineCount() > 6) {
+                        mAdventureSummaryTextView.setMaxLines(6);
+                        mBtnSeeMore.setVisibility(View.VISIBLE);
+                    }
+
                 }
+            });
+            mSessionAdapter = new SessionsListAdapter(mAdventure,
+                    getActivity(), mAdventureId, mEditMode);
+            mSessionsRecyclerView.setAdapter(mSessionAdapter);
 
-            }
-        });
-        mSessionAdapter = new SessionsListAdapter(mAdventure,
-                getActivity(), mAdventureId, mEditMode);
-        mSessionsRecyclerView.setAdapter(mSessionAdapter);
-
-        mBtnSeeMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mAdventureSummaryTextView.getMaxLines() > 6) {
-                    mAdventureSummaryTextView.setMaxLines(6);
-                    mAdventureSummaryTextView.getMaxLines();
-                } else {
-                    mAdventureSummaryTextView.setMaxLines(mAdventureSummaryTextView.getLineCount());
-                    mAdventureSummaryTextView.getMaxLines();
+            mBtnSeeMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mAdventureSummaryTextView.getMaxLines() > 6) {
+                        mAdventureSummaryTextView.setMaxLines(6);
+                        mAdventureSummaryTextView.getMaxLines();
+                    } else {
+                        mAdventureSummaryTextView.setMaxLines(mAdventureSummaryTextView.getLineCount());
+                        mAdventureSummaryTextView.getMaxLines();
+                    }
                 }
-            }
-        });
-
-
+            });
+        }
     }
 
     @Override

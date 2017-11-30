@@ -63,6 +63,9 @@ public class FragmentAdventure extends Fragment implements BackableFragment {
     private static final String ADVENTURE_ID = "ADVENTURE_ID";
     public static ArrayList<Session> sessoes;
     public static int batata = 0;
+    private boolean mIsInEditMode = false;
+    private View.OnClickListener mBtnAddAdventureListener;
+    private View.OnClickListener mBtnCloseEditModeListner;
 
     public FragmentAdventure() {
         // Required empty public constructor
@@ -102,7 +105,7 @@ public class FragmentAdventure extends Fragment implements BackableFragment {
     DatabaseReference databaseAdventures;
     List<Adventure> task;
     RecyclerView showadventuresRecyclerView;
-    RecyclerView.Adapter showadventuresrecyclerviewAdapter;
+    RecyclerViewAdapter showadventuresrecyclerviewAdapter;
     RecyclerView.LayoutManager showadventuresrecyclerviewLayoutManager;
 
     @Override
@@ -153,7 +156,7 @@ public class FragmentAdventure extends Fragment implements BackableFragment {
                         adventure.setBackground(Background);
                         adventure.setSessions(sessoes);
 
-                        task.add(adventure);
+                        task.add(mAdventure);
                     }
 
                 }
@@ -172,14 +175,23 @@ public class FragmentAdventure extends Fragment implements BackableFragment {
         });
         task = new ArrayList<>();
 
-        mBtnAddAdventure.setOnClickListener(new View.OnClickListener() {
+        mBtnAddAdventureListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Fragment fragment = new CreateAdventureFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, fragment).commit();
             }
-        });
+        };
+
+        mBtnCloseEditModeListner = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setEditMode(false);
+            }
+        };
+
+        mBtnAddAdventure.setOnClickListener(mBtnAddAdventureListener);
 
     }
 
@@ -195,6 +207,18 @@ public class FragmentAdventure extends Fragment implements BackableFragment {
     @Override
     public void back() {
         mActivity.onBackPressed();
+    }
+
+    public void setEditMode(Boolean mode) {
+        mIsInEditMode = mode;
+        if (mIsInEditMode) {
+            mBtnAddAdventure.setOnClickListener(mBtnCloseEditModeListner);
+            mBtnAddAdventure.setImageResource(R.drawable.accept_edit);
+        } else {
+            mBtnAddAdventure.setOnClickListener(mBtnAddAdventureListener);
+            mBtnAddAdventure.setImageResource(R.drawable.botao_criar_nova_aventura);
+        }
+        showadventuresrecyclerviewAdapter.setEditMode(mode);
     }
 
 }
