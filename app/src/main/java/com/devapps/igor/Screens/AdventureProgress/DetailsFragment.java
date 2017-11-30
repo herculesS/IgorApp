@@ -14,8 +14,6 @@ import android.widget.TextView;
 import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.AdventureRequestManager;
-import com.devapps.igor.Screens.Edit.EditSummaryFragment;
-import com.google.firebase.auth.FirebaseAuth;
 
 
 public class DetailsFragment extends Fragment implements AdventureRequestManager.AdventureLoaderListener, Editable {

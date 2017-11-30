@@ -17,10 +17,11 @@ import com.devapps.igor.DataObject.Session;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.AdventureRequestManager;
 import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
+import com.devapps.igor.Screens.BackableFragment;
 
 import java.util.Calendar;
 
-public class EditSessionFragment extends Fragment implements AdventureRequestManager.AdventureLoaderListener {
+public class EditSessionFragment extends Fragment implements AdventureRequestManager.AdventureLoaderListener, BackableFragment {
     private static final String ADVENTURE_ID = "ADVENTURE_ID";
     private static final String SESSION_ID = "SESSION_ID";
 
@@ -132,5 +133,12 @@ public class EditSessionFragment extends Fragment implements AdventureRequestMan
         }
         mDatePickerDialog.show();
 
+    }
+
+    @Override
+    public void back() {
+        Fragment fragment = AdventureProgressFragment.newInstance(mAdventureId);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment).commit();
     }
 }

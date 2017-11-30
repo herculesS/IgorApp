@@ -18,7 +18,6 @@ import com.devapps.igor.DataObject.Session;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.Database;
 import com.devapps.igor.Screens.Edit.EditSessionFragment;
-import com.devapps.igor.Screens.Edit.EditSummaryFragment;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;

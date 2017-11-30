@@ -13,8 +13,9 @@ import com.devapps.igor.DataObject.Adventure;
 import com.devapps.igor.R;
 import com.devapps.igor.RequestManager.AdventureRequestManager;
 import com.devapps.igor.Screens.AdventureProgress.AdventureProgressFragment;
+import com.devapps.igor.Screens.BackableFragment;
 
-public class EditAdventureFragment extends Fragment implements AdventureRequestManager.AdventureLoaderListener {
+public class EditAdventureFragment extends Fragment implements AdventureRequestManager.AdventureLoaderListener, BackableFragment {
     private static final String ADVENTURE_ID = "ADVENTURE_ID";
 
     private String mAdventureId;
@@ -92,5 +93,12 @@ public class EditAdventureFragment extends Fragment implements AdventureRequestM
                         .replace(R.id.fragment_container, fragment).commit();
             }
         });
+    }
+
+    @Override
+    public void back() {
+        Fragment fragment = AdventureProgressFragment.newInstance(mAdventureId);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment).commit();
     }
 }
