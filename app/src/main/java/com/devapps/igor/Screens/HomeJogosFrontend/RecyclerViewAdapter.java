@@ -154,7 +154,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         progress_value = progress;
                         holder.text_view.setText("Covered : " + progress + " / " + holder.Barra_Progresso.getMax());
-                        Toast.makeText(context, "SeekBar in progress" + task.get(position).getSessions().size(), Toast.LENGTH_LONG).show();
+                        //Toast.makeText(context, "SeekBar in progress" + task.get(position).getSessions().size(), Toast.LENGTH_LONG).show();
                         if (task.get(position).getSessions().size() != 0) {
                             holder.Proxima_Sessao.setText(task.get(position).getSessions().get(progress).getTitle());
                         }

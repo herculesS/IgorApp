@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements DiceRollerFragmen
     private LinearLayout mLinearLayout;
     List<DrawerItem> dataList;
 
-    private enum menuItens {ADVENTURES, BOOKS, PROFILE, DICE, NOTIFICATION, SETTINGS, LOGOUT}
+    private enum menuItens {ADVENTURES, BOOKS, DICE, LOGOUT}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,10 +98,7 @@ public class MainActivity extends AppCompatActivity implements DiceRollerFragmen
         String[] mMenuItens = getResources().getStringArray(R.array.menu_array);
         dataList.add(new DrawerItem(mMenuItens[0], R.drawable.adventure_icon));
         dataList.add(new DrawerItem(mMenuItens[1], R.drawable.books_icon));
-        dataList.add(new DrawerItem(mMenuItens[2], R.drawable.profile_icon));
         dataList.add(new DrawerItem(mMenuItens[3], R.drawable.dice_icon));
-        dataList.add(new DrawerItem(mMenuItens[4], R.drawable.notification_icon));
-        dataList.add(new DrawerItem(mMenuItens[5], R.drawable.settings_icon));
         dataList.add(new DrawerItem(mMenuItens[6], R.drawable.logout_icon));
 
         drawerAdapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item, dataList);
@@ -154,12 +151,9 @@ public class MainActivity extends AppCompatActivity implements DiceRollerFragmen
                 newFragment = new BooksFragment();
                 break;
             case 2:
-                newFragment = AdventureProgressFragment.newInstance("-KvV1jHurj0sGVPXP9GO");
-                break;
-            case 3:
                 newFragment = DiceRollerFragment.newInstance();
                 break;
-            case 6:
+            case 3:
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 mAuth.signOut();
                 Intent intent = new Intent(this, LoginActivity.class);
@@ -167,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements DiceRollerFragmen
                 finish();
                 return;
             default:
-                newFragment = new CreateAdventureFragment();
+                newFragment = new FragmentAdventure();
                 break;
         }
 
