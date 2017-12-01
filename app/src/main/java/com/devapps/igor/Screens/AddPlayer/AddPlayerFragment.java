@@ -103,6 +103,19 @@ public class AddPlayerFragment extends Fragment implements BackableFragment, Adv
     }
 
     private void setClickListeners() {
+
+        mBtn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                back();
+            }
+        });
+        mBtn_close_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                back();
+            }
+        });
         mBtn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

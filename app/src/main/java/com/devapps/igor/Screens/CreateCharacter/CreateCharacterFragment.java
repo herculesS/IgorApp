@@ -94,8 +94,6 @@ public class CreateCharacterFragment extends Fragment implements BackableFragmen
             @Override
             public void onClick(View view) {
                 btnReadyOnClick();
-                removeNotification();
-                backToAdventureProgress();
             }
         });
     }
@@ -122,7 +120,16 @@ public class CreateCharacterFragment extends Fragment implements BackableFragmen
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mAdventure = dataSnapshot.getValue(Adventure.class);
-                createCharacter(characterName, characterSummary);
+                if (!dataSnapshot.exists()) {
+                    createToast("Aventura não exite mais!");
+                    removeNotification();
+                    back();
+
+                } else {
+                    createCharacter(characterName, characterSummary);
+                    removeNotification();
+                    backToAdventureProgress();
+                }
 
             }
 

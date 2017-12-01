@@ -75,15 +75,17 @@ public class PlayersFragment extends Fragment implements AdventureRequestManager
 
     @Override
     public void onAdventureLoaded(Adventure a) {
-        mAdventure = a;
-        if (mAdventure.getCharacters() != null && mAdventure.getCharacters().size() != 0) {
-            new LoadCharactersPlayerProfiles().execute();
+        if (a != null) {
+            mAdventure = a;
+            if (mAdventure.getCharacters() != null && mAdventure.getCharacters().size() != 0) {
+                new LoadCharactersPlayerProfiles().execute();
 
-        } else {
-            mCharacterListAdapter = new CharacterListAdapter(mAdventureId, new ArrayList<Character>(),
-                    new ArrayList<Profile>(), mAdventure.getDMChar(), mEditMode, getActivity());
-            mRecyclerViewCharacter.setLayoutManager(new LinearLayoutManager(mContext));
-            mRecyclerViewCharacter.setAdapter(mCharacterListAdapter);
+            } else {
+                mCharacterListAdapter = new CharacterListAdapter(mAdventureId, new ArrayList<Character>(),
+                        new ArrayList<Profile>(), mAdventure.getDMChar(), mEditMode, getActivity());
+                mRecyclerViewCharacter.setLayoutManager(new LinearLayoutManager(mContext));
+                mRecyclerViewCharacter.setAdapter(mCharacterListAdapter);
+            }
         }
 
     }

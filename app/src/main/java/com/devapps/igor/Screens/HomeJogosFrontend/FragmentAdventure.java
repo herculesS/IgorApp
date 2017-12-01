@@ -134,6 +134,7 @@ public class FragmentAdventure extends Fragment implements BackableFragment {
         databaseAdventures.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                task = new ArrayList<>();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     mAdventure = dataSnapshot1.getValue(Adventure.class);
                     MainActivity activity = (MainActivity) mActivity;
